@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [doc/3, exported_predicates/2, showdoc/1]).
+:- module(paragraph, [doc/3, exported_predicates/2, predicates_using/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -131,7 +131,7 @@ doc(objects/0,             spec([]),
                            ['  Lists all objects referenced by predicates in module paragraph.']).
 doc(predicates/0,          spec([]),
                            ['  Lists all predicates available in module paragraph.']).
-doc(predicates_using/1,    spec(['Object']),
+doc(predicates_using/2,    spec(['Predicate', 'Object']),
                            ['  Lists all predicates which use an object listed in objects/0.',
                             "  example:  predicates_using(P,'GitUrl')."]).
 doc(sync/2,                spec(['View', 'Status']),
