@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [doc/3, showdoc/1]).
+:- module(paragraph, [doc/3, exported_predicates/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
