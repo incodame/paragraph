@@ -1,6 +1,6 @@
 :- use_module(library(plunit)).
 :- begin_tests(paragraph_doc).
-:- working_directory(_, '/opt/paragraph/prolog').
+:- getenv('PARAGRAPH_HOME', Ph), format(atom(Ps), '~w/prolog', [ Ph ]), working_directory(_, Ps).
 :- use_module(paragraph).
 
 %% help system (doc, showdoc)

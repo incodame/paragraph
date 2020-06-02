@@ -4,6 +4,7 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.incodame.paragraph.prolog.srv.PrologTestVerticle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,7 @@ public class MainVerticleTest {
   public void setUp(TestContext tc) {
     vertx = Vertx.vertx();
     vertx.deployVerticle(MainVerticle.class.getName(), tc.asyncAssertSuccess());
+    //vertx.deployVerticle(PrologTestVerticle.class.getName(), tc.asyncAssertSuccess());
   }
 
   @After

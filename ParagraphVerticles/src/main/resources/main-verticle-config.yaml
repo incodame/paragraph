@@ -1,0 +1,7 @@
+welcome.message: [ParagraphVerticles]
+deploy:
+  verticles:
+    MainVerticle:
+      port: 8087
+    PrologTestVerticle:
+      port: 8089
