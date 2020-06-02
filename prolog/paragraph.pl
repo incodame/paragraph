@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [doc/3, exported_predicates/2, predicates_using/2, showdoc/1]).
+:- module(paragraph, [doc/3, download_as/4, download_as/5, exported_predicates/2, objects/0, predicates/0, predicates_using/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -141,6 +141,17 @@ doc(sync/3,                spec(['View', 'Status', 'Options']),
                            ['  * View is one of app, maven, packages, build, deploy, cluster, user, appconfig',
                             '  * Status 0 if sync was successful, otherwise error status code',
                             '  * Options: depending on the View, ag(ApplicationGroup), ve(Version), env(Environment)']).
+doc(download_as/4,         spec(['Url', 'LocalFile', 'DownloadOptions', 'StatusCode']),
+                           ['  Downloads Url using http as LocalFile in the defaut directory defined in paragraph_conf.pl',
+                            '  * LocalFile is a file name without any path',
+                            '  * DownloadOptions is a list of valid options for http_open/3',
+                            '  * StatusCode is the http return code']).
+doc(download_as/5,         spec(['Url', 'LocalDir', 'LocalFile', 'DownloadOptions', 'StatusCode']),
+                           ['  Downloads Url using http as LocalFile in the defaut directory defined in paragraph_conf.pl',
+                            '  * LocalDir is a local directory path which might or might not exist before the download',
+                            '  * LocalFile is a file name without any path',
+                            '  * DownloadOptions is a list of valid options for http_open/3',
+                            '  * StatusCode is the http return code']).
 doc(search/2,              spec(['Consumer', 'Scoper']),
                            ['  Run a Consumer predicate within scope given by Scoper',
                             '  example: search(paramval(context_root, Ve, Val), app_clusters("lambda")).',
@@ -238,3 +249,20 @@ join_strings([H|T], Sep, J) :-
     string_concat(Sep, J1, J2),
     string_concat(H, J2, J), !.
 
+%% sync resources
+
+download_as(Url, LocalFile, DownloadOptions, StatusCode) :-
+    http_open(Url, Reply, [status_code(StatusCode) | DownloadOptions]),
+    setup_call_cleanup(
+        open(LocalFile, write, LocalFileStream),
+        copy_stream_data(Reply, LocalFileStream),
+        close(LocalFileStream)).
+
+download_as(Url, LocalDir, LocalFile, DownloadOptions, StatusCode) :-
+    http_open(Url, Reply, [status_code(StatusCode) | DownloadOptions]),
+    format(atom(LocalFilePath), '~w/~w', [ LocalDir, LocalFile ]),
+    (exists_directory(LocalDir) -> true ; make_directory(LocalDir)),
+    setup_call_cleanup(
+        open(LocalFilePath, write, LocalFileStream),
+        copy_stream_data(Reply, LocalFileStream),
+        close(LocalFileStream)).
