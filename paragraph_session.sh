@@ -10,5 +10,6 @@ echo "?- consult('t/doc_t.plt')."
 echo ""
 echo "?- run_tests."
 export PARAGRAPH_HOME=$(pwd)
+export PARAGRAPH_TEMP=/tmp/paragraph
 export IPADDRE=localhost
 /usr/local/Cellar/swi-prolog/8.2.0/bin/swipl
