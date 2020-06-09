@@ -1,0 +1,11 @@
+* left to implement 
+** download_as
+use workdirectory
+prevent use of other directory not under workdirectory
+** paramval
+force the use of structured term e.g. earfile(E) for container
+** TODO create docker image for paragraph
+* improve
+contloc_app_archive processes files . and ..
+it uses directory_files and could filter based on the FileType if it is ground
+

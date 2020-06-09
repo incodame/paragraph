@@ -28,6 +28,8 @@
 %:- use_module(string_ops).
 %:- use_module(yaml_query).
 
+
+
 doc(doc/3,                 spec(['Predicate', 'Spec', 'DocText']),
                            ['  Predicate short documentation in DocText',
                             '  * Spec is a predicate Signature',
@@ -251,6 +253,9 @@ join_strings([H|T], Sep, J) :-
 
 %% sync resources
 
+workdirectory(WorkDirectory) :-
+    getenv("PARAGRAPH_TEMP", WorkDirectory).
+
 download_as(Url, LocalFile, DownloadOptions, StatusCode) :-
     http_open(Url, Reply, [status_code(StatusCode) | DownloadOptions]),
     setup_call_cleanup(
@@ -266,3 +271,101 @@ download_as(Url, LocalDir, LocalFile, DownloadOptions, StatusCode) :-
         open(LocalFilePath, write, LocalFileStream),
         copy_stream_data(Reply, LocalFileStream),
         close(LocalFileStream)).
+
+
+%% scoping and search
+
+want_opt(Opt, Options) :-
+    search_option(Opt, Text, DefaultGet),  % see definition in paragraph_conf
+    (ground(Opt) ->
+         (Options = [] -> true        % incorrect, use functor !
+         ;
+          memberchk(Opt, Options)
+         )
+    ;
+        (member(Opt, Options) -> true
+        ;
+         catch(ask_option(Opt), _, (
+             format(string(Message), 'Confirm ~w:', [Text]),
+             writeln(Message),
+             call(DefaultGet)
+         ))
+        )
+    ).
+
+%???(S, C) :- search(C, S).
+%:- op(700, xfx, user:(???)).
+
+specify_option(SearchOption) :-
+    shift(specify_option(SearchOption)).
+
+no_option(SearchOption) :-
+    shift(no_option(SearchOption)).
+
+ask_option(SearchOption) :-
+    shift(ask_option(SearchOption)).
+
+% search C works within scope S
+%  C is an iterator that consumes Options ("Consumer"), S is a generator that yields Options ("Scoper")
+search(C,S) :-
+    reset(C,Term1,C1),
+    ( C1 == 0 ->
+      true
+    ; Term1 = ask_option(X) ->
+      reset(S,Term2,S1),
+      ( Term2 == 0 ->
+        X = eof,
+        call(C1)      % unfinished goal from C
+      ; S1 == 0 ->    % neu
+        X = eof,
+        call(C1)
+      ; Term2 = specify_option(X) ->
+        search(C1,S1) % X now unifies with ask_option(X), recursion with unfinished goals
+      ; Term2 = no_option(X) ->
+        X = eof,
+        call(C1)
+      )
+    ).
+
+%%% scopers
+
+
+
+%% container location
+
+:- discontiguous contloc/6.
+
+%%% application archives
+
+package_version(PackageFile, Type, Version, AppId) :-
+    app_archive(Type, AppId, ArNameTemplate, []),
+    split_string(ArNameTemplate, "()", "", [Prefix, "version", Suffix]),
+    atom_concat(Prefix, Rest, PackageFile),
+    atom_concat(Version, Suffix, Rest).
+
+contloc(build,    earfile(EarFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(EarFile, ear, Version, LocSpec, [], Options).
+
+contloc(build,    warfile(WarFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(WarFile, war, Version, LocSpec, [], Options).
+
+contloc(build,    jarfile(JarFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(JarFile, jar, Version, LocSpec, [], Options).
+
+contloc(build,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(ZipFile, zip, Version, LocSpec, [], Options).
+
+%:- table contloc_app_archive/6.
+contloc_app_archive(ArFile, FileType, Version, LocSpec, [], Options) :-
+    want_opt(ag(AppGroup), Options),
+    want_opt(ve(Version), Options),
+    workdirectory(WorkDirectory),
+    directory_files(WorkDirectory, FileList),
+    member(ArFile, FileList),
+    package_version(ArFile, FileType, Version, AppId),
+    application(app, AppId, AppGroup, _),
+    format(string(LocSpec), "file:~w/~w", [WorkDirectory, ArFile]).
+
+%% paramval - navigating resources inside hierarchical containers
+
+
