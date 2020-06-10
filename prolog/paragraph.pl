@@ -329,7 +329,11 @@ search(C,S) :-
 
 %%% scopers
 
+%%% special consumers
 
+slurp_options([Opt | Ropts]) :-
+    ask_option(GivenOpt),
+    (GivenOpt == eof -> Opt = [], Ropts = []; Opt = GivenOpt, slurp_options(Ropts)).
 
 %% container location
 

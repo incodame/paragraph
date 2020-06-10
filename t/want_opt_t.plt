@@ -23,6 +23,9 @@ my_consumer_twice(Ver1, Ver2, Options) :-
     paragraph:want_opt(ve(Ver1), Options),
     paragraph:want_opt(ve(Ver2), Options).
 
+my_consumer_all(VerList) :-
+    paragraph:slurp_options(VerList).
+
 my_scoper :-
     paragraph:specify_option(ve('0.1')),
     paragraph:specify_option(ve('0.2')).
@@ -36,9 +39,16 @@ test('want_opt in search, called once') :-
 
 test('want_opt in search, called twice') :-
     findall((Ver1, Ver2), paragraph:search(
-                                   plunit_paragraph_want_opt:my_consumer_twice(Ver1, Ver2, []),
-                                   plunit_paragraph_want_opt:my_scoper
-                               ), L),
+                                        plunit_paragraph_want_opt:my_consumer_twice(Ver1, Ver2, []),
+                                        plunit_paragraph_want_opt:my_scoper
+                                    ), L),
     L = [ ('0.1', '0.2') ].
+
+test('slurp options in search') :-
+    paragraph:search(
+        plunit_paragraph_want_opt:my_consumer_all(VerList),
+        plunit_paragraph_want_opt:my_scoper
+    ),
+    VerList = [ ve('0.1'), ve('0.2'), [] ].
 
 :- end_tests(paragraph_want_opt).
