@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [doc/3, download_as/4, download_as/5, exported_predicates/2, objects/0, predicates/0, predicates_using/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, doc/3, download_as/4, download_as/5, exported_predicates/2, objects/0, predicates/0, predicates_using/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -272,6 +272,31 @@ download_as(Url, LocalDir, LocalFile, DownloadOptions, StatusCode) :-
         copy_stream_data(Reply, LocalFileStream),
         close(LocalFileStream)).
 
+%% archive management
+
+% List of Zip Entries
+list_zipfile_entries(ZipFile, ZipEntryList) :-
+    open(ZipFile, read, ArchiveIn, [type(binary)]),
+    archive_entries(ArchiveIn, ZipEntryList),
+    close(ArchiveIn).
+
+% List of Zip Entries matching a pattern
+archive_entries_matching(ArchiveIn, EndsWithSpec, Entry) :-
+    archive_entries(ArchiveIn, ZipAllList),
+    member(Entry, ZipAllList),
+    string_concat("endswith:", EndString, EndsWithSpec),
+    string_concat(_Start, EndString, Entry).
+
+zipfile_entry_matches(ZipFile, EndsWithSpec, Entry) :-
+    setup_call_cleanup(
+        open_any(ZipFile, read, ArchiveIn, Close, [type(binary)]),
+        archive_entries_matching(ArchiveIn, EndsWithSpec, Entry),
+        close_any(Close)).
+
+application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
+    contloc(AppId, _, Ver, LocSpec, [], Options),
+    string_concat("file:", ArchiveFile, LocSpec),
+    zipfile_entry_matches(ArchiveFile, "endswith:.jar", Jar).
 
 %% scoping and search
 
@@ -347,20 +372,20 @@ package_version(PackageFile, Type, Version, AppId) :-
     atom_concat(Prefix, Rest, PackageFile),
     atom_concat(Version, Suffix, Rest).
 
-contloc(build,    earfile(EarFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(EarFile, ear, Version, LocSpec, [], Options).
+contloc(AppId,    earfile(EarFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(EarFile, ear, AppId, Version, LocSpec, [], Options).
 
-contloc(build,    warfile(WarFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(WarFile, war, Version, LocSpec, [], Options).
+contloc(AppId,    warfile(WarFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(WarFile, war, AppId, Version, LocSpec, [], Options).
 
-contloc(build,    jarfile(JarFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(JarFile, jar, Version, LocSpec, [], Options).
+contloc(AppId,    jarfile(JarFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(JarFile, jar, AppId, Version, LocSpec, [], Options).
 
-contloc(build,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(ZipFile, zip, Version, LocSpec, [], Options).
+contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
+    contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, [], Options).
 
 %:- table contloc_app_archive/6.
-contloc_app_archive(ArFile, FileType, Version, LocSpec, [], Options) :-
+contloc_app_archive(ArFile, FileType, AppId, Version, LocSpec, [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
     workdirectory(WorkDirectory),
@@ -372,4 +397,12 @@ contloc_app_archive(ArFile, FileType, Version, LocSpec, [], Options) :-
 
 %% paramval - navigating resources inside hierarchical containers
 
+
+%paramval(Param, Version, Val) :-
+%    paramloc(_, Param, Container, LocSpec, _),
+%    string_concat("xpath://", Xpath, LocSpec),
+%    paramloc(_, Container, Wfile, EntrySpec, _),
+%    string_concat("endswith:", _, EntrySpec),
+%    contloc(_, warfile(Wfile), Version, WfileLoc, _, []),
+%    string_concat("file:", WfilePath, WfileLoc),
 

@@ -7,7 +7,7 @@ test('parse package type, version and app') :-
     paragraph:package_version('paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui').
 
 test('container loc of paragraph-ui app archive') :-
-    paragraph:contloc(build, warfile('paragraph-ui-0.0.1-SNAPSHOT.war'), '0.0.1-SNAPSHOT', "file:/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war", [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
+    paragraph:contloc('paragraph-ui', warfile('paragraph-ui-0.0.1-SNAPSHOT.war'), '0.0.1-SNAPSHOT', "file:/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war", [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
 
 %test('find the pom dependencies of a built artifact') :-
 %    from_list([[ag('paragraph'), ve('0.0.1-SNAPSHOT')]]) ??? paramval(pom_xml_version, Version, Val),

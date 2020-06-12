@@ -1,9 +1,15 @@
 * left to implement 
+** application_jar and want_opt
+without Options, one is asked to enter Options twice,
+because of the redo after the failed
+paragraph:contloc_app_archive(_16864, ear, 'paragraph-ui', _16454, _17192, [], [])
 ** download_as
 use workdirectory
 prevent use of other directory not under workdirectory
 ** paramval
 force the use of structured term e.g. earfile(E) for container
+solution for removing large number of predicates (choicepoints) 
+ - using tree or graph
 ** TODO create docker image for paragraph
 * improve
 contloc_app_archive processes files . and ..
