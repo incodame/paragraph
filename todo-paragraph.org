@@ -1,8 +1,10 @@
 * left to implement 
-** application_jar and want_opt
+** application_jar and want_opt: use tabling
 without Options, one is asked to enter Options twice,
 because of the redo after the failed
 paragraph:contloc_app_archive(_16864, ear, 'paragraph-ui', _16454, _17192, [], [])
+** application_java_class
+produce an ear file from the ParagraphUI war
 ** download_as
 use workdirectory
 prevent use of other directory not under workdirectory
