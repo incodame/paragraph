@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, doc/3, download_as/4, download_as/5, exported_predicates/2, objects/0, predicates/0, predicates_using/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, objects/0, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -53,11 +53,16 @@ doc(application_cluster/5, spec(['View', 'ApplicationShortId', 'Version', 'Clust
                             '  * ApplicationShortID can be looked up with application/3',
                             '  * Version must be a string with ""',
                             '  * ScopeOptions: depending on the View, ag(ApplicationGroup), ve(Version), env(Environment)']).
-doc(application_jar/5,     spec(['View', 'ApplicationShortId', 'Version', 'ArchiveFile', 'JarFile']),
+doc(application_jar/4,     spec(['ApplicationShortId', 'Version', 'ArchiveFile', 'JarFile']),
                            ['  a JarFile is included in ArchiveFile of ApplicationShortId for version Version',
                             '  * ApplicationShortID can be looked up with application/3',
                             '  * ArchiveFile can be an ear file or a batch zip',
-                            '  * Version must be a string with ""']).
+                            '']).
+doc(application_jar/5,     spec(['ApplicationShortId', 'Version', 'ArchiveFile', 'JarFile', 'Options']),
+                           ['  a JarFile is included in ArchiveFile of ApplicationShortId for version Version',
+                            '  * ApplicationShortID can be looked up with application/3',
+                            '  * ArchiveFile can be an ear file or a batch zip',
+                            '  * Options can contain: ve(Version), ag(ApplicationGroup)']).
 doc(application_java_class/6, spec(['View', 'ApplicationShortId', 'Version', 'ArchiveFile', 'JarOrWarFile', 'JavaClass']),
                            ['  a JavaClass is included in JarOrWarFile of ApplicationShortId for version Version',
                             '  * ApplicationShortID can be looked up with application/3',
@@ -297,6 +302,9 @@ application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
     contloc(AppId, _, Ver, LocSpec, [], Options),
     string_concat("file:", ArchiveFile, LocSpec),
     zipfile_entry_matches(ArchiveFile, "endswith:.jar", Jar).
+
+application_jar(AppId, Ver, ArchiveFile, Jar) :-
+    application_jar(AppId, Ver, ArchiveFile, Jar, []).
 
 %% scoping and search
 
