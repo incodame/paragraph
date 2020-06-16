@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, objects/0, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -165,6 +165,8 @@ doc(search/2,              spec(['Consumer', 'Scoper']),
                             '  * Consumer is an iterator that consumes Options',
                             '  * Scoper is a generator that yields Options',
                             '  See also ask_options/1 and specify_options/1.']).
+doc(from_list/1,           spec(['ScopeOptions']),
+                           ['  Scoper based on a list,  which can be combined with search/2']).
 doc(ask_options/1,         spec(['ScopeOptions']),
                            ['  Used internally, to build an iterator-predicate which can be combined with search/2']).
 doc(specify_options/1,     spec(['ScopeOptions']),
@@ -361,6 +363,11 @@ search(C,S) :-
     ).
 
 %%% scopers
+
+from_list([]).
+from_list([X|Xs]) :-
+    specify_option(X),
+    from_list(Xs).
 
 %%% special consumers
 
