@@ -1,6 +1,6 @@
 * left to implement 
 ** application_jar and want_opt: use tabling
-without Options, one is asked to enter Options twice,
+without Options, one is asked to enter Options twice or more,
 because of the redo after the failed
 paragraph:contloc_app_archive(_16864, ear, 'paragraph-ui', _16454, _17192, [], [])
 ** application_java_class
@@ -14,6 +14,6 @@ solution for removing large number of predicates (choicepoints)
  - using tree or graph
 ** TODO create docker image for paragraph
 * improve
-contloc_app_archive processes files . and ..
+** contloc_app_archive processes files . and ..
 it uses directory_files and could filter based on the FileType if it is ground
 

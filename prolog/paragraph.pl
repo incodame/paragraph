@@ -166,7 +166,7 @@ doc(search/2,              spec(['Consumer', 'Scoper']),
                             '  * Scoper is a generator that yields Options',
                             '  See also ask_options/1 and specify_options/1.']).
 doc(from_list/1,           spec(['ScopeOptions']),
-                           ['  Scoper based on a list,  which can be combined with search/2']).
+                           ['  Scoper based on a list, which can be combined with search/2']).
 doc(ask_options/1,         spec(['ScopeOptions']),
                            ['  Used internally, to build an iterator-predicate which can be combined with search/2']).
 doc(specify_options/1,     spec(['ScopeOptions']),
@@ -313,7 +313,7 @@ application_jar(AppId, Ver, ArchiveFile, Jar) :-
 want_opt(Opt, Options) :-
     search_option(Opt, Text, DefaultGet),  % see definition in paragraph_conf
     (ground(Opt) ->
-         (Options = [] -> true        % incorrect, use functor !
+         (Options = [] -> true             % incorrect, use functor !
          ;
           memberchk(Opt, Options)
          )
@@ -342,23 +342,33 @@ ask_option(SearchOption) :-
 
 % search C works within scope S
 %  C is an iterator that consumes Options ("Consumer"), S is a generator that yields Options ("Scoper")
+%  S = wanted instructs search to print the wanted options of the consumer
 search(C,S) :-
     reset(C,Term1,C1),
     ( C1 == 0 ->
       true
     ; Term1 = ask_option(X) ->
-      reset(S,Term2,S1),
-      ( Term2 == 0 ->
-        X = eof,
-        call(C1)      % unfinished goal from C
-      ; S1 == 0 ->    % neu
-        X = eof,
-        call(C1)
-      ; Term2 = specify_option(X) ->
-        search(C1,S1) % X now unifies with ask_option(X), recursion with unfinished goals
-      ; Term2 = no_option(X) ->
-        X = eof,
-        call(C1)
+      (S = wanted, X =.. [ FunctorName, Var ] ->
+           search_option(X, Text, _),                   % see definition in paragraph_conf
+           format(string(Message), 'Wanted ~w:  ~w', [FunctorName, Text]),
+           Var = '_',
+           writeln(Message),
+           search(C1, S)        % recurse on unfinished goal
+      ;
+           (reset(S,Term2,S1),
+            ( Term2 == 0 ->
+                  X = eof,
+                  call(C1)      % unfinished goal from C
+            ; S1 == 0 ->        % neu
+                  X = eof,
+                  call(C1)
+            ; Term2 = specify_option(X) ->
+                  search(C1,S1) % X now unifies with ask_option(X), recursion with unfinished goals
+            ; Term2 = no_option(X) ->
+                  X = eof,
+                  call(C1)
+            )
+           )
       )
     ).
 
