@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, paramval/4, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -10,11 +10,7 @@
 :- use_module(library(archive)).
 :- use_module(library(clpfd)).
 :- use_module(library(clpr)).
-%:- use_module(library(coworkers)).
-%:- use_module(coworkers_02).
 :- use_module(library(dcg/basics)).
-%:- use_module(library(docstore)).
-%:- use_module(library(getpass)).
 :- use_module(library(http/http_open)).
 :- use_module(library(http/http_client)).
 :- use_module(library(http/http_cookie)).
@@ -24,10 +20,6 @@
 :- use_module(library(regex)).
 :- use_module(library(www_browser)).
 :- use_module(paragraph_conf).
-%:- use_module(git_automation).
-%:- use_module(string_ops).
-%:- use_module(yaml_query).
-
 
 
 doc(doc/3,                 spec(['Predicate', 'Spec', 'DocText']),
@@ -300,6 +292,16 @@ zipfile_entry_matches(ZipFile, EndsWithSpec, Entry) :-
         archive_entries_matching(ArchiveIn, EndsWithSpec, Entry),
         close_any(Close)).
 
+% Open archive entry, Entry must be an atom with '', not a string
+open_archive_entry(ArchiveFile, Entry, Stream) :-
+    open(ArchiveFile, read, In, [type(binary)]),
+    format(string(Info), 'Reading archive ~w: ~w', [ArchiveFile, Entry]),
+    writeln(Info),
+    archive_open(In, Archive, [close_parent(true)]),
+    archive_next_header(Archive, Entry),
+    archive_open_entry(Archive, Stream),
+    archive_close(Archive).
+
 application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
     contloc(AppId, _, Ver, LocSpec, [], Options),
     string_concat("file:", ArchiveFile, LocSpec),
@@ -410,24 +412,48 @@ contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
     contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, [], Options).
 
 %:- table contloc_app_archive/6.
-contloc_app_archive(ArFile, FileType, AppId, Version, LocSpec, [], Options) :-
+contloc_app_archive(ArTest, FileType, AppId, Version, LocSpec, [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
     workdirectory(WorkDirectory),
     directory_files(WorkDirectory, FileList),
-    member(ArFile, FileList),
-    package_version(ArFile, FileType, Version, AppId),
+    archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
     application(app, AppId, AppGroup, _),
-    format(string(LocSpec), "file:~w/~w", [WorkDirectory, ArFile]).
+    format(string(LocSpec), "file:~w/~w", [WorkDirectory, ArMatch]).
+
+archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
+    app_archive(FileType, AppId, ArNameTemplate, []),
+    split_string(ArNameTemplate, "()", "", [Prefix, "version", Suffix]),
+    (ground(Version)  ->
+         join_strings([Prefix, Version, Suffix], "", FileStr),
+         atom_string(File, FileStr)
+    ;
+         File = FileTest
+    ),
+    member(File, FileList),
+    (\+ground(Version) ->
+         atom_concat(Prefix, Rest, File),
+         atom_concat(Version, Suffix, Rest)
+    ;
+     true
+    ).
 
 %% paramval - navigating resources inside hierarchical containers
 
-
-%paramval(Param, Version, Val) :-
-%    paramloc(_, Param, Container, LocSpec, _),
-%    string_concat("xpath://", Xpath, LocSpec),
-%    paramloc(_, Container, Wfile, EntrySpec, _),
-%    string_concat("endswith:", _, EntrySpec),
-%    contloc(_, warfile(Wfile), Version, WfileLoc, _, []),
-%    string_concat("file:", WfilePath, WfileLoc),
-
+paramval(Param, Version, Val, Options) :-
+    paramloc(_, Param, XmlSource, LocSpec, _),
+    string_concat("xpath://", Xpath, LocSpec),
+    paramloc(_, XmlSource, Wfile, EntrySpec, _),
+    string_concat("endswith:", _, EntrySpec),
+    contloc(_, warfile(Wfile), Version, WfileLoc, _, Options),
+    string_concat("file:", WfilePath, WfileLoc),
+    zipfile_entry_matches(WfilePath, EntrySpec, EntryStr),
+    atom_string(Entry, EntryStr),
+    setup_call_cleanup(
+        open_archive_entry(WfilePath, Entry, XmlStream),
+        (
+            load_xml(stream(XmlStream), XmlRoot, _),
+            term_string(XP, Xpath),
+            xpath(XmlRoot, //XP, Val)
+        ),
+        close(XmlStream)).
