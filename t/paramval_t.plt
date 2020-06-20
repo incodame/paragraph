@@ -22,10 +22,23 @@ test('archive match, version unknown') :-
 %% contloc
 
 test('container loc of paragraph-ui app archive, version already set') :-
-    paragraph:contloc('paragraph-ui', warfile('paragraph-ui-0.0.1-SNAPSHOT.war'), '0.0.1-SNAPSHOT', "file:/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war", [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
+    paragraph:contloc('paragraph-ui', warfile('paragraph-ui-0.0.1-SNAPSHOT.war'), '0.0.1-SNAPSHOT', file("/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war"), [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
 
 test('container loc of paragraph-ui app archive, version not set') :-
-    paragraph:contloc('paragraph-ui', warfile('paragraph-ui-(version).war'),      '0.0.1-SNAPSHOT', "file:/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war", [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
+    paragraph:contloc('paragraph-ui', warfile('paragraph-ui-(version).war'),      '0.0.1-SNAPSHOT', file("/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war"), [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
+
+%% parameters defined in paragraph_conf
+
+test('print the parameters (fails if there are any inconsistencies)') :-
+    parameters.
+
+test('find the container of parameter pom_xml_version') :-
+    parameters(pom_xml_version, C),
+    C = war_pom_xml.
+
+test('find one of the parameters of container war_pom_xml') :-
+    parameters(P, war_pom_xml),
+    P = pom_xml_version.
 
 %% paramval
 

@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, paramval/4, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/4, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -94,12 +94,12 @@ doc(goto_cluster/1,        spec(['Cluster']),
                            ['  the default web browser will navigate to the configuration for cluster Cluster',
                             '  See also: application_cluster/4']).
 doc(can_goto_param/2,      spec(['Parameter', 'Version']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/5 predicate',
-                            '    using a search specification like "regexp:" or "xpath:" etc...',
+                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                            '    using a search specification like regexp() or xpath() etc...',
                             '  if a container exists in version Version, and can be navigated to with the browser',
                             '    its search specification will be printed.']).
 doc(goto_param/2,          spec(['Parameter', 'Version']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/5 predicate',
+                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
                             '  the default web browser will navigate to the container, if its "browsable"',
                             '  See also: can_goto_param/3 for browsable parameters',
                             '  See also: parameters/2']).
@@ -107,21 +107,24 @@ doc(package/4,             spec(['ApplicationGroup', 'Version', 'PackageFile', '
                            ['  PackageFile is available for ApplicationGroup version Version at DownloadUrl',
                             "  * Version is a string with ''"]).
 doc(parameters/0,          spec([]),
-                           ['  Lists all parameters configured for search in containers, via the paragraph:paramloc/5 predicate',
+                           ['  Lists all parameters configured for search in containers, via the paragraph:paramloc/4 predicate',
+                            '  Documentation of a parameter can be displayed via pdoc/1',
                             '  The value can be searched with paramval/3']).
 doc(parameters/2,          spec(['Parameter', 'Container']),
-                           ['  A Parameter is configured in container Container, via the paragraph:paramloc/5 predicate',
+                           ['  A Parameter is configured in container Container, via the paragraph:paramloc/4 predicate',
                             '  * Container can be a text file, archive file (.zip or .ear), or web resource.',
-                            '  See also: parameters/0']).
+                            '  See also: parameters/0, pdoc/1']).
+doc(pdoc/1,                spec(['Parameter']),
+                           ['  Display documentation for Parameter']).
 doc(paramval/3,            spec(['Parameter', 'Version', 'ParameterValue']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/5 predicate',
-                            '    using a search specification like "regexp:" or "xpath:" etc...',
+                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                            '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
                             '  * Version must be a string with ""',
                             '  See also: parameters/2']).
 doc(paramval/4,            spec(['Parameter', 'Version', 'ParameterValue', 'ScopeOptions']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/5 predicate',
-                            '    using a search specification like "regexp:" or "xpath:" etc...',
+                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                            '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
                             '  * Version must be a string with ""',
                             '  * ScopeOptions: depending on the View, ag(ApplicationGroup), ve(Version), env(Environment)',
@@ -283,8 +286,7 @@ list_zipfile_entries(ZipFile, ZipEntryList) :-
 archive_entries_matching(ArchiveIn, EndsWithSpec, Entry) :-
     archive_entries(ArchiveIn, ZipAllList),
     member(Entry, ZipAllList),
-    string_concat("endswith:", EndString, EndsWithSpec),
-    string_concat(_Start, EndString, Entry).
+    string_concat(_Start, EndsWithSpec, Entry).
 
 zipfile_entry_matches(ZipFile, EndsWithSpec, Entry) :-
     setup_call_cleanup(
@@ -303,9 +305,8 @@ open_archive_entry(ArchiveFile, Entry, Stream) :-
     archive_close(Archive).
 
 application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
-    contloc(AppId, _, Ver, LocSpec, [], Options),
-    string_concat("file:", ArchiveFile, LocSpec),
-    zipfile_entry_matches(ArchiveFile, "endswith:.jar", Jar).
+    contloc(AppId, _, Ver, file(ArchiveFile), [], Options),
+    zipfile_entry_matches(ArchiveFile, ".jar", Jar).
 
 application_jar(AppId, Ver, ArchiveFile, Jar) :-
     application_jar(AppId, Ver, ArchiveFile, Jar, []).
@@ -412,14 +413,14 @@ contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
     contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, [], Options).
 
 %:- table contloc_app_archive/6.
-contloc_app_archive(ArTest, FileType, AppId, Version, LocSpec, [], Options) :-
+contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
     workdirectory(WorkDirectory),
     directory_files(WorkDirectory, FileList),
     archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
     application(app, AppId, AppGroup, _),
-    format(string(LocSpec), "file:~w/~w", [WorkDirectory, ArMatch]).
+    format(string(LocSpec), "~w/~w", [WorkDirectory, ArMatch]).
 
 archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
     app_archive(FileType, AppId, ArNameTemplate, []),
@@ -438,22 +439,41 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
      true
     ).
 
+%% parameters defined in paragraph_conf
+
+parameters :-
+    findall(Param, paramloc(Param,_,_,_), ParList),
+    list_to_set(ParList, ParSet),
+    sort(ParSet, Parameters),
+    maplist(writeln, Parameters).
+parameters(Param, Container) :- paramloc(Param, Container, _LocSpec, _LocArgs).
+pdoc(Param) :-
+    paramloc(Param,_,LocString,Opts),
+    member(doc(DocString), Opts),
+    format(string(Documentation), '~w [~w]', [DocString, LocString]),
+    writeln(Documentation), !.
+
 %% paramval - navigating resources inside hierarchical containers
 
+% xpath for an archive xml resource (war)
 paramval(Param, Version, Val, Options) :-
-    paramloc(_, Param, XmlSource, LocSpec, _),
-    string_concat("xpath://", Xpath, LocSpec),
-    paramloc(_, XmlSource, Wfile, EntrySpec, _),
-    string_concat("endswith:", _, EntrySpec),
-    contloc(_, warfile(Wfile), Version, WfileLoc, _, Options),
-    string_concat("file:", WfilePath, WfileLoc),
+    paramloc(Param, XmlSource, xpath(Xpath), _),
+    paramloc(XmlSource, Wfile, endswith(EntrySpec), _),
+    contloc(_, warfile(Wfile), Version, file(WfilePath), _, Options),
     zipfile_entry_matches(WfilePath, EntrySpec, EntryStr),
     atom_string(Entry, EntryStr),
     setup_call_cleanup(
         open_archive_entry(WfilePath, Entry, XmlStream),
         (
             load_xml(stream(XmlStream), XmlRoot, _),
-            term_string(XP, Xpath),
-            xpath(XmlRoot, //XP, Val)
+            xpath(XmlRoot, Xpath, Val)
         ),
         close(XmlStream)).
+
+% nested xpath definitions
+paramval(Param, Version, Val, Options) :-
+    paramloc(Param, XmlParentTag, xpath(Xpath), _),
+    paramloc(XmlParentTag, _, xpath(_), _),
+    paramval(XmlParentTag, Version, ParentXml, Options),
+    xpath(ParentXml, Xpath, Val).
+
