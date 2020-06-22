@@ -9,11 +9,15 @@ produce an ear file from the ParagraphUI war
 use workdirectory
 prevent use of other directory not under workdirectory
 ** paramval
-force the use of structured term e.g. earfile(E) for container
-solution for removing large number of predicates (choicepoints) 
+*** force the use of structured term e.g. earfile(E) for container
+*** solution for removing large number of predicates (choicepoints) 
  - using tree or graph
+*** use tabling for recursive calls of paramval
+*** doc in README.md
+*** introduce AppId (Ve is relative to AppId)
 ** TODO create docker image for paragraph
 * improve
-** contloc_app_archive processes files . and ..
+** contloc_app_archive 
+processes files . and ..
 it uses directory_files and could filter based on the FileType if it is ground
-
+tabling not yet working
