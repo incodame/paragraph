@@ -32,9 +32,9 @@ paramloc(persistence_xml,  WebAppEar,       endswith("persistence-context.xml"),
     app_archive(ear, _App, WebAppEar, _),
     Doc = "Main configuration of JPA".
 paramloc(pom_xml_parent,   war_pom_xml,     xpath(//project/parent), [ doc("pom.xml parent") ]).
-paramloc(pom_xml_parent_group_id,  pom_xml_parent,     xpath(//artifactId(text)), [ doc("pom.xml parent artifactId") ]).
-paramloc(pom_xml_parent_group_id,  pom_xml_parent,     xpath(//groupdId(text)),   [ doc("pom.xml parent groupdId") ]).
-paramloc(pom_xml_parent_version,   pom_xml_parent,     xpath(//version(text)),    [ doc("pom.xml parent version") ]).
+paramloc(pom_xml_parent_artifact_id,  pom_xml_parent,     xpath(//artifactId(text)), [ doc("pom.xml parent artifactId") ]).
+paramloc(pom_xml_parent_group_id,     pom_xml_parent,     xpath(//groupdId(text)),   [ doc("pom.xml parent groupdId") ]).
+paramloc(pom_xml_parent_version,      pom_xml_parent,     xpath(//version(text)),    [ doc("pom.xml parent version") ]).
 paramloc(pom_xml_version,  war_pom_xml,     xpath(//project/version(text)), [ doc("pom.xml version") ]).
 paramloc(war_pom_xml,      WebAppWar,       endswith("/pom.xml"),     [ doc(Doc) ]) :-
     app_archive(war, _App, WebAppWar, _),

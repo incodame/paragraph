@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/4, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/5, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(xpath)).
@@ -20,6 +20,8 @@
 :- use_module(library(regex)).
 :- use_module(library(www_browser)).
 :- use_module(paragraph_conf).
+
+:- table contloc_app_archive/6.
 
 
 doc(doc/3,                 spec(['Predicate', 'Spec', 'DocText']),
@@ -116,18 +118,26 @@ doc(parameters/2,          spec(['Parameter', 'Container']),
                             '  See also: parameters/0, pdoc/1']).
 doc(pdoc/1,                spec(['Parameter']),
                            ['  Display documentation for Parameter']).
-doc(paramval/3,            spec(['Parameter', 'Version', 'ParameterValue']),
+doc(paramval/3,            spec(['Parameter', 'ParameterValue', 'ScopeOptions']),
                            ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
-                            '  * Version must be a string with ""',
+                            '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
                             '  See also: parameters/2']).
 doc(paramval/4,            spec(['Parameter', 'Version', 'ParameterValue', 'ScopeOptions']),
                            ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
-                            '  * Version must be a string with ""',
-                            '  * ScopeOptions: depending on the View, ag(ApplicationGroup), ve(Version), env(Environment)',
+                            '  * Version is the version of the application where the parameter was found',
+                            '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
+                            '  See also: parameters/2']).
+doc(paramval/5,            spec(['Parameter', 'ApplicationShortId', 'Version', 'ParameterValue', 'ScopeOptions']),
+                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                            '    using a search specification like regexp() or xpath() etc...',
+                            '  * ParameterValue will be extracted from the container',
+                            '  * ApplicationShortId is the identifier of the application where the parameter was found',
+                            '  * Version is the version of the application where the parameter was found',
+                            '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
                             '  See also: parameters/2']).
 doc(objects/0,             spec([]),
                            ['  Lists all objects referenced by predicates in module paragraph.']).
@@ -412,7 +422,6 @@ contloc(AppId,    jarfile(JarFile), Version, LocSpec, [], Options) :-
 contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
     contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, [], Options).
 
-%:- table contloc_app_archive/6.
 contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
@@ -455,11 +464,18 @@ pdoc(Param) :-
 
 %% paramval - navigating resources inside hierarchical containers
 
+% shortcuts
+paramval(Param, Val, Options) :-
+    paramval(Param, _, _, Val, Options).
+
+paramval(Param, Ve, Val, Options) :-
+    paramval(Param, _, Ve, Val, Options).
+
 % xpath for an archive xml resource (war)
-paramval(Param, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
     paramloc(XmlSource, Wfile, endswith(EntrySpec), _),
-    contloc(_, warfile(Wfile), Version, file(WfilePath), _, Options),
+    contloc(AppId, warfile(Wfile), Version, file(WfilePath), _, Options),
     zipfile_entry_matches(WfilePath, EntrySpec, EntryStr),
     atom_string(Entry, EntryStr),
     setup_call_cleanup(
@@ -471,9 +487,9 @@ paramval(Param, Version, Val, Options) :-
         close(XmlStream)).
 
 % nested xpath definitions
-paramval(Param, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlParentTag, xpath(Xpath), _),
     paramloc(XmlParentTag, _, xpath(_), _),
-    paramval(XmlParentTag, Version, ParentXml, Options),
+    paramval(XmlParentTag, AppId, Version, ParentXml, Options),
     xpath(ParentXml, Xpath, Val).
 

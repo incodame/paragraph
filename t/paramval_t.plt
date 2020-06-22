@@ -42,9 +42,14 @@ test('find one of the parameters of container war_pom_xml') :-
 
 %% paramval
 
-test('find the pom version of paragraph archives') :-
+test('xpath -> xml file -> warfile : find the pom version of paragraph archives') :-
     paramval(pom_xml_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT')]),
-    Version = '0.0.1-SNAPSHOT',
-    Val = '0.0.1-SNAPSHOT'.
+    Version = '0.0.1-SNAPSHOT',    % app version
+    Val = '0.0.1-SNAPSHOT'.        % value
+
+test('xpath -> xpath -> xml file -> warfile : find the parent pom version of paragraph archives') :-
+    paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT')]),
+    Version = '0.0.1-SNAPSHOT',    % app version
+    Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
 :- end_tests(paragraph_paramval).
