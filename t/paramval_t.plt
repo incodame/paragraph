@@ -50,6 +50,6 @@ test('xpath -> xml file -> warfile : find the pom version of paragraph archives'
 test('xpath -> xpath -> xml file -> warfile : find the parent pom version of paragraph archives') :-
     paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT')]),
     Version = '0.0.1-SNAPSHOT',    % app version
-    Val = '2.3.0-RELEASE'.         % value = spring boot starter parent version
+    Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
 :- end_tests(paragraph_paramval).
