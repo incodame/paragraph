@@ -96,3 +96,23 @@ Ve = '0.0.1-SNAPSHOT' ;
 false.
 ```
 
+## paragraph configuration
+
+paragraph relies on the configuration maintained and documented in prolog/paragraph_conf.pl
+
+example of definitions for the above pom_xml* parameters
+
+```javascript
+paramloc(pom_xml_parent,              war_pom_xml,        xpath(//project/parent),   [ doc("pom.xml parent") ]).
+paramloc(pom_xml_parent_artifact_id,  pom_xml_parent,     xpath(//artifactId(text)), [ doc("pom.xml parent artifactId") ]).
+paramloc(pom_xml_parent_group_id,     pom_xml_parent,     xpath(//groupdId(text)),   [ doc("pom.xml parent groupdId") ]).
+paramloc(pom_xml_parent_version,      pom_xml_parent,     xpath(//version(text)),    [ doc("pom.xml parent version") ]).
+paramloc(pom_xml_version,             war_pom_xml,        xpath(//project/version(text)), [ doc("pom.xml version") ]).
+paramloc(war_pom_xml,                 WebAppWar,          endswith("/pom.xml"),      [ doc(Doc) ]) :-
+    app_archive(war, _App, WebAppWar, _),
+    Doc = "pom.xml of a Web Archive built by Maven".
+
+%% application archives ordered alphabetically (ear, war, jar, zip)
+
+app_archive(war,  'paragraph-ui',           'paragraph-ui-(version).war', []).
+```
