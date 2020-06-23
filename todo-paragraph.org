@@ -13,8 +13,6 @@ prevent use of other directory not under workdirectory
 *** solution for removing large number of predicates (choicepoints) 
  - using tree or graph
 *** use tabling for recursive calls of paramval
-*** doc in README.md
-*** introduce AppId (Ve is relative to AppId)
 ** TODO create docker image for paragraph
 * improve
 ** contloc_app_archive 
