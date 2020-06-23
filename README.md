@@ -10,7 +10,7 @@ A configuration management toolkit (module) written in prolog, including:
 
 ```javascript
 ?- predicates.               % lists available predicates
-application/3
+application/4
 application_batch/5
 application_cluster/4
 application_cluster/5

@@ -31,7 +31,7 @@ doc(doc/3,                 spec(['Predicate', 'Spec', 'DocText']),
 doc(showdoc/1,             spec(['Predicate']),
                            ['  pretty Prints Predicate documentation',
                             '  documentation is stored in doc/3 facts']).
-doc(application/3,         spec(['View', 'ApplicationGroup', 'ApplicationShortId']),
+doc(application/4,         spec(['View', 'ApplicationGroup', 'ApplicationShortId', 'Options']),
                            ['  lists all ApplicationShortId and ApplicationGroup']).
 doc(application_batch/5,   spec(['View', 'ApplicationShortId', 'Version', 'ZipFile', 'BatchCmd']),
                            ['  a BatchCmd is included in ZipFile of ApplicationShortId for version Version',
