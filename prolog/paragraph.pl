@@ -268,6 +268,13 @@ join_strings([H|T], Sep, J) :-
 workdirectory(WorkDirectory) :-
     getenv("PARAGRAPH_TEMP", WorkDirectory).
 
+workdirectory(WorkDirectory, Options) :-
+    (member(wd(WorkDirectoryAlias), Options),
+     directory_alias(WorkDirectoryAlias, WorkDirectory)
+    ;
+     workdirectory(WorkDirectory)
+    ).
+
 download_as(Url, LocalFile, DownloadOptions, StatusCode) :-
     http_open(Url, Reply, [status_code(StatusCode) | DownloadOptions]),
     setup_call_cleanup(
@@ -425,7 +432,7 @@ contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
 contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
-    workdirectory(WorkDirectory),
+    workdirectory(WorkDirectory, Options),
     directory_files(WorkDirectory, FileList),
     archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
     application(app, AppId, AppGroup, _),
