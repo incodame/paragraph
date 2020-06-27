@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, paramloc/4, app_archive/4, search_option/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, paramloc/4, app_archive/4, search_option/3 ]).
 :- use_module(library(xpath)).
 %%
 %% Paragraph Configuration
@@ -49,3 +49,8 @@ app_archive(jar,  'paragraph-verticles',    'paragraph-verticles-(version)-fat.j
 
 search_option(ag(ApplicationGroup), "Application group", read(ApplicationGroup)).
 search_option(ve(Version),          "Version", read(Version)).
+search_option(wd(WorkDirectory),    "Work directory alias", read(WorkDirectory)).
+
+%% directory aliases
+
+directory_alias(examples, '/opt/paragraph/examples').
