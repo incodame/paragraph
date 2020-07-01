@@ -265,6 +265,10 @@ join_strings([H|T], Sep, J) :-
 
 %% sync resources
 
+appdirectory(AppId, AppDirectory, Options) :-
+    member(ad(AppDirectoryAlias), Options),
+    directory_alias(AppId, AppDirectoryAlias, AppDirectory).
+
 workdirectory(WorkDirectory) :-
     getenv("PARAGRAPH_TEMP", WorkDirectory).
 
@@ -413,9 +417,17 @@ slurp_options([Opt | Ropts]) :-
 
 package_version(PackageFile, Type, Version, AppId) :-
     app_archive(Type, AppId, ArNameTemplate, []),
-    split_string(ArNameTemplate, "()", "", [Prefix, "version", Suffix]),
+    split_string(ArNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
+    version_tok(VersionTokenStr, VePrefix, VeSuffix),
     atom_concat(Prefix, Rest, PackageFile),
-    atom_concat(Version, Suffix, Rest).
+    atom_concat(VersionToken, Suffix, Rest),
+    atom_length(VersionToken, VtLen),
+    (VtLen is 0 ->
+         Version = ''
+    ;
+         atom_concat(VePrefix, VeRest, VersionToken),
+         atom_concat(Version, VeSuffix, VeRest)
+    ).
 
 contloc(AppId,    earfile(EarFile), Version, LocSpec, [], Options) :-
     contloc_app_archive(EarFile, ear, AppId, Version, LocSpec, [], Options).
@@ -438,21 +450,92 @@ contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), [], Options
     application(app, AppId, AppGroup, _),
     format(string(LocSpec), "~w/~w", [WorkDirectory, ArMatch]).
 
+
+list([])     --> [].
+list([L|Ls]) --> [L], list(Ls).
+
+conc_of(Prefix, Suffix) --> list(Prefix), "version", list(Suffix).
+
+version_tok(VersionTokenStr, VePrefixStr, VeSuffixStr) :-
+    string_codes(VersionTokenStr, VersionTokenCodes),
+    phrase(conc_of(VePrefixL, VeSuffixL), VersionTokenCodes),
+    string_codes(VePrefixStr, VePrefixL),
+    string_codes(VeSuffixStr, VeSuffixL).
+
 archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
-    app_archive(FileType, AppId, ArNameTemplate, []),
-    split_string(ArNameTemplate, "()", "", [Prefix, "version", Suffix]),
-    (ground(Version)  ->
-         join_strings([Prefix, Version, Suffix], "", FileStr),
-         atom_string(File, FileStr)
+    app_archive(FileType, AppId, ArNameTemplate, _),
+    (atom_codes(ArNameTemplate, Codes), memberchk(0'(, Codes) ->
+        split_string(ArNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
+        version_tok(VersionTokenStr, VePrefix, VeSuffix),
+        (ground(Version), atom_length(Version, Len)  ->
+             (Len is 0 ->
+                  join_strings([Prefix, Suffix], "", FileStr)
+             ;
+                  join_strings([Prefix, VePrefix, Version, VeSuffix, Suffix], "", FileStr)
+             ),
+             atom_string(File, FileStr)
+        ),
+        member(File, FileList),
+        (\+ground(Version) ->
+             atom_concat(Prefix, Rest, File),
+             atom_concat(VersionToken, Suffix, Rest),
+             atom_length(VersionToken, VtLen),
+             (VtLen is 0 ->
+                  Version = ''
+             ;
+              atom_concat(VePrefix, VeRest, VersionToken),
+              atom_concat(Version, VeSuffix, VeRest)
+             )
+        ;
+             true
+        )
     ;
-         File = FileTest
-    ),
-    member(File, FileList),
-    (\+ground(Version) ->
-         atom_concat(Prefix, Rest, File),
-         atom_concat(Version, Suffix, Rest)
+        member(FileTest, FileList), File = FileTest, Version = ''
+    ).
+
+%%% flat files
+
+contloc(AppId,    lfile(File), Version, LocSpec, [], Options) :-
+    contloc_app_file(File, pom, AppId, Version, LocSpec, [], Options).
+
+contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
+    want_opt(ag(AppGroup), Options),
+    want_opt(ve(Version), Options),
+    application(app, AppId, AppGroup, _),
+    appdirectory(AppId, AppDirectory, Options),
+    directory_files(AppDirectory, FileList),
+    file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
+    format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]).
+
+file_match(FileTest, FileList, File, FileType, Version, AppId) :-
+    app_file(FileType, AppId, FileNameTemplate, _),
+    (atom_codes(FileNameTemplate, Codes), memberchk(0'(, Codes) ->
+        split_string(FileNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
+        version_tok(VersionTokenStr, VePrefix, VeSuffix),
+        (ground(Version), atom_length(Version, Len)  ->
+             (Len is 0 ->
+                  join_strings([Prefix, Suffix], "", FileStr)
+             ;
+                  join_strings([Prefix, VePrefix, Version, VeSuffix, Suffix], "", FileStr)
+             ),
+             atom_string(File, FileStr)
+        ),
+        member(File, FileList),
+        (\+ground(Version) ->
+             atom_concat(Prefix, Rest, File),
+             atom_concat(VersionToken, Suffix, Rest),
+             atom_length(VersionToken, VtLen),
+             (VtLen is 0 ->
+                  Version = ''
+             ;
+              atom_concat(VePrefix, VeRest, VersionToken),
+              atom_concat(Version, VeSuffix, VeRest)
+             )
+        ;
+             true
+        )
     ;
-     true
+        member(FileTest, FileList), File = FileTest, Version = ''
     ).
 
 %% parameters defined in paragraph_conf
@@ -478,15 +561,26 @@ paramval(Param, Val, Options) :-
 paramval(Param, Ve, Val, Options) :-
     paramval(Param, _, Ve, Val, Options).
 
-% xpath for an archive xml resource (war)
+%%% xpath
+
+% xpath for a flat file
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(XmlSource, Wfile, endswith(EntrySpec), _),
-    contloc(AppId, warfile(Wfile), Version, file(WfilePath), _, Options),
-    zipfile_entry_matches(WfilePath, EntrySpec, EntryStr),
+    paramloc(XmlSource, _Ffile, lfile(FileSpec), _),
+    contloc(AppId, lfile(FileSpec), Version, file(FilePath), _, Options),
+    load_xml(FilePath, XmlRoot, _),
+    xpath(XmlRoot, Xpath, Val).
+
+% xpath for an archive xml resource (war / jar / zip)
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, XmlSource, xpath(Xpath), _),
+    paramloc(XmlSource, Afile, endswith(EntrySpec), _),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+    zipfile_entry_matches(AfilePath, EntrySpec, EntryStr),
     atom_string(Entry, EntryStr),
     setup_call_cleanup(
-        open_archive_entry(WfilePath, Entry, XmlStream),
+        open_archive_entry(AfilePath, Entry, XmlStream),
         (
             load_xml(stream(XmlStream), XmlRoot, _),
             xpath(XmlRoot, Xpath, Val)

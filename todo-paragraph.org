@@ -13,6 +13,10 @@ prevent use of other directory not under workdirectory
 *** solution for removing large number of predicates (choicepoints) 
  - using tree or graph
 *** use tabling for recursive calls of paramval
+** fix this
+   Redo: (17) lists:member('pom.xml', ['.', .., '.DS_Store', '.gitignore', '.idea', '.mvn', 'HELP.md'|...]) ? creep
+   Fail: (17) lists:member('pom.xml', ['.', .., '.DS_Store', '.gitignore', '.idea', '.mvn', 'HELP.md'|...]) ? creep
+   Fail: (16) paragraph:file_match('pom.xml', ['.', .., '.DS_Store', '.gitignore', '.idea', '.mvn', 'HELP.md'|...], _1166, pom, '0.0.1-SNAPSHOT', 'paragraph-ui') ? abort
 ** TODO create docker image for paragraph
 * improve
 ** contloc_app_archive 
