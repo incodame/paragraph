@@ -19,6 +19,21 @@ test('archive match, version unknown') :-
     paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui'),
     paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.2.war', war, '0.2', 'paragraph-ui').
 
+test('archive match, with or without version') :-
+    FileList = [ '.', '..', 'paragraph-ui.war', 'paragraph-ui-0.2.war' ],
+    paragraph:archive_match('paragraph-ui(-version).war', FileList, 'paragraph-ui.war', war, '', 'paragraph-ui'),
+    paragraph:archive_match('paragraph-ui(-version).war', FileList, 'paragraph-ui-0.2.war', war, '0.2', 'paragraph-ui').
+
+test('archive match, without version') :-
+    FileList = [ '.', '..', 'paragraph-ui.war', 'paragraph-ui-0.2.war' ],
+    paragraph:archive_match('paragraph-ui.war', FileList, 'paragraph-ui.war', war, '', 'paragraph-ui').
+
+%% file match
+
+test('file match, without version') :-
+    FileList = [ '.', '..', 'pom.xml', '' ],
+    paragraph:file_match('pom.xml', FileList, 'pom.xml', pom, '', 'paragraph-ui').
+
 %% contloc
 
 test('container loc of paragraph-ui app archive, version already set') :-
@@ -26,6 +41,10 @@ test('container loc of paragraph-ui app archive, version already set') :-
 
 test('container loc of paragraph-ui app archive, version not set') :-
     paragraph:contloc('paragraph-ui', warfile('paragraph-ui-(version).war'),      '0.0.1-SNAPSHOT', file("/tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war"), [], [ ag('paragraph'), ve('0.0.1-SNAPSHOT')]).
+
+test('container loc of paragraph-ui pom.xml, version not set') :-
+    paragraph:contloc('paragraph-ui', lfile('pom.xml'), '', file("/opt/paragraph/ParagraphUI/pom.xml"), [], [ ag('paragraph'), ve(''), ad(paragraph_ui) ]).
+
 
 %% parameters defined in paragraph_conf
 
@@ -52,8 +71,13 @@ test('xpath -> xpath -> xml file -> warfile : find the parent pom version of par
     Version = '0.0.1-SNAPSHOT',    % app version
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
-test('search with wd option : find the parent pom version of paragraph archives') :-
+test('search archive with wd option : find the parent pom version of paragraph archives') :-
     paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT'), wd(examples)]),
+    Version = '0.0.1-SNAPSHOT',    % app version
+    Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
+
+test('search file with ad option : find the parent pom version of paragraph') :-
+    paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui)]),
     Version = '0.0.1-SNAPSHOT',    % app version
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 

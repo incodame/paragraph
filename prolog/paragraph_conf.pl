@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, paramloc/4, app_archive/4, search_option/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/4, app_archive/4, app_file/4, search_option/3 ]).
 :- use_module(library(xpath)).
 %%
 %% Paragraph Configuration
@@ -31,7 +31,8 @@ paramloc(context_root,     application_xml, xpath(//'context-root'(text)),      
 paramloc(persistence_xml,  WebAppEar,       endswith("persistence-context.xml"), [ doc(Doc) ]) :-
     app_archive(ear, _App, WebAppEar, _),
     Doc = "Main configuration of JPA".
-paramloc(pom_xml_parent,   war_pom_xml,     xpath(//project/parent), [ doc("pom.xml parent") ]).
+paramloc(pom_xml_parent,   war_pom_xml,     xpath(//project/parent), [ doc("pom.xml parent in app archive") ]).
+paramloc(pom_xml_parent,   app_pom_xml,     xpath(//project/parent), [ doc("pom.xml parent in app file") ]).
 paramloc(pom_xml_parent_artifact_id,  pom_xml_parent,     xpath(//artifactId(text)), [ doc("pom.xml parent artifactId") ]).
 paramloc(pom_xml_parent_group_id,     pom_xml_parent,     xpath(//groupdId(text)),   [ doc("pom.xml parent groupdId") ]).
 paramloc(pom_xml_parent_version,      pom_xml_parent,     xpath(//version(text)),    [ doc("pom.xml parent version") ]).
@@ -39,18 +40,33 @@ paramloc(pom_xml_version,  war_pom_xml,     xpath(//project/version(text)), [ do
 paramloc(war_pom_xml,      WebAppWar,       endswith("/pom.xml"),     [ doc(Doc) ]) :-
     app_archive(war, _App, WebAppWar, _),
     Doc = "pom.xml of a Web Archive built by Maven".
+paramloc(app_pom_xml,      no_parent,       lfile('pom.xml'), [ doc(Doc) ]) :-
+    app_file(pom, _App, 'pom.xml', [ doc(Doc) ]).
 
 %% application archives ordered alphabetically (ear, war, jar, zip)
 
-app_archive(war,  'paragraph-ui',           'paragraph-ui-(version).war', []).
+app_archive(war,  'paragraph-ui',           'paragraph-ui(-version).war', []).
 app_archive(jar,  'paragraph-verticles',    'paragraph-verticles-(version)-fat.jar', []).
+
+%% application files
+
+app_file(pom, AppId, 'pom.xml',  [ doc("application pom.xml") ]) :-
+    application(app, AppId, _ApplicationGroup, AppOpts), memberchk(build(maven), AppOpts).
+% add specific files here
 
 %% search options: term, printable text and default way to get it
 
 search_option(ag(ApplicationGroup), "Application group", read(ApplicationGroup)).
 search_option(ve(Version),          "Version", read(Version)).
 search_option(wd(WorkDirectory),    "Work directory alias", read(WorkDirectory)).
+search_option(ad(AppDirectory),     "App directory alias",  read(AppDirectory)).
 
-%% directory aliases
+%% global directory aliases
 
 directory_alias(examples, '/opt/paragraph/examples').
+
+%% application specific directory aliases
+
+directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
+directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').
+
