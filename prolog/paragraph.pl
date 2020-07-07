@@ -5,6 +5,7 @@
 :- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/5, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
+:- use_module(library(list_util)).
 :- use_module(library(xpath)).
 :- use_module(library(apply)).
 :- use_module(library(archive)).
@@ -269,14 +270,14 @@ appdirectory(AppId, AppDirectory, Options) :-
     member(ad(AppDirectoryAlias), Options),
     directory_alias(AppId, AppDirectoryAlias, AppDirectory).
 
-workdirectory(WorkDirectory) :-
+default_workdirectory(WorkDirectory) :-
     getenv("PARAGRAPH_TEMP", WorkDirectory).
 
 workdirectory(WorkDirectory, Options) :-
     (member(wd(WorkDirectoryAlias), Options),
      directory_alias(WorkDirectoryAlias, WorkDirectory)
     ;
-     workdirectory(WorkDirectory)
+     default_workdirectory(WorkDirectory)
     ).
 
 download_as(Url, LocalFile, DownloadOptions, StatusCode) :-
@@ -566,15 +567,19 @@ paramval(Param, Ve, Val, Options) :-
 % xpath for a flat file
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(XmlSource, _Ffile, lfile(FileSpec), _),
+    paramloc(AppId, XmlSource, _Ffile, lfile(FileSpec), _),
+    dbg_paramval('xpath->lfile', Param, XmlSource, Options),
     contloc(AppId, lfile(FileSpec), Version, file(FilePath), _, Options),
+    format(string(Info), 'Reading file ~w', [FilePath]),
+    writeln(Info),
     load_xml(FilePath, XmlRoot, _),
     xpath(XmlRoot, Xpath, Val).
 
 % xpath for an archive xml resource (war / jar / zip)
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(XmlSource, Afile, endswith(EntrySpec), _),
+    paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _),
+    dbg_paramval('xpath->endswith', Param, XmlSource, Options),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), _, Options),
     zipfile_entry_matches(AfilePath, EntrySpec, EntryStr),
@@ -590,7 +595,25 @@ paramval(Param, AppId, Version, Val, Options) :-
 % nested xpath definitions
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlParentTag, xpath(Xpath), _),
-    paramloc(XmlParentTag, _, xpath(_), _),
-    paramval(XmlParentTag, AppId, Version, ParentXml, Options),
+    %paramloc(XmlParentTag, _, xpath(_), _), %  creates duplicates due to various containers
+    dbg_paramval('xpath->*', Param, XmlParentTag, Options),
+    inc_dbg_level(Options, NewOptions),
+    paramval(XmlParentTag, AppId, Version, ParentXml, NewOptions),  % NB: here the container is not used
     xpath(ParentXml, Xpath, Val).
+
+dbg_paramval(Transition, Param, Container, Options) :-
+    (memberchk(dbg(Level), Options) ->
+         Nsp is Level * 4,
+         repeat(' ', Rs), take(Nsp, Rs, Tabs),
+         format(atom(Message), '~w paramval ~w : ~w -> ~w', [Tabs, Transition, Param, Container]),
+         writeln(Message)
+    ;
+         true
+    ).
+
+inc_dbg_level([], []) :- !.
+inc_dbg_level([dbg(Level)|Rest], [dbg(NewLevel)|Rest]) :-
+    NewLevel is Level+1, !.
+inc_dbg_level([H|Rest], [H|NewRest]) :-
+    inc_dbg_level(Rest, NewRest).
 

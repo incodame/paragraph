@@ -77,8 +77,8 @@ test('search archive with wd option : find the parent pom version of paragraph a
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
 test('search file with ad option : find the parent pom version of paragraph') :-
-    paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui)]),
-    Version = '0.0.1-SNAPSHOT',    % app version
+    paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve(''), ad(paragraph_ui)]),
+    Version = '',                  % container (lfile) is not versioned
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
 :- end_tests(paragraph_paramval).
