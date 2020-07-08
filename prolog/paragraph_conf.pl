@@ -30,6 +30,9 @@ paramloc(App, batch_properties, BatchAppZip,     endswith(".properties"), [ doc(
     app_archive(zip, App, BatchAppZip, _),
     Doc = "Any properties file within an application's zip".
 paramloc(context_root,     application_xml, xpath(//'context-root'(text)),      [ doc("context root of a Java EE web application")]).
+paramloc(App, help_md, no_parent, lfile('HELP.md'), [ doc(Doc) ]) :-
+    app_file(md, App, 'HELP.md', [ doc(Doc) ]).
+paramloc(help_url,  help_md,       regexp("[(](?<V1L>.*)[)]$"), [ doc("help resource url") ]).
 paramloc(App, persistence_xml,  WebAppEar,       endswith("persistence-context.xml"), [ doc(Doc) ]) :-
     app_archive(ear, App, WebAppEar, _),
     Doc = "Main configuration of JPA".
@@ -56,6 +59,7 @@ app_file(pom, AppId, 'pom.xml',  [ doc("application pom.xml") ]) :-
     application(app, AppId, _ApplicationGroup, AppOpts), memberchk(build(maven), AppOpts).
 
 % add specific files here
+app_file(md,  'paragraph-ui', 'HELP.md', [ doc("application help") ]).
 
 %% search options: term, printable text and default way to get it
 
