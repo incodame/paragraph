@@ -81,4 +81,9 @@ test('search file with ad option : find the parent pom version of paragraph') :-
     Version = '',                  % container (lfile) is not versioned
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
+test('regexp -> txt file : find help url') :-
+    paramval(help_url, Version, Val, [ag('paragraph'), ve(''), ad(paragraph_ui)]),
+    Version = '',
+    Val = "https://maven.apache.org/guides/index.html".
+
 :- end_tests(paragraph_paramval).

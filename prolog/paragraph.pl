@@ -20,6 +20,7 @@
 :- use_module(library(process)).
 :- use_module(library(regex)).
 :- use_module(library(www_browser)).
+:- use_module(library(yall)).
 :- use_module(paragraph_conf).
 
 :- table contloc_app_archive/6.
@@ -499,6 +500,9 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
 contloc(AppId,    lfile(File), Version, LocSpec, [], Options) :-
     contloc_app_file(File, pom, AppId, Version, LocSpec, [], Options).
 
+contloc(AppId,    lfile(File), Version, LocSpec, [], Options) :-
+    contloc_app_file(File, md, AppId, Version, LocSpec, [], Options).
+
 contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
@@ -600,6 +604,50 @@ paramval(Param, AppId, Version, Val, Options) :-
     inc_dbg_level(Options, NewOptions),
     paramval(XmlParentTag, AppId, Version, ParentXml, NewOptions),  % NB: here the container is not used
     xpath(ParentXml, Xpath, Val).
+
+%%% regexp
+
+% regexp for a flat file
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, TxtSource, regexp(Regexp), _),
+    paramloc(AppId, TxtSource, _Ffile, lfile(FileSpec), _),
+    dbg_paramval('regexp->lfile', Param, TxtSource, Options),
+    contloc(AppId, lfile(FileSpec), Version, file(FilePath), _, Options),
+    format(string(Info), 'Reading file ~w', [FilePath]),
+    writeln(Info),
+    lines(file(FilePath), Lines),
+    lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]). % non empty list
+
+% regexp for an archive xml resource (war / jar / zip)
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, TxtSource, regexp(Regexp), _),
+    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    dbg_paramval('regexp->endswith', Param, TxtSource, Options),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+    zipfile_entry_matches(AfilePath, EntrySpec, EntryStr),
+    atom_string(Entry, EntryStr),
+    setup_call_cleanup(
+        open_archive_entry(AfilePath, Entry, FileStream),
+        (
+            lines(stream(FileStream), Lines),
+            lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_])
+        ),
+        close(FileStream)).
+
+% nested regexp definitions
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, Parent, regexp(Regexp), _),
+    dbg_paramval('regexp->*', Param, Parent, Options),
+    inc_dbg_level(Options, NewOptions),
+    paramval(Parent, AppId, Version, ParentTxt, NewOptions),
+    open_string(ParentTxt, TxtStream),
+    lines(stream(TxtStream), Lines),
+    lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]).
+
+text_match(Line, Regexp, Val) :-
+    regex(Regexp, [], Line, ['V1L'=V1L]),
+    text_to_string(V1L, Val).
 
 dbg_paramval(Transition, Param, Container, Options) :-
     (memberchk(dbg(Level), Options) ->
