@@ -269,7 +269,9 @@ join_strings([H|T], Sep, J) :-
 
 appdirectory(AppId, AppDirectory, Options) :-
     member(ad(AppDirectoryAlias), Options),
-    directory_alias(AppId, AppDirectoryAlias, AppDirectory).
+    directory_alias(AppId, AppDirectoryAlias, AppDirectory),
+    format(string(Message), 'Trying app directory = ~w', [AppDirectory]),
+    writeln(Message).
 
 default_workdirectory(WorkDirectory) :-
     getenv("PARAGRAPH_TEMP", WorkDirectory).
@@ -279,7 +281,9 @@ workdirectory(WorkDirectory, Options) :-
      directory_alias(WorkDirectoryAlias, WorkDirectory)
     ;
      default_workdirectory(WorkDirectory)
-    ).
+    ),
+    format(string(Message), 'Trying work directory = ~w', [WorkDirectory]),
+    writeln(Message).
 
 download_as(Url, LocalFile, DownloadOptions, StatusCode) :-
     http_open(Url, Reply, [status_code(StatusCode) | DownloadOptions]),
@@ -500,6 +504,20 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
         member(FileTest, FileList), File = FileTest, Version = ''
     ).
 
+resolve_entry_spec(pv(Param), ActualEntry, Options) :-
+    paramval(Param, ActualEntry, Options),
+    format(atom(Message), 'Resolved entry spec pv(~w) to ~w', [Param, ActualEntry]),
+    writeln(Message).
+
+resolve_entry_spec(pv(Param, Conversion), ActualEntry, Options) :-
+    paramval(Param, ParamVal, Options),
+    transform_val(Conversion, ParamVal, ActualEntry),
+    format(atom(Message), 'Resolved entry spec pv(~w, ~w) to ~w', [Param, Conversion, ActualEntry]),
+    writeln(Message).
+
+resolve_entry_spec(ActualEntry, ActualEntry, _) :-
+    \+compound(ActualEntry).
+
 %%% flat files
 
 contloc(AppId,    lfile(File), Version, LocSpec, [], Options) :-
@@ -592,10 +610,11 @@ paramval(Param, AppId, Version, Val, Options) :-
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
     paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Options),
     dbg_paramval('xpath->endswith', Param, XmlSource, Options),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), _, Options),
-    zipfile_entry_matches(AfilePath, EntrySpec, EntryStr),
+    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
     atom_string(Entry, EntryStr),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, XmlStream),
