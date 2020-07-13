@@ -10,14 +10,21 @@ test('parse package type, version and app') :-
 
 %% archive match
 
+% TODO - broken, should fail
 test('archive match, version is known') :-
     FileList = [ '.', '..', 'paragraph-ui-0.1.war', 'paragraph-ui-0.2.war' ],
-    paragraph:archive_match('paragraph-ui-0.1.war', FileList, 'paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui').
+    paragraph:archive_match('paragraph-ui-0.9.war', FileList, 'paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui').
 
 test('archive match, version unknown') :-
     FileList = [ '.', '..', 'paragraph-ui-0.1.war', 'paragraph-ui-0.2.war' ],
-    paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui'),
-    paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.2.war', war, '0.2', 'paragraph-ui').
+    (paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.1.war', FileType, Ve1, 'paragraph-ui'),
+     Ve1 = '0.1',
+     FileType = war
+    ),
+    (paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.2.war', FileType, Ve2, 'paragraph-ui'),
+     Ve2 = '0.2',
+     FileType = war
+    ).
 
 test('archive match, with or without version') :-
     FileList = [ '.', '..', 'paragraph-ui.war', 'paragraph-ui-0.2.war' ],
@@ -28,11 +35,21 @@ test('archive match, without version') :-
     FileList = [ '.', '..', 'paragraph-ui.war', 'paragraph-ui-0.2.war' ],
     paragraph:archive_match('paragraph-ui.war', FileList, 'paragraph-ui.war', war, '', 'paragraph-ui').
 
+test('archive match, wilcard') :-
+    FileList = [ '.', '..', 'a.jar', 'b.jar' ],
+    paragraph:archive_match('*.jar', FileList, 'a.jar', jar, '', 'paragraph-verticles'),
+    paragraph:archive_match('*.jar', FileList, 'b.jar', jar, '', 'paragraph-verticles').
+
 %% file match
 
 test('file match, without version') :-
     FileList = [ '.', '..', 'pom.xml', '' ],
     paragraph:file_match('pom.xml', FileList, 'pom.xml', pom, '', 'paragraph-ui').
+
+test('file match, wilcard') :-
+    FileList = [ '.', '..', 'a.xml', 'b.xml' ],
+    paragraph:file_match('*.xml', FileList, 'a.xml', xml, '', 'paragraph-verticles'),
+    paragraph:file_match('*.xml', FileList, 'b.xml', xml, '', 'paragraph-verticles').
 
 %% contloc
 
