@@ -70,6 +70,8 @@ app_file(pom, AppId, 'pom.xml',  [ doc("application pom.xml") ]) :-
 
 % add specific files here
 app_file(md,  'paragraph-ui', 'HELP.md', [ doc("application help") ]).
+app_file(xml, 'paragraph-verticles',    '*.xml', []).
+app_file(jar, 'paragraph-verticles',    '*.jar', []).
 
 %% search options: term, printable text and default way to get it
 :- discontiguous search_option/3.
@@ -90,4 +92,4 @@ directory_alias(examples, '/opt/paragraph/examples').
 
 directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
 directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').
-
+directory_alias('paragraph-verticles', pv_dependencies, '/opt/paragraph/ParagraphVerticles/target/dependency').

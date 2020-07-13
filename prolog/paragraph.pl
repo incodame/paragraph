@@ -464,9 +464,9 @@ version_tok(VersionTokenStr, VePrefixStr, VeSuffixStr) :-
     string_codes(VePrefixStr, VePrefixL),
     string_codes(VeSuffixStr, VeSuffixL).
 
+% TODO: remove call to app_archive, use FileTest only
 archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
-    app_archive(FileType, AppId, ArNameTemplate, _),
-    (atom_codes(ArNameTemplate, Codes), memberchk(0'(, Codes) ->
+    (app_archive(FileType, AppId, ArNameTemplate, _), atom_codes(ArNameTemplate, Codes), memberchk(0'(, Codes),
         split_string(ArNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
         version_tok(VersionTokenStr, VePrefix, VeSuffix),
         (ground(Version), atom_length(Version, Len)  ->
@@ -475,7 +475,10 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
              ;
                   join_strings([Prefix, VePrefix, Version, VeSuffix, Suffix], "", FileStr)
              ),
+        %atom_string(FileTest, FileStr), File = FileTest
              atom_string(File, FileStr)
+        ;
+             true
         ),
         member(File, FileList),
         (\+ground(Version) ->
@@ -491,6 +494,8 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
         ;
              true
         )
+    ;atom_concat('*.', FileType, FileTest), atom_concat('*', Suffix, FileTest),
+        member(File, FileList), atom_concat(_, Suffix, File)
     ;
         member(FileTest, FileList), File = FileTest, Version = ''
     ).
@@ -512,9 +517,9 @@ contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), [], Options)
     file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
     format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]).
 
+% TODO: remove call to app_file, use FileTest only
 file_match(FileTest, FileList, File, FileType, Version, AppId) :-
-    app_file(FileType, AppId, FileNameTemplate, _),
-    (atom_codes(FileNameTemplate, Codes), memberchk(0'(, Codes) ->
+    (app_file(FileType, AppId, FileNameTemplate, _), atom_codes(FileNameTemplate, Codes), memberchk(0'(, Codes),
         split_string(FileNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
         version_tok(VersionTokenStr, VePrefix, VeSuffix),
         (ground(Version), atom_length(Version, Len)  ->
@@ -524,6 +529,8 @@ file_match(FileTest, FileList, File, FileType, Version, AppId) :-
                   join_strings([Prefix, VePrefix, Version, VeSuffix, Suffix], "", FileStr)
              ),
              atom_string(File, FileStr)
+        ;
+             true
         ),
         member(File, FileList),
         (\+ground(Version) ->
@@ -539,6 +546,8 @@ file_match(FileTest, FileList, File, FileType, Version, AppId) :-
         ;
              true
         )
+    ;atom_concat('*.', FileType, FileTest), atom_concat('*', Suffix, FileTest),
+        member(File, FileList), atom_concat(_, Suffix, File)
     ;
         member(FileTest, FileList), File = FileTest, Version = ''
     ).
