@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/4, paramloc/5, app_archive/4, app_file/4, search_option/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/4, paramloc/5, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
 :- use_module(library(xpath)).
 %%
 %% Paragraph Configuration

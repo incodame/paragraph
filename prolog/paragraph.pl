@@ -650,10 +650,11 @@ paramval(Param, AppId, Version, Val, Options) :-
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, TxtSource, regexp(Regexp), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Options),
     dbg_paramval('regexp->endswith', Param, TxtSource, Options),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), _, Options),
-    zipfile_entry_matches(AfilePath, EntrySpec, EntryStr),
+    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
     atom_string(Entry, EntryStr),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
