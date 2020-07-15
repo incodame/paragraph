@@ -1,64 +1,90 @@
 package org.incodame.paragraph.prolog.srv
 
 import com.profesorfalken.jpowershell.PowerShell
-import io.vertx.core.AbstractVerticle
-import io.vertx.core.Promise
+import com.profesorfalken.jpowershell.PowerShellNotAvailableException
 import io.vertx.core.eventbus.Message
-import io.vertx.core.http.HttpServer
 import io.vertx.core.json.JsonObject
-import io.vertx.ext.web.Router
-import io.vertx.ext.web.handler.StaticHandler
+import org.incodame.paragraph.ParagraphVerticle
 
-class PwshTaskVerticle extends AbstractVerticle {
+class PwshTaskVerticle extends ParagraphVerticle {
 
   @Override
-  public void start(Promise<Void> promise) {
+  public void startParagraphVerticle(JsonObject jsonConfig) {
+
     def eb = vertx.eventBus()
+
     def consumer = eb.consumer("pwsh.task")
+
     consumer.handler({ message ->
-      println("I have received a message: ${message.body()}")
-      executeTask(message)
+      executeTask(message, jsonConfig)
     })
+
   }
 
-  def executeTask(Message<JsonObject> message) {
+  def executeTask(Message<JsonObject> message, JsonObject jsonConfig) {
 
     if (!message.headers().contains("templateScript")) {
-      LOGGER.error("No templateScript header specified for message with headers {} and body {}",
-        message.headers(), message.body().encodePrettily())
-      message.fail(ErrorCodes.NO_ACTION_SPECIFIED.ordinal(), "No templateScript header specified")
+      failTask(message, "No templateScript header specified")
       return
     }
 
     String templateScript = message.headers().get("templateScript")
 
-    /* TODO exception handling -> fail */
-    def scriptResponse = executePwsh(templateScript)
+    if (validateScript(templateScript)) {
 
-    message.reply(new JsonObject().put("scriptResponse", scriptResponse));
+      try {
+        def scriptResponse = executePwsh(templateScript, jsonConfig)
+
+        message.reply(new JsonObject().put("scriptResponse", scriptResponse));
+
+      } catch (Exception e) {
+        failTask(message, "Task exception: ${e.getMessage()}")
+        return
+      }
+
+    } else {
+      failTask(message, "Task not accepted")
+      return
+    }
 
   }
 
-  /* TODO: bundling of scripts into jar file */
   /* TODO: reading of parameters passed to templateScript */
   /* TODO: similar GStringTemplate technique as in TemplateQuery */
-  def executePwsh(String templateScript) {
-    PowerShell powerShell = PowerShell.openSession();
-    String script = "resourcePath/${templateScript}.ps1"
-    String scriptParams = "-Parameter value"
+  def executePwsh(String templateScript, JsonObject jsonConfig) {
 
-    //Read the resource
-    BufferedReader srcReader = new BufferedReader(
-      new InputStreamReader(getClass().getResourceAsStream(script)));
+    try (PowerShell powerShell = PowerShell.openSession()) {
 
-    if (scriptParams != null && !scriptParams.equals("")) {
-      return powerShell.executeScript(srcReader, scriptParams);
-    } else {
-      return powerShell.executeScript(srcReader);
+      JsonObject verticleConfig = jsonConfig.getJsonObject("PwshTaskVerticle")
+
+      //Increase timeout to give enough time to the script to finish
+      Map<String, String> config = new HashMap<String, String>();
+      config.put("maxWait", verticleConfig.getInteger("maxWait"));
+
+      def scriptHome = verticleConfig.getString("scriptHome")
+
+      //Execute script
+      def response = powerShell
+        .configuration(config)
+        .executeScript("${scriptHome}/${templateScript}.ps1");
+      
+      return response.getCommandOutput();
+
+    } catch(PowerShellNotAvailableException ex) {
+      return "PowerShell is not available in the system"
     }
+    
+  }
+
+  def validateScript(String scriptName) {
+    return scriptName.matches("[a-zA-Z0-9_]+")
+  }
+
+  def failTask(Message<?> message, String failureMessage) {
+    //LOGGER.error("Task failed: {}", failureMessage)
+    message.fail(ErrorCodes.NO_ACTION_SPECIFIED.ordinal(), "Task failed: ${failureMessage} ")
   }
 
   /* TODO - Spock tests */
-  /* TODO - read values from main-verticle-config.yaml */
 
 }

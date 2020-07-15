@@ -93,3 +93,8 @@ directory_alias(examples, '/opt/paragraph/examples').
 directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
 directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').
 directory_alias('paragraph-verticles', pv_dependencies, '/opt/paragraph/ParagraphVerticles/target/dependency').
+
+%% value transformation
+
+transform_val(id, Val, Val).
+
