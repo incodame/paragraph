@@ -19,7 +19,6 @@ public class MainVerticleTest {
   public void setUp(TestContext tc) {
     vertx = Vertx.vertx();
     vertx.deployVerticle(MainVerticle.class.getName(), tc.asyncAssertSuccess());
-    //vertx.deployVerticle(PrologTestVerticle.class.getName(), tc.asyncAssertSuccess());
   }
 
   @After

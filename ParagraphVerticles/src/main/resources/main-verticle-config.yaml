@@ -1,7 +1,10 @@
-welcome.message: [ParagraphVerticles]
+welcome.message: ParagraphVerticles
 deploy:
   verticles:
     MainVerticle:
       port: 8087
     PrologTestVerticle:
       port: 8089
+PwshTaskVerticle:
+  scriptHome: ~/Incodame/paragraph/examples/pwsh
+  maxWait: 80000

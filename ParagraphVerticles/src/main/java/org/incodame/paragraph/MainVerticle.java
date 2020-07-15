@@ -1,43 +1,34 @@
 package org.incodame.paragraph;
 
-import io.vertx.config.ConfigRetriever;
-import io.vertx.config.ConfigStoreOptions;
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import org.incodame.paragraph.prolog.srv.PrologTestVerticle;
+import org.incodame.paragraph.prolog.srv.PwshTaskVerticle;
 
-public class MainVerticle extends AbstractVerticle {
+public class MainVerticle extends ParagraphVerticle {
 
   @Override
-  public void start() {
-    ConfigStoreOptions store = new ConfigStoreOptions()
-      .setType("file")
-      .setFormat("yaml")
-      .setConfig(new JsonObject()
-        .put("path", "main-verticle-config.yaml")
-      );
-
-    ConfigRetriever retriever = ConfigRetriever.create(vertx);
-    retriever.getConfig(json -> {
-      JsonObject result = json.result();
-
-      vertx.createHttpServer()
+  public void startParagraphVerticle(JsonObject jsonConfig) {
+    vertx.createHttpServer()
         .requestHandler(request ->
         {
           request.response()
             .putHeader("content-type", "text/plain")
-            .end("[Paragraph Verticles]");
+            .end(jsonConfig.getString("welcome.message"));
         })
-        .listen(8087);
+        .listen(jsonConfig
+          .getJsonObject("deploy")
+          .getJsonObject("verticles")
+          .getJsonObject("MainVerticle")
+          .getInteger("port"));
 
-      vertx.deployVerticle(PrologTestVerticle.class.getName());
+    vertx.deployVerticle(PrologTestVerticle.class.getName());
+    vertx.deployVerticle(PwshTaskVerticle.class.getName());
 
-    });
   }
-  /* TODO - read values from main-verticle-config.yaml */
 
   @Override
   public void stop() {
     vertx.undeploy(PrologTestVerticle.class.getName());
+    vertx.undeploy(PwshTaskVerticle.class.getName());
   }
 }
