@@ -321,6 +321,17 @@ zipfile_entry_matches(ZipFile, EndsWithSpec, Entry) :-
         archive_entries_matching(ArchiveIn, EndsWithSpec, Entry),
         close_any(Close)).
 
+archive_entries_starting(ArchiveIn, StartsWithSpec, Entry) :-
+    archive_entries(ArchiveIn, ZipAllList),
+    member(Entry, ZipAllList),
+    string_concat(StartsWithSpec, _End, Entry).
+
+zipfile_entry_starts(ZipFile, StartsWithSpec, Entry) :-
+    setup_call_cleanup(
+        open_any(ZipFile, read, ArchiveIn, Close, [type(binary)]),
+        archive_entries_starting(ArchiveIn, StartsWithSpec, Entry),
+        close_any(Close)).
+
 % Open archive entry, Entry must be an atom with '', not a string
 open_archive_entry(ArchiveFile, Entry, Stream) :-
     open(ArchiveFile, read, In, [type(binary)]),
@@ -624,6 +635,24 @@ paramval(Param, AppId, Version, Val, Options) :-
         ),
         close(XmlStream)).
 
+% xpath for an archive xml resource (war / jar / zip)
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, XmlSource, xpath(Xpath), _),
+    paramloc(AppId, XmlSource, Afile, startswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Options),
+    dbg_paramval('xpath->startswith', Param, XmlSource, Options),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+    zipfile_entry_starts(AfilePath, Entry2Find, EntryStr),
+    atom_string(Entry, EntryStr),
+    setup_call_cleanup(
+        open_archive_entry(AfilePath, Entry, XmlStream),
+        (
+            load_xml(stream(XmlStream), XmlRoot, _),
+            xpath(XmlRoot, Xpath, Val)
+        ),
+        close(XmlStream)).
+
 % nested xpath definitions
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlParentTag, xpath(Xpath), _),
@@ -654,6 +683,23 @@ paramval(Param, AppId, Version, Val, Options) :-
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), _, Options),
     zipfile_entry_matches(AfilePath, EntrySpec, EntryStr),
+    atom_string(Entry, EntryStr),
+    setup_call_cleanup(
+        open_archive_entry(AfilePath, Entry, FileStream),
+        (
+            lines(stream(FileStream), Lines),
+            lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_])
+        ),
+        close(FileStream)).
+
+% regexp for an archive xml resource (war / jar / zip)
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, TxtSource, regexp(Regexp), _),
+    paramloc(AppId, TxtSource, Afile, startswith(EntrySpec), _),
+    dbg_paramval('regexp->startswith', Param, TxtSource, Options),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+    zipfile_entry_starts(AfilePath, EntrySpec, EntryStr),
     atom_string(Entry, EntryStr),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
