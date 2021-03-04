@@ -3,20 +3,30 @@
 without Options, one is asked to enter Options twice or more,
 because of the redo after the failed
 paragraph:contloc_app_archive(_16864, ear, 'paragraph-ui', _16454, _17192, [], [])
-** application_java_class
-produce an ear file from the ParagraphUI war
+** application_jar, application_java_class
+ - produce an ear file from the ParagraphUI war
+ - implement methods for ear archives
+ - fix showdoc
 ** download_as
 use workdirectory
 prevent use of other directory not under workdirectory
 ** paramval
 *** force the use of structured term e.g. earfile(E) for container
 *** solution for removing large number of predicates (choicepoints) 
- - using graph
+ - using constrained search in graph
+ - reimplement scopers
 *** use tabling for recursive calls of paramval
 *** complete example: maven_checks.pl
-** TODO create docker image for paragraph
+** verticles
+ - first implementation of Pwsh and Query verticles
 * improve
 ** contloc_app_archive 
 processes files . and ..
 it uses directory_files and could filter based on the FileType if it is ground
 tabling not yet working
+** use yaml paragraph configuration
+ - finish implementation for app files and archives
+ - directory aliases in separate yaml
+** example of integration with ansible
+ - using the python pengine client
+

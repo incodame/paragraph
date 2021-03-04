@@ -6,5 +6,14 @@ deploy:
     PrologTestVerticle:
       port: 8089
 PwshTaskVerticle:
-  scriptHome: ~/Incodame/paragraph/examples/pwsh
+  scriptHome: /opt/paragraph/templates/pwsh
   maxWait: 80000
+QueryTaskVerticle:
+  queryHome: /opt/paragraph/templates/query
+db.props:
+  local:
+    url: aa
+    driver: bb
+    user: cc
+    propsFile: /opt/paragraph/cipher/local.properties
+session.props: /run/secrets/paragraph_session.properties
