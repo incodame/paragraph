@@ -1,0 +1,113 @@
+paragraph:
+  apps:
+    - name: paragraph
+      build: prolog
+      repositories:
+        - paragraph-repo: webrepo
+      deployments:
+        - paragraph-deploy: deployment
+      modules:
+        - paragraph-ui
+        - paragraph-verticles
+        - paragraph_conf
+    - name: paragraph-ui
+      build: maven
+    - name: paragraph-verticles
+      build: maven
+    - name: paragraph_conf
+      build: prolog
+  graph:
+    host:
+      directory:
+        archive:
+          name: archive
+          entries:
+            - entry: file
+        file: file
+    webrepo:
+      directory:
+        archive:
+          entry: file
+        file: file
+    file:
+      application_xml:
+        loc: rpath("META-INF/application.xml")
+        doc: "The application.xml deployment descriptor contains one module element for each module in the Enterprise Archive file."
+        params:
+          - context_root: param
+      batch_cmd:
+        loc: endswith(".cmd")
+        doc: "Any batch cmd file within an application's zip"
+        params:
+          - batch_java_home: param
+      help_md:
+        loc: applfile("HELP.md")
+        doc: "Help resources"
+        params:
+          - help_url: param
+      persistence_xml:
+        loc: endswith("persistence-context.xml")
+        doc: "Main configuration of JPA"
+        params:
+          - jpa_todo: param
+      pom_xml:
+        loc: applfile("pom.xml"), endswith("/pom.xml")
+        doc: "Application or module's pom.xml"
+        params:
+          - pom_xml_parent: param
+          - pom_xml_artifact_id: param
+          - pom_xml_group_id: param
+          - pom_xml_version: param
+    param:
+      batch_java_home:
+        loc: regexp("^(?<V1L>.*JAVA_HOME=.*)$")
+        doc: "JAVA_HOME definition within a .cmd"
+      context_root:
+        loc: xpath(//'context-root'(text))
+        doc: "context root of a Java EE web application"
+      help_url:
+        loc: regexp("[(](?<V1L>.*)[)]$")
+        doc: "help resource url"
+      jpa_todo:
+        loc: xpath("TODO")
+        doc: "TODO"
+      pom_xml_parent:
+        loc: xpath(//project/parent)
+        doc: "pom.xml parent"
+        params:
+          - pom_xml_parent_artifact_id: param
+          - pom_xml_parent_group_id: param
+          - pom_xml_parent_version: param
+      pom_xml_artifact_id:
+        loc: xpath(//artifactId(text))
+        doc: "pom.xml artifactId"
+      pom_xml_group_id:
+        loc: xpath(//groupdId(text))
+        doc: "pom.xml groupdId"
+      pom_xml_parent_artifact_id:
+        loc: xpath(//artifactId(text))
+        doc: "pom.xml parent artifactId"
+      pom_xml_parent_group_id:
+        loc: xpath(//groupdId(text))
+        doc: "pom.xml parent groupdId"
+      pom_xml_parent_version:
+        loc: xpath(//version(text))
+        doc: "pom.xml parent version"
+      pom_xml_version:
+        loc: xpath(//project/version(text))
+        doc: "pom.xml version"
+    deployment:
+      paragraph-deploy:
+        root-dir: /Users/tanguyro/Incodame/paragraph
+        paragraph-ui:
+          files:
+            - help_md: file
+            - pom_xml: file
+          archives:
+            - paragraph-ui(-version).war: archive
+        paragraph-verticles:
+          files:
+            - pom_xml: file
+          archives:
+            - paragraph-verticles-(version)-fat.jar: archive
+          

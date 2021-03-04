@@ -21,6 +21,7 @@ class PwshTaskVerticle extends ParagraphVerticle {
 
   }
 
+  /* TODO : secure client token */
   def executeTask(Message<JsonObject> message, JsonObject jsonConfig) {
 
     if (!message.headers().contains("templateScript")) {
@@ -58,22 +59,22 @@ class PwshTaskVerticle extends ParagraphVerticle {
       JsonObject verticleConfig = jsonConfig.getJsonObject("PwshTaskVerticle")
 
       //Increase timeout to give enough time to the script to finish
-      Map<String, String> config = new HashMap<String, String>();
-      config.put("maxWait", verticleConfig.getInteger("maxWait"));
+      Map<String, String> config = new HashMap<String, String>()
+      config.put("maxWait", verticleConfig.getInteger("maxWait"))
 
       def scriptHome = verticleConfig.getString("scriptHome")
 
       //Execute script
       def response = powerShell
         .configuration(config)
-        .executeScript("${scriptHome}/${templateScript}.ps1");
-      
-      return response.getCommandOutput();
+        .executeScript("${scriptHome}/${templateScript}.ps1")
+
+      return response.getCommandOutput()
 
     } catch(PowerShellNotAvailableException ex) {
       return "PowerShell is not available in the system"
     }
-    
+
   }
 
   def validateScript(String scriptName) {

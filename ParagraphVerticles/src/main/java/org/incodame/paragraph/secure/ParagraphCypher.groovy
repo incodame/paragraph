@@ -18,8 +18,9 @@ class ParagraphCipher {
     private File cipherPropsFile
     private byte[] salt
 
-    public ParagraphCipher(String propsFile) {
-        this.salt = "27059345".getBytes()
+    public ParagraphCipher(String userSalt, String propsFile) {
+        //this.salt = "27059345".getBytes()
+        this.salt = userSalt.getBytes()
         this.cipherPropsFile = new File(propsFile)
         if (cipherPropsFile.exists()) {
             // read file to cipherProps

@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/5, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/5, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(list_util)).
@@ -59,14 +59,14 @@ doc(application_jar/5,     spec(['ApplicationShortId', 'Version', 'ArchiveFile',
                             '  * ApplicationShortID can be looked up with application/3',
                             '  * ArchiveFile can be an ear file or a batch zip',
                             '  * Options can contain: ve(Version), ag(ApplicationGroup)']).
-doc(application_java_class/6, spec(['View', 'ApplicationShortId', 'Version', 'ArchiveFile', 'JarOrWarFile', 'JavaClass']),
+doc(application_java_class/5, spec(['ApplicationShortId', 'Version', 'ArchiveFile', 'JarOrWarFile', 'JavaClass']),
                            ['  a JavaClass is included in JarOrWarFile of ApplicationShortId for version Version',
                             '  * ApplicationShortID can be looked up with application/3',
                             '  * ArchiveFile can be an ear file or a batch zip',
                             '  * JarOrWarFile is included in ArchiveFile',
                             '  * JavaClass is included in JarOrWarFile',
                             '  * Version must be a string with ""']).
-doc(application_java_class/7, spec(['View', 'ApplicationShortId', 'Version', 'ArchiveFile', 'WarFile', 'JarFile', 'JavaClass']),
+doc(application_java_class/6, spec(['ApplicationShortId', 'Version', 'ArchiveFile', 'WarFile', 'JarFile', 'JavaClass']),
                            ['  a JavaClass is included in JarFile of WarFile of ApplicationShortId for version Version',
                             '  * ApplicationShortID can be looked up with application/3',
                             '  * ArchiveFile can be an ear file or a batch zip',
@@ -185,7 +185,7 @@ doc(exported_predicates/2, spec(['paragraph', 'PredicateList']),
 %% predicates, their doc and objects
 
 exported_predicates(paragraph, PredicateListe) :-
-    module_property(paragraph, exports(PredicateListe)). 
+    module_property(paragraph, exports(PredicateListe)).
 
 predicates :-
     findall(Predikat, doc(Predikat,_,_), PredikatListe),
@@ -343,11 +343,81 @@ open_archive_entry(ArchiveFile, Entry, Stream) :-
     archive_close(Archive).
 
 application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
-    contloc(AppId, _, Ver, file(ArchiveFile), [], Options),
+    (contloc(AppId, warfile(_), Ver, file(ArchiveFile), [], Options)
+     ;
+     contloc(AppId, earfile(_), Ver, file(ArchiveFile), [], Options)
+    ),
     zipfile_entry_matches(ArchiveFile, ".jar", Jar).
 
-application_jar(AppId, Ver, ArchiveFile, Jar) :-
-    application_jar(AppId, Ver, ArchiveFile, Jar, []).
+application_jar(AppId, Ver, JarFile, Options) :-
+    contloc(AppId, jarfile(_), Ver, file(JarFile), [], Options).
+
+application_war(AppId, Ver, ArchiveFile, Options) :-
+    app_archive(war, AppId, ArchiveId, _),
+    contloc(AppId, warfile(ArchiveId), Ver, file(ArchiveFile), [], Options).
+
+application_java_class(AppId, Ver, WarFilePath, JarRelPath, ClassRelPath, Options) :-
+    application_jar(AppId, Ver, WarFilePath, JarRelPath, Options),
+    open_archive_entry(WarFilePath, JarRelPath, JarStream),
+    archive_entries(JarStream, JarContentList),
+    member(JarEntry, JarContentList),
+    string_concat(_Start, ".class", JarEntry),
+    ClassRelPath = rpath(JarEntry).
+
+application_java_class(AppId, Ver, JarFilePath, ClassRelPath, Options) :-
+    application_jar(AppId, Ver, JarFilePath, Options),
+    zipfile_entry_matches(JarFilePath, ".class", ClassEntry),
+    ClassRelPath = rpath(ClassEntry).
+
+%% application_war(AppId, Ver, ArchiveFile, War, Options) :-
+%%     app_archive(ear, AppId, ArchiveId, _),
+%%     contloc(AppId, earfile(ArchiveId), Ver, LocSpec, [], Options),
+%%     string_concat("file:", ArchiveFile, LocSpec),
+%%     zipfile_entry_matches(ArchiveFile, "endswith:.war", War).
+
+%% application_war(AppId, Ver, ArchiveFile, War) :-
+%%     application_war(AppId, Ver, ArchiveFile, War, []).
+
+%% web_jar(AppId, Ver, EarFilePath, WebArEntry, JarRelPath) :-
+%%     application_war(AppId, Ver, EarFilePath, WebArEntry),
+%%     open_archive_entry(EarFilePath, WebArEntry, Stream),
+%%     archive_entries(Stream, WarContentList),
+%%     member(JarEntry, WarContentList),
+%%     string_concat(_Start, ".jar", JarEntry),
+%%     string_concat("WEB-INF/", JarRelPathStr, JarEntry),
+%%     atom_string(JarRelPath, JarRelPathStr).
+
+%% % classes in ear file level
+%% application_java_class(AppId, Ver, EarFilePath, JarRelPath, ClassRelPath) :-
+%%     application_jar(AppId, Ver, EarFilePath, JarRelPath),
+%%     open_archive_entry(EarFilePath, JarRelPath, Stream),
+%%     archive_entries(Stream, JarContentList),
+%%     member(JarEntry, JarContentList),
+%%     string_concat(_Start, ".class", JarEntry),
+%%     string_concat("rpath:", JarEntry, ClassRelPath).
+
+%% % classes in war WEB-INF/classes level
+%% application_java_class(AppId, Ver, EarFilePath, WarRelPath, ClassRelPath) :-
+%%     application_war(AppId, Ver, EarFilePath, WarRelPath),
+%%     open_archive_entry(EarFilePath, WarRelPath, WarStream),
+%%     zipfile_entry_matches(WarStream, "endswith:.class", ClassEntry),
+%%     string_concat("WEB-INF/classes/", ClassPackage, ClassEntry),
+%%     string_concat("rpath:", ClassPackage, ClassRelPath).
+
+%% % classes in war WEB-INF/lib jar file level
+%% application_java_class(AppId, Ver, EarFilePath, WarRelPath, JarRelPath, ClassRelPath) :-
+%%     web_jar(AppId, Ver, EarFilePath, WarRelPath, JarRelPath),
+%%     open_archive_entry(EarFilePath, WarRelPath, WarStream),
+%%     archive_open(WarStream, Archive, [close_parent(true)]),
+%%     string_concat("WEB-INF/", JarRelPath, WebinfRelPathStr),
+%%     atom_string(WebinfRelPath, WebinfRelPathStr),
+%%     archive_next_header(Archive, WebinfRelPath),
+%%     archive_open_entry(Archive, JarStream),
+%%     archive_entries(JarStream, JarContentList),
+%%     member(JarEntry, JarContentList),
+%%     string_concat(_Start, ".class", JarEntry),
+%%     string_concat("rpath:", JarEntry, ClassRelPath),
+%%     archive_close(Archive).
 
 %% scoping and search
 
@@ -461,11 +531,11 @@ contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
 contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
     want_opt(ag(AppGroup), Options),
     want_opt(ve(Version), Options),
-    workdirectory(WorkDirectory, Options),
-    directory_files(WorkDirectory, FileList),
+    (appdirectory(AppId, Directory, Options) ; workdirectory(Directory, Options)),
+    directory_files(Directory, FileList),
     archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
     application(app, AppId, AppGroup, _),
-    format(string(LocSpec), "~w/~w", [WorkDirectory, ArMatch]).
+    format(string(LocSpec), "~w/~w", [Directory, ArMatch]).
 
 
 list([])     --> [].
@@ -531,10 +601,12 @@ resolve_entry_spec(ActualEntry, ActualEntry, _) :-
 
 %%% flat files
 
-contloc(AppId,    lfile(File), Version, LocSpec, [], Options) :-
+contloc(AppId,    applfile(FileStr), Version, LocSpec, [], Options) :-
+    atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
     contloc_app_file(File, pom, AppId, Version, LocSpec, [], Options).
 
-contloc(AppId,    lfile(File), Version, LocSpec, [], Options) :-
+contloc(AppId,    applfile(FileStr), Version, LocSpec, [], Options) :-
+    atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
     contloc_app_file(File, md, AppId, Version, LocSpec, [], Options).
 
 contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
@@ -609,9 +681,9 @@ paramval(Param, Ve, Val, Options) :-
 % xpath for a flat file
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(AppId, XmlSource, _Ffile, lfile(FileSpec), _),
-    dbg_paramval('xpath->lfile', Param, XmlSource, Options),
-    contloc(AppId, lfile(FileSpec), Version, file(FilePath), _, Options),
+    paramloc(AppId, XmlSource, _Ffile, applfile(FileSpec), _),
+    dbg_paramval('xpath->applfile', Param, XmlSource, Options),
+    contloc(AppId, applfile(FileSpec), Version, file(FilePath), _, Options),
     format(string(Info), 'Reading file ~w', [FilePath]),
     writeln(Info),
     load_xml(FilePath, XmlRoot, _),
@@ -667,9 +739,9 @@ paramval(Param, AppId, Version, Val, Options) :-
 % regexp for a flat file
 paramval(Param, AppId, Version, Val, Options) :-
     paramloc(Param, TxtSource, regexp(Regexp), _),
-    paramloc(AppId, TxtSource, _Ffile, lfile(FileSpec), _),
-    dbg_paramval('regexp->lfile', Param, TxtSource, Options),
-    contloc(AppId, lfile(FileSpec), Version, file(FilePath), _, Options),
+    paramloc(AppId, TxtSource, _Ffile, applfile(FileSpec), _),
+    dbg_paramval('regexp->applfile', Param, TxtSource, Options),
+    contloc(AppId, applfile(FileSpec), Version, file(FilePath), _, Options),
     format(string(Info), 'Reading file ~w', [FilePath]),
     writeln(Info),
     lines(file(FilePath), Lines),
