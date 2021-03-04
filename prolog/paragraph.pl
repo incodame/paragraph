@@ -346,6 +346,8 @@ application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
     (contloc(AppId, warfile(_), Ver, file(ArchiveFile), [], Options)
      ;
      contloc(AppId, earfile(_), Ver, file(ArchiveFile), [], Options)
+     ;
+     contloc(AppId, zipfile(_), Ver, file(ArchiveFile), [], Options)
     ),
     zipfile_entry_matches(ArchiveFile, ".jar", Jar).
 
