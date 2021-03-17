@@ -143,4 +143,5 @@ directory_alias('paragraph-verticles', pv_dependencies, '/opt/paragraph/Paragrap
 
 %% value transformation
 
-transform_val(id, Val, Val).
+transform_val(id, ValStr, Val) :-
+    atom_string(Val, ValStr).

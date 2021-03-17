@@ -45,6 +45,16 @@ paragraph:
         doc: "Help resources"
         params:
           - help_url: param
+      js_source:
+        loc: endswith(".js")
+        doc: "Any javascript source in an application's web archive"
+        params:
+          - angular_module: param
+      json_config:
+        loc: endswith(".json")
+        doc: "Any json configuration in an application's web archive"
+        params:
+          - json_ktext: param
       persistence_xml:
         loc: endswith("persistence-context.xml")
         doc: "Main configuration of JPA"
@@ -59,6 +69,9 @@ paragraph:
           - pom_xml_group_id: param
           - pom_xml_version: param
     param:
+      angular_module:
+        loc: phrase(js_dcg:angular_module_decl(Val))
+        doc: "Declaration of angularjs module"
       batch_java_home:
         loc: regexp("^(?<V1L>.*JAVA_HOME=.*)$")
         doc: "JAVA_HOME definition within a .cmd"
@@ -71,6 +84,9 @@ paragraph:
       jpa_todo:
         loc: xpath("TODO")
         doc: "TODO"
+      json_ktext:
+        loc: jsonget('d/_/t')
+        doc: "text extracted from json configuration tree"
       pom_xml_parent:
         loc: xpath(//project/parent)
         doc: "pom.xml parent"
