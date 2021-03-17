@@ -22,6 +22,7 @@
 :- use_module(library(www_browser)).
 :- use_module(library(yall)).
 :- use_module(paragraph_conf).
+:- use_module(js_dcg).
 
 :- table contloc_app_archive/6.
 
@@ -341,6 +342,14 @@ open_archive_entry(ArchiveFile, Entry, Stream) :-
     archive_next_header(Archive, Entry),
     archive_open_entry(Archive, Stream),
     archive_close(Archive).
+
+z_open_archive_entry(ArchiveFile, Entry, Stream) :-
+    zip_open(ArchiveFile, read, Zipper, []),
+    format(string(Info), 'Reading archive ~w: ~w', [ArchiveFile, Entry]),
+    writeln(Info),
+    zipper_goto(Zipper, file(Entry)),
+    zipper_open_current(Zipper, Stream, []). % [encoding(utf8)]),
+    %zip_close(Zipper).
 
 application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
     (contloc(AppId, warfile(_), Ver, file(ArchiveFile), [], Options)
@@ -678,6 +687,8 @@ paramval(Param, Val, Options) :-
 paramval(Param, Ve, Val, Options) :-
     paramval(Param, _, Ve, Val, Options).
 
+:- discontiguous paragraph:paramval/5.
+
 %%% xpath
 
 % xpath for a flat file
@@ -735,6 +746,68 @@ paramval(Param, AppId, Version, Val, Options) :-
     inc_dbg_level(Options, NewOptions),
     paramval(XmlParentTag, AppId, Version, ParentXml, NewOptions),  % NB: here the container is not used
     xpath(ParentXml, Xpath, Val).
+
+
+%%% phrase
+
+% DCG for an archive xml resource (war / jar / zip)
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, TxtSource, phrase(Dcg), _),
+    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Options),
+    dbg_paramval('phrase->endswith', Param, TxtSource, Options),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
+    atom_string(Entry, EntryStr),
+    setup_call_cleanup(
+        z_open_archive_entry(AfilePath, Entry, FileStream),
+        (
+            phrase_from_stream(Dcg, FileStream),
+            Dcg =.. [_, Val]
+        ),
+        close(FileStream)).
+
+%%% jsonget
+
+% jsonget for an archive json resource (war / jar / zip)
+paramval(Param, AppId, Version, Val, Options) :-
+    paramloc(Param, TxtSource, jsonget(JsonPath), _),
+    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Options),
+    dbg_paramval('jsonget->endswith', Param, TxtSource, Options),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
+    atom_string(Entry, EntryStr),
+    setup_call_cleanup(
+        open_archive_entry(AfilePath, Entry, FileStream),
+        (
+            json_read_dict(FileStream, JsonDict),
+            writeln(JsonDict),
+            %trace,
+            jsonget(JsonDict, JsonPath, Val)
+        ),
+        close(FileStream)).
+
+jsonget(JsonDict, JsonPath, Val) :-
+    atomic_list_concat(PropsArr, '/', JsonPath),
+    json_prop_chain_o(JsonDict, PropsArr, Val).
+
+json_prop_(JsonDict, Property, Obj) :-
+    Obj = JsonDict.get(Property).
+
+json_sub_prop_(Property, Obj0, Obj1) :-
+    (is_dict(Obj0) -> Obj1 = Obj0.get(Property) ;
+     is_list(Obj0) -> (
+         atom_number(Property, Int0) -> nth0(Int0, Obj0, Obj1) ;
+         Property = '_'   -> length(Obj0, ListLen), Index in 1..ListLen, label([Index]), nth1(Index, Obj0, Obj1)
+     ) ;
+     Obj1 = Obj0).
+
+json_prop_chain_o(JsonDict, [P0|Props], Obj) :-
+    json_prop_(JsonDict, P0, Obj0),
+    foldl([A,B,C]>>json_sub_prop_(A,B,C), Props, Obj0, Obj).
 
 %%% regexp
 

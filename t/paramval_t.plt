@@ -90,6 +90,16 @@ test('xpath -> xpath -> xml file -> warfile : find the parent pom version of par
     Version = '0.0.1-SNAPSHOT',    % app version
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
+test('phrase -> js file -> warfile : find the angularjs modules in paragraph archives') :-
+    paramval(angular_module, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui_target)]),
+    Version = '0.0.1-SNAPSHOT',    % app version
+    Val = 'paragraph'.             % value = angular module name
+
+test('jsonget -> json file -> warfile : extract values from json in paragraph archives') :-
+    paramval(json_ktext, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui_target)]),
+    Version = '0.0.1-SNAPSHOT',    % app version
+    memberchk(Val, [ "hello", "json" ]). % multiple values extracted via "_"
+
 test('search archive with wd option : find the parent pom version of paragraph archives') :-
     paramval(pom_xml_parent_version, Version, Val, [ag('paragraph'), ve('0.0.1-SNAPSHOT'), wd(examples)]),
     Version = '0.0.1-SNAPSHOT',    % app version
