@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/5, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/6, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(list_util)).
@@ -134,13 +134,14 @@ doc(paramval/4,            spec(['Parameter', 'Version', 'ParameterValue', 'Scop
                             '  * Version is the version of the application where the parameter was found',
                             '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
                             '  See also: parameters/2']).
-doc(paramval/5,            spec(['Parameter', 'ApplicationShortId', 'Version', 'ParameterValue', 'ScopeOptions']),
+doc(paramval/6,            spec(['Parameter', 'ApplicationShortId', 'Version', 'ParameterValue', 'ScopeOptions', 'NewScoper']),
                            ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
                             '  * ApplicationShortId is the identifier of the application where the parameter was found',
                             '  * Version is the version of the application where the parameter was found',
                             '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
+                            '  * NewScoper: added constraints after finding the value',
                             '  See also: parameters/2']).
 doc(objects/0,             spec([]),
                            ['  Lists all objects referenced by predicates in module paragraph.']).
@@ -352,20 +353,20 @@ z_open_archive_entry(ArchiveFile, Entry, Stream) :-
     %zip_close(Zipper).
 
 application_jar(AppId, Ver, ArchiveFile, Jar, Options) :-
-    (contloc(AppId, warfile(_), Ver, file(ArchiveFile), [], Options)
+    (contloc(AppId, warfile(_), Ver, file(ArchiveFile), Options, _)
      ;
-     contloc(AppId, earfile(_), Ver, file(ArchiveFile), [], Options)
+     contloc(AppId, earfile(_), Ver, file(ArchiveFile), Options, _)
      ;
-     contloc(AppId, zipfile(_), Ver, file(ArchiveFile), [], Options)
+     contloc(AppId, zipfile(_), Ver, file(ArchiveFile), Options, _)
     ),
     zipfile_entry_matches(ArchiveFile, ".jar", Jar).
 
 application_jar(AppId, Ver, JarFile, Options) :-
-    contloc(AppId, jarfile(_), Ver, file(JarFile), [], Options).
+    contloc(AppId, jarfile(_), Ver, file(JarFile), Options, _).
 
 application_war(AppId, Ver, ArchiveFile, Options) :-
     app_archive(war, AppId, ArchiveId, _),
-    contloc(AppId, warfile(ArchiveId), Ver, file(ArchiveFile), [], Options).
+    contloc(AppId, warfile(ArchiveId), Ver, file(ArchiveFile), Options, _).
 
 application_java_class(AppId, Ver, WarFilePath, JarRelPath, ClassRelPath, Options) :-
     application_jar(AppId, Ver, WarFilePath, JarRelPath, Options),
@@ -509,6 +510,10 @@ slurp_options([Opt | Ropts]) :-
 
 %% container location
 
+% TODO: handle version, get options from scoper
+contloc(AppId,  ContSpec,  LocSpec,  Scoper0, Scoper1) :-
+    contloc(AppId, ContSpec, _Version, LocSpec, Scoper0, Scoper1).
+
 :- discontiguous contloc/6.
 
 %%% application archives
@@ -527,26 +532,32 @@ package_version(PackageFile, Type, Version, AppId) :-
          atom_concat(Version, VeSuffix, VeRest)
     ).
 
-contloc(AppId,    earfile(EarFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(EarFile, ear, AppId, Version, LocSpec, [], Options).
+contloc(AppId,    earfile(EarFile), Version, LocSpec, Scoper0, Scoper1) :-
+    contloc_app_archive(EarFile, ear, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc(AppId,    warfile(WarFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(WarFile, war, AppId, Version, LocSpec, [], Options).
+contloc(AppId,    warfile(WarFile), Version, LocSpec, Scoper0, Scoper1) :-
+    contloc_app_archive(WarFile, war, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc(AppId,    jarfile(JarFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(JarFile, jar, AppId, Version, LocSpec, [], Options).
+contloc(AppId,    jarfile(JarFile), Version, LocSpec, Scoper0, Scoper1) :-
+    contloc_app_archive(JarFile, jar, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc(AppId,    zipfile(ZipFile), Version, LocSpec, [], Options) :-
-    contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, [], Options).
+contloc(AppId,    zipfile(ZipFile), Version, LocSpec, Scoper0, Scoper1) :-
+    contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
-    want_opt(ag(AppGroup), Options),
-    want_opt(ve(Version), Options),
-    (appdirectory(AppId, Directory, Options) ; workdirectory(Directory, Options)),
-    directory_files(Directory, FileList),
-    archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
-    application(app, AppId, AppGroup, _),
-    format(string(LocSpec), "~w/~w", [Directory, ArMatch]).
+contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
+    want_opt(ag(AppGroup), Scoper0),
+    want_opt(ve(Version), Scoper0),
+    (member(ar(file(LocSpec)), Scoper0) ->
+         Scoper1 = Scoper0
+    ;
+         (appdirectory(AppId, Directory, Scoper0) ; workdirectory(Directory, Scoper0)),
+         %workdirectory(Directory, Scoper0),
+         directory_files(Directory, FileList),
+         archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
+         application(app, AppGroup, AppId, _),
+         format(string(LocSpec), "~w/~w", [Directory, ArMatch]),
+         Scoper1 = [ar(file(LocSpec)) | Scoper0]
+    ).
 
 
 list([])     --> [].
@@ -596,38 +607,44 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
         member(FileTest, FileList), File = FileTest, Version = ''
     ).
 
-resolve_entry_spec(pv(Param), ActualEntry, Options) :-
-    paramval(Param, ActualEntry, Options),
-    format(atom(Message), 'Resolved entry spec pv(~w) to ~w', [Param, ActualEntry]),
-    writeln(Message).
+%% resolve_entry_spec(pv(Param), ActualEntry, Options) :-
+%%     paramval(Param, ActualEntry, Options),
+%%     format(atom(Message), 'Resolved entry spec pv(~w) to ~w', [Param, ActualEntry]),
+%%     writeln(Message).
 
-resolve_entry_spec(pv(Param, Conversion), ActualEntry, Options) :-
-    paramval(Param, ParamVal, Options),
-    transform_val(Conversion, ParamVal, ActualEntry),
-    format(atom(Message), 'Resolved entry spec pv(~w, ~w) to ~w', [Param, Conversion, ActualEntry]),
-    writeln(Message).
+%% resolve_entry_spec(pv(Param, Conversion), ActualEntry, Options) :-
+%%     paramval(Param, ParamVal, Options),
+%%     transform_val(Conversion, ParamVal, ActualEntry),
+%%     format(atom(Message), 'Resolved entry spec pv(~w, ~w) to ~w', [Param, Conversion, ActualEntry]),
+%%     writeln(Message).
 
-resolve_entry_spec(ActualEntry, ActualEntry, _) :-
-    \+compound(ActualEntry).
+resolve_entry_spec(ActualEntry, ActualEntry, Scoper0, Scoper1) :-
+    \+compound(ActualEntry),
+    Scoper1 = Scoper0.
 
 %%% flat files
 
-contloc(AppId,    applfile(FileStr), Version, LocSpec, [], Options) :-
+contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
     atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
-    contloc_app_file(File, pom, AppId, Version, LocSpec, [], Options).
+    contloc_app_file(File, pom, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc(AppId,    applfile(FileStr), Version, LocSpec, [], Options) :-
+contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
     atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
-    contloc_app_file(File, md, AppId, Version, LocSpec, [], Options).
+    contloc_app_file(File, md, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), [], Options) :-
-    want_opt(ag(AppGroup), Options),
-    want_opt(ve(Version), Options),
-    application(app, AppId, AppGroup, _),
-    appdirectory(AppId, AppDirectory, Options),
-    directory_files(AppDirectory, FileList),
-    file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
-    format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]).
+contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
+    want_opt(ag(AppGroup), Scoper0),
+    want_opt(ve(Version), Scoper0),
+    (member(af(file(LocSpec)), Scoper0) ->
+         Scoper1 = Scoper0
+    ;
+         application(app, AppGroup, AppId, _),
+         appdirectory(AppId, AppDirectory, Scoper0),
+         directory_files(AppDirectory, FileList),
+         file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
+         format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]),
+         Scoper1 = [af(file(LocSpec)) | Scoper0]
+    ).
 
 % TODO: remove call to app_file, use FileTest only
 file_match(FileTest, FileList, File, FileType, Version, AppId) :-
@@ -682,36 +699,95 @@ pdoc(Param) :-
 
 % shortcuts
 paramval(Param, Val, Options) :-
-    paramval(Param, _, _, Val, Options).
+    paramval(Param, _, _, Val, Options, _).
 
 paramval(Param, Ve, Val, Options) :-
-    paramval(Param, _, Ve, Val, Options).
+    paramval(Param, _, Ve, Val, Options, _).
 
-:- discontiguous paragraph:paramval/5.
+:- discontiguous paragraph:paramval/6.
+:- discontiguous paragraph:transition/5.
+
+% TEMPORARY: rewrite of paramval with foldl
+paramv(Param, Val, Scoper) :-
+    paramv(Param, Val, Scoper, _).
+
+paramv(_Param, Val, Scoper0, Scoper1) :-
+    writeln("choose the App using scoper"),
+    App = app('paragraph-ui'),
+    writeln("build possible lists of transitions Tlist from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param"), % uses scoper too !
+    TList = [ applfile("pom.xml"), xpath(//project/version(text)) ],
+    foldl({Scoper0,Scoper1}/[A,B,C]>>transition(A,B,C,Scoper0,Scoper1), TList, App, Val).
+
+%% ?- paramv(_,Val, [ ag(paragraph), ve(''), ad(paragraph_ui) ]).
+%% Correct to: "paragraph:paramv(_,Val,[ag(paragraph),ve(''),ad(paragraph_ui)])"? yes
+%% choose the App using scoper
+%% build possible lists of transitions Tlist from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param
+%% Trying app directory = /opt/paragraph/ParagraphUI
+%% Val = '0.0.1-SNAPSHOT' ;
+%% Trying app directory = /opt/paragraph/ParagraphUI
+%% Val = '0.0.1-SNAPSHOT' ;
+%% false.
+
 
 %%% xpath
 
 % xpath for a flat file
-paramval(Param, AppId, Version, Val, Options) :-
+transition(xpath(Xpath), file(FilePath), Val, Scoper0, Scoper1) :-
+    load_xml(FilePath, XmlRoot, _),
+    xpath(XmlRoot, Xpath, Val),
+    Scoper1 = Scoper0.
+
+transition(applfile(FileSpec), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    contloc(AppId, applfile(FileSpec), file(FilePath), Scoper0, Scoper1).
+
+paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
     paramloc(AppId, XmlSource, _Ffile, applfile(FileSpec), _),
-    dbg_paramval('xpath->applfile', Param, XmlSource, Options),
-    contloc(AppId, applfile(FileSpec), Version, file(FilePath), _, Options),
+    dbg_paramval('xpath->applfile', Param, XmlSource, Scoper0),
+    contloc(AppId, applfile(FileSpec), Version, file(FilePath), Scoper0, Scoper1),
     format(string(Info), 'Reading file ~w', [FilePath]),
     writeln(Info),
     load_xml(FilePath, XmlRoot, _),
     xpath(XmlRoot, Xpath, Val).
 
+
 % xpath for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Options) :-
-    paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Options),
-    dbg_paramval('xpath->endswith', Param, XmlSource, Options),
-    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+transition(xpath(Xpath), stream(FileStream), Val, Scoper0, Scoper1) :-
+    load_xml(stream(FileStream), XmlRoot, _),
+    xpath(XmlRoot, Xpath, Val),
+    close(FileStream),
+    Scoper1 = Scoper0.
+
+transition(endswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper2) :-
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
     atom_string(Entry, EntryStr),
+    Scoper2 = [ ae(Entry) | Scoper1 ],
+    %setup_call_cleanup(
+         open_archive_entry(AfilePath, Entry, FileStream).
+    %    (
+    %
+    %    ),
+    %    close(FileStream)).
+
+transition(Archive, app(AppId), archive(AfilePath), Scoper0, Scoper1) :-
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, file(AfilePath), Scoper0, Scoper1).
+
+paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+    paramloc(Param, XmlSource, xpath(Xpath), _),
+    paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
+    dbg_paramval('xpath->endswith', Param, XmlSource, Scoper0),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
+    (member(ae(Entry), Scoper2) ->
+         Scoper3 = Scoper2
+    ;
+         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper3 = [ ae(Entry) | Scoper2 ]
+    ),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, XmlStream),
         (
@@ -721,15 +797,32 @@ paramval(Param, AppId, Version, Val, Options) :-
         close(XmlStream)).
 
 % xpath for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Options) :-
-    paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(AppId, XmlSource, Afile, startswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Options),
-    dbg_paramval('xpath->startswith', Param, XmlSource, Options),
-    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
+transition(startswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper2) :-
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     zipfile_entry_starts(AfilePath, Entry2Find, EntryStr),
     atom_string(Entry, EntryStr),
+    Scoper2 = [ ae(Entry) | Scoper1 ],
+    %setup_call_cleanup(
+    open_archive_entry(AfilePath, Entry, FileStream).
+    %    (
+    %
+    %    ),
+    %    close(FileStream)).
+
+paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+    paramloc(Param, XmlSource, xpath(Xpath), _),
+    paramloc(AppId, XmlSource, Afile, startswith(EntrySpec), _),
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
+    dbg_paramval('xpath->startswith', Param, XmlSource, Scoper0),
+    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
+    (member(ae(Entry), Scoper2) ->
+         Scoper3 = Scoper2
+    ;
+         zipfile_entry_starts(AfilePath, Entry2Find, EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper3 = [ ae(Entry) | Scoper2 ]
+    ),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, XmlStream),
         (
@@ -739,27 +832,32 @@ paramval(Param, AppId, Version, Val, Options) :-
         close(XmlStream)).
 
 % nested xpath definitions
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, XmlParentTag, xpath(Xpath), _),
     %paramloc(XmlParentTag, _, xpath(_), _), %  creates duplicates due to various containers
-    dbg_paramval('xpath->*', Param, XmlParentTag, Options),
-    inc_dbg_level(Options, NewOptions),
-    paramval(XmlParentTag, AppId, Version, ParentXml, NewOptions),  % NB: here the container is not used
+    dbg_paramval('xpath->*', Param, XmlParentTag, Scoper0),
+    inc_dbg_level(Scoper0, NewScoper),
+    paramval(XmlParentTag, AppId, Version, ParentXml, NewScoper, Scoper1),  % NB: here the container is not used
     xpath(ParentXml, Xpath, Val).
 
 
 %%% phrase
 
 % DCG for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
     paramloc(Param, TxtSource, phrase(Dcg), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Options),
-    dbg_paramval('phrase->endswith', Param, TxtSource, Options),
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
+    dbg_paramval('phrase->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
-    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-    atom_string(Entry, EntryStr),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
+    (member(ae(Entry), Scoper2) ->
+         Scoper3 = Scoper2
+    ;
+         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper3 = [ ae(Entry) | Scoper2 ]
+    ),
     setup_call_cleanup(
         z_open_archive_entry(AfilePath, Entry, FileStream),
         (
@@ -771,20 +869,25 @@ paramval(Param, AppId, Version, Val, Options) :-
 %%% jsonget
 
 % jsonget for an archive json resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
     paramloc(Param, TxtSource, jsonget(JsonPath), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Options),
-    dbg_paramval('jsonget->endswith', Param, TxtSource, Options),
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
+    dbg_paramval('jsonget->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
-    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-    atom_string(Entry, EntryStr),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
+    (member(ae(Entry), Scoper2) ->
+         Scoper3 = Scoper2
+    ;
+         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper3 = [ ae(Entry) | Scoper2 ]
+    ),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
         (
             json_read_dict(FileStream, JsonDict),
-            writeln(JsonDict),
+            %writeln(JsonDict),
             %trace,
             jsonget(JsonDict, JsonPath, Val)
         ),
@@ -812,26 +915,31 @@ json_prop_chain_o(JsonDict, [P0|Props], Obj) :-
 %%% regexp
 
 % regexp for a flat file
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, TxtSource, regexp(Regexp), _),
     paramloc(AppId, TxtSource, _Ffile, applfile(FileSpec), _),
-    dbg_paramval('regexp->applfile', Param, TxtSource, Options),
-    contloc(AppId, applfile(FileSpec), Version, file(FilePath), _, Options),
+    dbg_paramval('regexp->applfile', Param, TxtSource, Scoper0),
+    contloc(AppId, applfile(FileSpec), Version, file(FilePath), Scoper0, Scoper1),
     format(string(Info), 'Reading file ~w', [FilePath]),
     writeln(Info),
     lines(file(FilePath), Lines),
     lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]). % non empty list
 
 % regexp for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
     paramloc(Param, TxtSource, regexp(Regexp), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Options),
-    dbg_paramval('regexp->endswith', Param, TxtSource, Options),
+    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
+    dbg_paramval('regexp->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
-    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-    atom_string(Entry, EntryStr),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
+    (member(ae(Entry), Scoper2) ->
+         Scoper3 = Scoper2
+    ;
+         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper3 = [ ae(Entry) | Scoper2 ]
+    ),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
         (
@@ -841,14 +949,19 @@ paramval(Param, AppId, Version, Val, Options) :-
         close(FileStream)).
 
 % regexp for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, regexp(Regexp), _),
     paramloc(AppId, TxtSource, Afile, startswith(EntrySpec), _),
-    dbg_paramval('regexp->startswith', Param, TxtSource, Options),
+    dbg_paramval('regexp->startswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), _, Options),
-    zipfile_entry_starts(AfilePath, EntrySpec, EntryStr),
-    atom_string(Entry, EntryStr),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
+    (member(ae(Entry), Scoper1) ->
+         Scoper2 = Scoper1
+    ;
+         zipfile_entry_starts(AfilePath, EntrySpec, EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper2 = [ ae(Entry) | Scoper1 ]
+    ),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
         (
@@ -858,11 +971,11 @@ paramval(Param, AppId, Version, Val, Options) :-
         close(FileStream)).
 
 % nested regexp definitions
-paramval(Param, AppId, Version, Val, Options) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, Parent, regexp(Regexp), _),
-    dbg_paramval('regexp->*', Param, Parent, Options),
-    inc_dbg_level(Options, NewOptions),
-    paramval(Parent, AppId, Version, ParentTxt, NewOptions),
+    dbg_paramval('regexp->*', Param, Parent, Scoper0),
+    inc_dbg_level(Scoper0, NewScoper),
+    paramval(Parent, AppId, Version, ParentTxt, NewScoper, Scoper1),
     open_string(ParentTxt, TxtStream),
     lines(stream(TxtStream), Lines),
     lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]).

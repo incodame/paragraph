@@ -18,7 +18,7 @@ application_group(build, paragraph, 'org.incodame.paragraph').
 pgraph(YamlDoc) :-
     yaml_read('/opt/paragraph/paragraph.yml', YamlDoc).
 
-application(app, AppShortName, paragraph, AppProps) :-
+application(app, paragraph, AppShortName, AppProps) :-
     pgraph(yaml{paragraph:yaml{apps:AppList, graph:_}}),
     member(App, AppList),
     select_dict(yaml{name:AppShortNameStr, build:AppBuildStr}, App, _),

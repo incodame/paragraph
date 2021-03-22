@@ -1,4 +1,4 @@
-* left to implement 
+* left to implement
 ** application_jar and want_opt: use tabling
 without Options, one is asked to enter Options twice or more,
 because of the redo after the failed
@@ -13,9 +13,9 @@ prevent use of other directory not under workdirectory
 ** paramval
 *** force the use of structured term e.g. earfile(E) for container
 *** solution for removing large number of predicates (choicepoints) 
- - using constrained search in graph
- - reimplement scopers
-*** use tabling for recursive calls of paramval
+ - temporary paramv uses constrained search in graph, and foldl
+ - find solution for setup_call_cleanup for foldl
+*** remove recursive calls of paramval
 *** complete example: maven_checks.pl
 ** verticles
  - first implementation of Pwsh and Query verticles
