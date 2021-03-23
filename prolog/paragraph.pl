@@ -619,7 +619,7 @@ archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
 %%     writeln(Message).
 
 resolve_entry_spec(ActualEntry, ActualEntry, Scoper0, Scoper1) :-
-    \+compound(ActualEntry),
+    %\+compound(ActualEntry),
     Scoper1 = Scoper0.
 
 %%% flat files
@@ -758,11 +758,8 @@ transition(xpath(Xpath), stream(FileStream), Val, Scoper0, Scoper1) :-
     close(FileStream),
     Scoper1 = Scoper0.
 
-transition(endswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper2) :-
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
-    zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-    atom_string(Entry, EntryStr),
-    Scoper2 = [ ae(Entry) | Scoper1 ],
+transition(endswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper1) :-
+    entryloc(AfilePath, endswith(EntrySpec), Entry, Scoper0, Scoper1),
     %setup_call_cleanup(
          open_archive_entry(AfilePath, Entry, FileStream).
     %    (
@@ -774,20 +771,13 @@ transition(Archive, app(AppId), archive(AfilePath), Scoper0, Scoper1) :-
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, file(AfilePath), Scoper0, Scoper1).
 
-paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
     paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     dbg_paramval('xpath->endswith', Param, XmlSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
-    (member(ae(Entry), Scoper2) ->
-         Scoper3 = Scoper2
-    ;
-         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-         atom_string(Entry, EntryStr),
-         Scoper3 = [ ae(Entry) | Scoper2 ]
-    ),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
+    entryloc(AfilePath, endswith(EntrySpec), Entry, Scoper1, Scoper2),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, XmlStream),
         (
@@ -796,12 +786,23 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
         ),
         close(XmlStream)).
 
+entryloc_matcher(endswith(_),   [AfilePath,EntryPath,EntryStr]>>zipfile_entry_matches(AfilePath, EntryPath, EntryStr)).
+entryloc_matcher(startswith(_), [AfilePath,EntryPath,EntryStr]>>zipfile_entry_starts(AfilePath, EntryPath, EntryStr)).
+entryloc(AfilePath, EntryTerm, Entry, Scoper0, Scoper1) :-
+    (member(ae(Entry), Scoper0) ->
+         Scoper1 = Scoper0
+    ;
+         resolve_entry_spec(EntryTerm, Entry2Find, Scoper0, NewScoper),
+         entryloc_matcher(EntryTerm, EntryMatcher),
+         Entry2Find =.. [ _, EntryPath ],
+         call(EntryMatcher,AfilePath,EntryPath,EntryStr),
+         atom_string(Entry, EntryStr),
+         Scoper1 = [ ae(Entry) | NewScoper ]
+    ).
+
 % xpath for an archive xml resource (war / jar / zip)
-transition(startswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper2) :-
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
-    zipfile_entry_starts(AfilePath, Entry2Find, EntryStr),
-    atom_string(Entry, EntryStr),
-    Scoper2 = [ ae(Entry) | Scoper1 ],
+transition(startswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper1) :-
+    entryloc(AfilePath, startswith(EntrySpec), Entry, Scoper0, Scoper1),
     %setup_call_cleanup(
     open_archive_entry(AfilePath, Entry, FileStream).
     %    (
@@ -809,20 +810,13 @@ transition(startswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper
     %    ),
     %    close(FileStream)).
 
-paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, XmlSource, xpath(Xpath), _),
     paramloc(AppId, XmlSource, Afile, startswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     dbg_paramval('xpath->startswith', Param, XmlSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
-    (member(ae(Entry), Scoper2) ->
-         Scoper3 = Scoper2
-    ;
-         zipfile_entry_starts(AfilePath, Entry2Find, EntryStr),
-         atom_string(Entry, EntryStr),
-         Scoper3 = [ ae(Entry) | Scoper2 ]
-    ),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
+    entryloc(AfilePath, startswith(EntrySpec), Entry, Scoper1, Scoper2),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, XmlStream),
         (
@@ -844,20 +838,13 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 %%% phrase
 
 % DCG for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, phrase(Dcg), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     dbg_paramval('phrase->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
-    (member(ae(Entry), Scoper2) ->
-         Scoper3 = Scoper2
-    ;
-         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-         atom_string(Entry, EntryStr),
-         Scoper3 = [ ae(Entry) | Scoper2 ]
-    ),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
+    entryloc(AfilePath, endswith(EntrySpec), Entry, Scoper1, Scoper2),
     setup_call_cleanup(
         z_open_archive_entry(AfilePath, Entry, FileStream),
         (
@@ -869,26 +856,17 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
 %%% jsonget
 
 % jsonget for an archive json resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, jsonget(JsonPath), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     dbg_paramval('jsonget->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
-    (member(ae(Entry), Scoper2) ->
-         Scoper3 = Scoper2
-    ;
-         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-         atom_string(Entry, EntryStr),
-         Scoper3 = [ ae(Entry) | Scoper2 ]
-    ),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
+    entryloc(AfilePath, endswith(EntrySpec), Entry, Scoper1, Scoper2),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
         (
             json_read_dict(FileStream, JsonDict),
-            %writeln(JsonDict),
-            %trace,
             jsonget(JsonDict, JsonPath, Val)
         ),
         close(FileStream)).
@@ -926,20 +904,13 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]). % non empty list
 
 % regexp for an archive xml resource (war / jar / zip)
-paramval(Param, AppId, Version, Val, Scoper0, Scoper3) :-
+paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, regexp(Regexp), _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
-    resolve_entry_spec(EntrySpec, Entry2Find, Scoper0, Scoper1),
     dbg_paramval('regexp->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
-    contloc(AppId, Archive, Version, file(AfilePath), Scoper1, Scoper2),
-    (member(ae(Entry), Scoper2) ->
-         Scoper3 = Scoper2
-    ;
-         zipfile_entry_matches(AfilePath, Entry2Find, EntryStr),
-         atom_string(Entry, EntryStr),
-         Scoper3 = [ ae(Entry) | Scoper2 ]
-    ),
+    contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
+    entryloc(AfilePath, endswith(EntrySpec), Entry, Scoper1, Scoper2),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
         (
@@ -955,13 +926,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     dbg_paramval('regexp->startswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
-    (member(ae(Entry), Scoper1) ->
-         Scoper2 = Scoper1
-    ;
-         zipfile_entry_starts(AfilePath, EntrySpec, EntryStr),
-         atom_string(Entry, EntryStr),
-         Scoper2 = [ ae(Entry) | Scoper1 ]
-    ),
+    entryloc(AfilePath, startswith(EntrySpec), Entry, Scoper1, Scoper2),
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, FileStream),
         (
