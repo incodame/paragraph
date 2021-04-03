@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/4, paramloc/5, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
 %%
@@ -46,21 +46,22 @@ application(app, paragraph, AppShortName, AppProps) :-
 %% LocTerm = "xpath(//'context-root'(text))" ;
 
 % application parameters
-paramloc(App, Param, Container, LocTerm, ParamProps) :-
+paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
     (app_archive(_, App, Container, _) ; app_file(_, App, Container, _)),
     pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
     LocExprStr = Graph.get(file/Param/loc),
     location_term(LocExprStr, LocTerm),
     Doc = Graph.get(file/Param/doc),
+    ContLocTerm = 'resolved from directory aliases',
     ParamProps = [ doc(Doc) ].
 
 % generic parameters
-paramloc(Param, Container, LocTerm, ParamProps) :-
+paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
     pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
     LocExprStr = Graph.get(param/Param/loc),
     location_term(LocExprStr, LocTerm),
     Doc = Graph.get(param/Param/doc),
-    parent_param(Param, _, Container, _),
+    parent_param(Param, _, Container, ContLocTerm),
     ParamProps = [ doc(Doc) ].
 
 :- table parent_param/4.
@@ -116,7 +117,7 @@ app_archive(jar,  'paragraph-verticles',    'paragraph-verticles-(version)-fat.j
 %% application files
 
 app_file(pom, AppId, 'pom.xml',  [ doc("application pom.xml") ]) :-
-    application(app, AppId, _ApplicationGroup, AppOpts), memberchk(build(maven), AppOpts).
+    application(app, _ApplicationGroup, AppId, AppOpts), memberchk(build(maven), AppOpts).
 
 % add specific files here
 app_file(md,  'paragraph-ui', 'HELP.md', [ doc("application help") ]).

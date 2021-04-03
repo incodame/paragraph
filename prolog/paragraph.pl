@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/6, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, navigate_graph_up/3, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/6, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(list_util)).
@@ -99,43 +99,46 @@ doc(goto_cluster/1,        spec(['Cluster']),
                            ['  the default web browser will navigate to the configuration for cluster Cluster',
                             '  See also: application_cluster/4']).
 doc(can_goto_param/2,      spec(['Parameter', 'Version']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                           ['  A Parameter is configured in a container, via the paragraph_conf:paramloc/5 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  if a container exists in version Version, and can be navigated to with the browser',
                             '    its search specification will be printed.']).
 doc(goto_param/2,          spec(['Parameter', 'Version']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                           ['  A Parameter is configured in a container, via the paragraph_conf:paramloc/5 predicate',
                             '  the default web browser will navigate to the container, if its "browsable"',
                             '  See also: can_goto_param/3 for browsable parameters',
                             '  See also: parameters/2']).
+doc(navigate_graph_up/3,   spec(['Parameter', 'ApplicationShortId', 'LocTermList']),
+                           ['  LocTermList is a sequence of terms for fetching the Parameter value for ApplicationShortId',
+                            "  "]).
 doc(package/4,             spec(['ApplicationGroup', 'Version', 'PackageFile', 'DownloadUrl']),
                            ['  PackageFile is available for ApplicationGroup version Version at DownloadUrl',
                             "  * Version is a string with ''"]).
 doc(parameters/0,          spec([]),
-                           ['  Lists all parameters configured for search in containers, via the paragraph:paramloc/4 predicate',
+                           ['  Lists all parameters configured for search in containers, via the paragraph_conf:paramloc/5 predicate',
                             '  Documentation of a parameter can be displayed via pdoc/1',
                             '  The value can be searched with paramval/3']).
 doc(parameters/2,          spec(['Parameter', 'Container']),
-                           ['  A Parameter is configured in container Container, via the paragraph:paramloc/4 predicate',
+                           ['  A Parameter is configured in container Container, via the paragraph_conf:paramloc/5 predicate',
                             '  * Container can be a text file, archive file (.zip or .ear), or web resource.',
                             '  See also: parameters/0, pdoc/1']).
 doc(pdoc/1,                spec(['Parameter']),
                            ['  Display documentation for Parameter']).
 doc(paramval/3,            spec(['Parameter', 'ParameterValue', 'ScopeOptions']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                           ['  A Parameter is configured in a container, via the paragraph_conf:paramloc/5 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
                             '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
                             '  See also: parameters/2']).
 doc(paramval/4,            spec(['Parameter', 'Version', 'ParameterValue', 'ScopeOptions']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                           ['  A Parameter is configured in a container, via the paragraph_conf:paramloc/5 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
                             '  * Version is the version of the application where the parameter was found',
                             '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)',
                             '  See also: parameters/2']).
 doc(paramval/6,            spec(['Parameter', 'ApplicationShortId', 'Version', 'ParameterValue', 'ScopeOptions', 'NewScoper']),
-                           ['  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate',
+                           ['  A Parameter is configured in a container, via the paragraph_conf:paramloc/5 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
                             '  * ParameterValue will be extracted from the container',
                             '  * ApplicationShortId is the identifier of the application where the parameter was found',
@@ -551,10 +554,9 @@ contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), Scoper0, Sc
          Scoper1 = Scoper0
     ;
          (appdirectory(AppId, Directory, Scoper0) ; workdirectory(Directory, Scoper0)),
-         %workdirectory(Directory, Scoper0),
+         application(app, AppGroup, AppId, _),
          directory_files(Directory, FileList),
          archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
-         application(app, AppGroup, AppId, _),
          format(string(LocSpec), "~w/~w", [Directory, ArMatch]),
          Scoper1 = [ar(file(LocSpec)) | Scoper0]
     ).
@@ -628,18 +630,14 @@ contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
     atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
     contloc_app_file(File, pom, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
-    atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
-    contloc_app_file(File, md, AppId, Version, LocSpec, Scoper0, Scoper1).
-
 contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
     want_opt(ag(AppGroup), Scoper0),
     want_opt(ve(Version), Scoper0),
     (member(af(file(LocSpec)), Scoper0) ->
          Scoper1 = Scoper0
     ;
-         application(app, AppGroup, AppId, _),
          appdirectory(AppId, AppDirectory, Scoper0),
+         application(app, AppGroup, AppId, _),
          directory_files(AppDirectory, FileList),
          file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
          format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]),
@@ -684,13 +682,13 @@ file_match(FileTest, FileList, File, FileType, Version, AppId) :-
 %% parameters defined in paragraph_conf
 
 parameters :-
-    findall(Param, paramloc(Param,_,_,_), ParList),
+    findall(Param, paramloc(Param,_,_,_,_), ParList),
     list_to_set(ParList, ParSet),
     sort(ParSet, Parameters),
     maplist(writeln, Parameters).
-parameters(Param, Container) :- paramloc(Param, Container, _LocSpec, _LocArgs).
+parameters(Param, Container) :- paramloc(Param, Container, _LocSpec, _ContLocSpec, _LocArgs).
 pdoc(Param) :-
-    paramloc(Param,_,LocString,Opts),
+    paramloc(Param,_,LocString,_,Opts),
     member(doc(DocString), Opts),
     format(string(Documentation), '~w [~w]', [DocString, LocString]),
     writeln(Documentation), !.
@@ -711,22 +709,27 @@ paramval(Param, Ve, Val, Options) :-
 paramv(Param, Val, Scoper) :-
     paramv(Param, Val, Scoper, _).
 
-paramv(_Param, Val, Scoper0, Scoper1) :-
+paramv(Param, Val, Scoper0, Scoper1) :-
     writeln("choose the App using scoper"),
-    App = app('paragraph-ui'),
-    writeln("build possible lists of transitions Tlist from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param"), % uses scoper too !
-    TList = [ applfile("pom.xml"), xpath(//project/version(text)) ],
-    foldl({Scoper0,Scoper1}/[A,B,C]>>transition(A,B,C,Scoper0,Scoper1), TList, App, Val).
+    App = 'paragraph-ui',
+    writeln("build possible lists of transitions TdList from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param"), % uses scoper too !
+    navigate_graph_up(Param, App, UpList),
+    reverse(UpList, TdList),
+    (memberchk(dbg(_), Scoper0) ->
+         writeln(TdList)
+    ;
+         true
+    ),
+    foldl([A,B-S0,C-S1]>>transition(A,B,C,S0,S1), TdList, app(App)-Scoper0, Val-Scoper1).
 
-%% ?- paramv(_,Val, [ ag(paragraph), ve(''), ad(paragraph_ui) ]).
-%% Correct to: "paragraph:paramv(_,Val,[ag(paragraph),ve(''),ad(paragraph_ui)])"? yes
-%% choose the App using scoper
-%% build possible lists of transitions Tlist from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param
-%% Trying app directory = /opt/paragraph/ParagraphUI
-%% Val = '0.0.1-SNAPSHOT' ;
-%% Trying app directory = /opt/paragraph/ParagraphUI
-%% Val = '0.0.1-SNAPSHOT' ;
-%% false.
+navigate_graph_up(app(App), App, []) :- !.
+navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
+    paramloc(App, Param, _Container, LocTerm, _ContLocTerm, _),
+    navigate_graph_up(app(App), App, LocRest), !.
+navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
+    paramloc(Param, Container, LocTerm, ContLocTerm, _),
+    navigate_graph_up(Container, App, [ContLocTerm|ContLocRest]),
+    LocRest = [ContLocTerm|ContLocRest].
 
 
 %%% xpath
@@ -741,8 +744,8 @@ transition(applfile(FileSpec), app(AppId), file(FilePath), Scoper0, Scoper1) :-
     contloc(AppId, applfile(FileSpec), file(FilePath), Scoper0, Scoper1).
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
-    paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(AppId, XmlSource, _Ffile, applfile(FileSpec), _),
+    paramloc(Param, XmlSource, xpath(Xpath), _, _),
+    paramloc(AppId, XmlSource, _Ffile, applfile(FileSpec), _, _),
     dbg_paramval('xpath->applfile', Param, XmlSource, Scoper0),
     contloc(AppId, applfile(FileSpec), Version, file(FilePath), Scoper0, Scoper1),
     format(string(Info), 'Reading file ~w', [FilePath]),
@@ -772,8 +775,8 @@ transition(Archive, app(AppId), archive(AfilePath), Scoper0, Scoper1) :-
     contloc(AppId, Archive, file(AfilePath), Scoper0, Scoper1).
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
-    paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _),
+    paramloc(Param, XmlSource, xpath(Xpath), _, _),
+    paramloc(AppId, XmlSource, Afile, endswith(EntrySpec), _, _),
     dbg_paramval('xpath->endswith', Param, XmlSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
@@ -811,8 +814,8 @@ transition(startswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper
     %    close(FileStream)).
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
-    paramloc(Param, XmlSource, xpath(Xpath), _),
-    paramloc(AppId, XmlSource, Afile, startswith(EntrySpec), _),
+    paramloc(Param, XmlSource, xpath(Xpath), _, _),
+    paramloc(AppId, XmlSource, Afile, startswith(EntrySpec), _, _),
     dbg_paramval('xpath->startswith', Param, XmlSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
@@ -827,8 +830,8 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 % nested xpath definitions
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
-    paramloc(Param, XmlParentTag, xpath(Xpath), _),
-    %paramloc(XmlParentTag, _, xpath(_), _), %  creates duplicates due to various containers
+    paramloc(Param, XmlParentTag, xpath(Xpath), _, _),
+    %paramloc(XmlParentTag, _, xpath(_), _, _), %  creates duplicates due to various containers
     dbg_paramval('xpath->*', Param, XmlParentTag, Scoper0),
     inc_dbg_level(Scoper0, NewScoper),
     paramval(XmlParentTag, AppId, Version, ParentXml, NewScoper, Scoper1),  % NB: here the container is not used
@@ -839,8 +842,8 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 
 % DCG for an archive xml resource (war / jar / zip)
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
-    paramloc(Param, TxtSource, phrase(Dcg), _),
-    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    paramloc(Param, TxtSource, phrase(Dcg), _, _),
+    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _, _),
     dbg_paramval('phrase->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
@@ -857,8 +860,8 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 % jsonget for an archive json resource (war / jar / zip)
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
-    paramloc(Param, TxtSource, jsonget(JsonPath), _),
-    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    paramloc(Param, TxtSource, jsonget(JsonPath), _, _),
+    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _, _),
     dbg_paramval('jsonget->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
@@ -894,8 +897,8 @@ json_prop_chain_o(JsonDict, [P0|Props], Obj) :-
 
 % regexp for a flat file
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
-    paramloc(Param, TxtSource, regexp(Regexp), _),
-    paramloc(AppId, TxtSource, _Ffile, applfile(FileSpec), _),
+    paramloc(Param, TxtSource, regexp(Regexp), _, _),
+    paramloc(AppId, TxtSource, _Ffile, applfile(FileSpec), _, _),
     dbg_paramval('regexp->applfile', Param, TxtSource, Scoper0),
     contloc(AppId, applfile(FileSpec), Version, file(FilePath), Scoper0, Scoper1),
     format(string(Info), 'Reading file ~w', [FilePath]),
@@ -905,8 +908,8 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 
 % regexp for an archive xml resource (war / jar / zip)
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
-    paramloc(Param, TxtSource, regexp(Regexp), _),
-    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _),
+    paramloc(Param, TxtSource, regexp(Regexp), _, _),
+    paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _, _),
     dbg_paramval('regexp->endswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
@@ -921,8 +924,8 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 % regexp for an archive xml resource (war / jar / zip)
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
-    paramloc(Param, TxtSource, regexp(Regexp), _),
-    paramloc(AppId, TxtSource, Afile, startswith(EntrySpec), _),
+    paramloc(Param, TxtSource, regexp(Regexp), _, _),
+    paramloc(AppId, TxtSource, Afile, startswith(EntrySpec), _, _),
     dbg_paramval('regexp->startswith', Param, TxtSource, Scoper0),
     member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
     contloc(AppId, Archive, Version, file(AfilePath), Scoper0, Scoper1),
@@ -937,7 +940,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 % nested regexp definitions
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
-    paramloc(Param, Parent, regexp(Regexp), _),
+    paramloc(Param, Parent, regexp(Regexp), _, _),
     dbg_paramval('regexp->*', Param, Parent, Scoper0),
     inc_dbg_level(Scoper0, NewScoper),
     paramval(Parent, AppId, Version, ParentTxt, NewScoper, Scoper1),
