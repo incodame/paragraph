@@ -21,6 +21,7 @@ prevent use of other directory not under workdirectory
 ** verticles
  - first implementation of Pwsh and Query verticles
  - use docker postgres image
+** scratch introduction
 * improve
 ** contloc_app_archive 
 processes files . and ..
