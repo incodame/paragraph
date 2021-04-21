@@ -111,8 +111,19 @@ location_term(LocExprStr, LocTerm) :-
 
 %% application archives ordered alphabetically (ear, war, jar, zip)
 
-app_archive(war,  'paragraph-ui',           'paragraph-ui(-version).war', []).
-app_archive(jar,  'paragraph-verticles',    'paragraph-verticles-(version)-fat.jar', []).
+app_archive(ArType, AppId, Archive, ArProps) :-
+    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    AppArList = Graph.get(deployment/paragraph/AppId/archives),
+    member(AppAr, AppArList),
+    dict_keys(AppAr, Keys),
+    member(Archive, Keys),
+    member(ArType, [ war, jar, zip, ear ]),
+    atom_concat('.', ArType, ArSuffix),
+    atom_concat(_Prefix, ArSuffix, Archive),
+    ArProps = [].
+
+%% app_archive(war,  'paragraph-ui',           'paragraph-ui(-version).war', []).
+%% app_archive(jar,  'paragraph-verticles',    'paragraph-verticles-(version)-fat.jar', []).
 
 %% application files
 

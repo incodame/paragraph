@@ -17,18 +17,6 @@ paragraph:
     - name: paragraph_conf
       build: prolog
   graph:
-    host:
-      directory:
-        archive:
-          name: archive
-          entries:
-            - entry: file
-        file: file
-    webrepo:
-      directory:
-        archive:
-          entry: file
-        file: file
     file:
       application_xml:
         loc: rpath("META-INF/application.xml")
@@ -113,8 +101,7 @@ paragraph:
         loc: xpath(//project/version(text))
         doc: "pom.xml version"
     deployment:
-      paragraph-deploy:
-        root-dir: /Users/tanguyro/Incodame/paragraph
+      paragraph:
         paragraph-ui:
           files:
             - help_md: file
@@ -126,4 +113,3 @@ paragraph:
             - pom_xml: file
           archives:
             - paragraph-verticles-(version)-fat.jar: archive
-          

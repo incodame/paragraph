@@ -723,14 +723,31 @@ paramv(Param, Val, Scoper0, Scoper1) :-
     foldl([A,B-S0,C-S1]>>transition(A,B,C,S0,S1), TdList, app(App)-Scoper0, Val-Scoper1).
 
 navigate_graph_up(app(App), App, []) :- !.
+navigate_graph_up(Param,    App, [LocTerm,ContainerTerm|LocRest]) :-
+    paramloc(App, Param, Container, LocTerm, _ContLocTerm, _),
+    add_container_up(LocTerm),
+    container_term(Container, ContainerTerm),
+    navigate_graph_up(app(App), App, LocRest), !.
 navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
     paramloc(App, Param, _Container, LocTerm, _ContLocTerm, _),
+    \+add_container_up(LocTerm),
     navigate_graph_up(app(App), App, LocRest), !.
 navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
     paramloc(Param, Container, LocTerm, ContLocTerm, _),
     navigate_graph_up(Container, App, [ContLocTerm|ContLocRest]),
     LocRest = [ContLocTerm|ContLocRest].
 
+add_container_up(endswith(_)).
+add_container_up(startswith(_)).
+add_container_up(rpath(_)).
+container_term(Container, warfile(Container)) :-
+    atom_concat(_Prefix, '.war', Container).
+container_term(Container, jarfile(Container)) :-
+    atom_concat(_Prefix, '.jar', Container).
+container_term(Container, earfile(Container)) :-
+    atom_concat(_Prefix, '.ear', Container).
+container_term(Container, zipfile(Container)) :-
+    atom_concat(_Prefix, '.zip', Container).
 
 %%% xpath
 
@@ -771,7 +788,7 @@ transition(endswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0,
     %    close(FileStream)).
 
 transition(Archive, app(AppId), archive(AfilePath), Scoper0, Scoper1) :-
-    member(Archive, [warfile(Afile), jarfile(Afile), zipfile(Afile)]),
+    member(Archive, [warfile(_), jarfile(_), zipfile(_)]),
     contloc(AppId, Archive, file(AfilePath), Scoper0, Scoper1).
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
@@ -829,6 +846,10 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
         close(XmlStream)).
 
 % nested xpath definitions
+transition(xpath(Xpath1), ParentXml, Val, Scoper0, Scoper1) :-
+    xpath(ParentXml, Xpath1, Val),
+    Scoper1 = Scoper0.
+
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, XmlParentTag, xpath(Xpath), _, _),
     %paramloc(XmlParentTag, _, xpath(_), _, _), %  creates duplicates due to various containers
@@ -841,6 +862,13 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 %%% phrase
 
 % DCG for an archive xml resource (war / jar / zip)
+transition(phrase(Dcg), stream(FileStream), Val, Scoper0, Scoper1) :-
+    %setup_call_cleanup(
+    phrase_from_stream(Dcg, FileStream),
+    Dcg =.. [_, Val],
+    %    close(FileStream)).
+    Scoper1 = Scoper0.
+
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, phrase(Dcg), _, _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _, _),
@@ -859,6 +887,13 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 %%% jsonget
 
 % jsonget for an archive json resource (war / jar / zip)
+transition(jsonget(JsonPath), stream(FileStream), Val, Scoper0, Scoper1) :-
+    %setup_call_cleanup(
+    json_read_dict(FileStream, JsonDict),
+    jsonget(JsonDict, JsonPath, Val),
+    %    close(FileStream)).
+    Scoper1 = Scoper0.
+
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, jsonget(JsonPath), _, _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _, _),
@@ -896,6 +931,11 @@ json_prop_chain_o(JsonDict, [P0|Props], Obj) :-
 %%% regexp
 
 % regexp for a flat file
+transition(regexp(Regexp), file(FilePath), Val, Scoper0, Scoper1) :-
+    lines(file(FilePath), Lines),
+    lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]), % non empty list
+    Scoper1 = Scoper0.
+
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, TxtSource, regexp(Regexp), _, _),
     paramloc(AppId, TxtSource, _Ffile, applfile(FileSpec), _, _),
@@ -907,6 +947,13 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]). % non empty list
 
 % regexp for an archive xml resource (war / jar / zip)
+transition(regexp(Regexp), stream(FileStream), Val, Scoper0, Scoper1) :-
+    %setup_call_cleanup(
+            lines(stream(FileStream), Lines),
+            lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]),
+    %    close(FileStream)).
+    Scoper1 = Scoper0.
+
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     paramloc(Param, TxtSource, regexp(Regexp), _, _),
     paramloc(AppId, TxtSource, Afile, endswith(EntrySpec), _, _),
@@ -939,6 +986,12 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
         close(FileStream)).
 
 % nested regexp definitions
+transition(regexp(Regexp), ParentTxt, Val, Scoper0, Scoper1) :-
+    open_string(ParentTxt, TxtStream),
+    lines(stream(TxtStream), Lines),
+    lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]),
+    Scoper1 = Scoper0.
+
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, Parent, regexp(Regexp), _, _),
     dbg_paramval('regexp->*', Param, Parent, Scoper0),

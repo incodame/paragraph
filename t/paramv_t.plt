@@ -86,13 +86,13 @@ test('find one of the parameters of container pom_xml') :-
 test('navigate graph from pom_xml_version up') :-
     navigate_graph_up(pom_xml_version, 'paragraph-ui', L),
     memberchk(L, [
-                  [xpath(//project/version(text)), endswith("/pom.xml")],
+                  [xpath(//project/version(text)), endswith("/pom.xml"), warfile('paragraph-ui(-version).war')],
                   [xpath(//project/version(text)), applfile("pom.xml")]
                  ]).
 
 test('navigate graph from json_ktext up') :-
     navigate_graph_up(json_ktext, 'paragraph-ui', L),
-    L = [jsonget('d/_/t'), endswith(".json")].
+    L = [jsonget('d/_/t'), endswith(".json"), warfile('paragraph-ui(-version).war')].
 
 %% paramval
 
