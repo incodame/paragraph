@@ -55,12 +55,13 @@ false.
 ## getting started with some analysis
 
 ```javascript
-?- showdoc(paramval/4).
-paramval(Parameter, Version, ParameterValue, ScopeOptions)
-  A Parameter is configured in a container, via the paragraph:paramloc/4 predicate
+?- showdoc(paramv/4).
+paramv(Parameter, ParameterValue, ScopeOptions, NewScoper)
+  A Parameter is configured in a container file or archive, via the graph defined in paragraph.yml, 
     using a search specification like regexp() or xpath() etc...
   * ParameterValue will be extracted from the container
-  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment)
+  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment), ...
+  * NewScoper: = ScopeOptions enriched with additional terms describing the location where ParameterValue was extracted 
   See also: parameters/2
 true.
 ```
@@ -79,21 +80,23 @@ true.
 ```
 
 ```javascript
-?- paramval(pom_xml_version, Ve, Val, [ag(paragraph), ve('0.0.1-SNAPSHOT')]).
-Reading archive /tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war: META-INF/maven/org.incodame.paragraph.sample.webapp/paragraph-ui/pom.xml
-Ve = Val, Val = '0.0.1-SNAPSHOT' ;
-false.
+% Define search options
 
-?- paramval(pom_xml_parent_artifact_id, Ve, Val, [ag(paragraph), ve('0.0.1-SNAPSHOT')]).
-Reading archive /tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war: META-INF/maven/org.incodame.paragraph.sample.webapp/paragraph-ui/pom.xml
-Ve = '0.0.1-SNAPSHOT',
-Val = 'spring-boot-starter-parent' .
+?- Opts = [ag('paragraph'), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui_target)].
 
-?- paramval(pom_xml_parent_artifact_id, App, Ve, 'spring-boot-starter-parent', [ag(paragraph), ve('0.0.1-SNAPSHOT')]).
-Reading archive /tmp/paragraph/paragraph-ui-0.0.1-SNAPSHOT.war: META-INF/maven/org.incodame.paragraph.sample.webapp/paragraph-ui/pom.xml
-App = 'paragraph-ui',
-Ve = '0.0.1-SNAPSHOT' ;
-false.
+% Example of navigation: xpath -> xpath -> xml file -> warfile : find the parent pom artifact/version of the paragraph archives
+
+?- paramv(pom_xml_parent_artifact_id, Val, $Opts, NewScoper).
+Val = 'spring-boot-starter-parent',
+NewScoper = [ae('META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml'),
+             ar(file("/opt/paragraph/ParagraphUI/target/paragraph-ui-0.0.1-SNAPSHOT.war")),
+             ag(paragraph), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui_target)]
+
+?- paramv(pom_xml_parent_version, Val, $Opts, NewScoper).
+Val = '2.3.0.RELEASE',
+NewScoper = [ae('META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml'),
+             ar(file("/opt/paragraph/ParagraphUI/target/paragraph-ui-0.0.1-SNAPSHOT.war")),
+             ag(paragraph), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui_target)]
 ```
 
 ## paragraph configuration

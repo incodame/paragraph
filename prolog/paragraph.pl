@@ -124,6 +124,14 @@ doc(parameters/2,          spec(['Parameter', 'Container']),
                             '  See also: parameters/0, pdoc/1']).
 doc(pdoc/1,                spec(['Parameter']),
                            ['  Display documentation for Parameter']).
+doc(paramv/4,              spec(['Parameter', 'ParameterValue', 'ScopeOptions', 'NewScoper']),
+                           ['  A Parameter is configured in a container file or archive, via the graph defined in paragraph.yml',
+                            '    using a search specification like regexp() or xpath() etc...',
+                            '  * ParameterValue will be extracted from the container',
+                            '  * ScopeOptions: depending on the parameter, ag(ApplicationGroup), ve(Version), env(Environment), ...',
+                            '  * NewScoper: = ScopeOptions enriched with additional terms describing the location where ParameterValue was extracted',
+                            '  See also: parameters/2']).
+
 doc(paramval/3,            spec(['Parameter', 'ParameterValue', 'ScopeOptions']),
                            ['  A Parameter is configured in a container, via the paragraph_conf:paramloc/5 predicate',
                             '    using a search specification like regexp() or xpath() etc...',
