@@ -1,0 +1,50 @@
+* Software Configuration Management with Prolog
+** Subtitle: a cookbook for solving real life scenarios
+** Introduction - Reflective systems and devops
+
+The impact of using wrongly(1) configured software products nowadays cannot be underestimated.
+
+Software artifacts rely heavily on some -usually scattered- collection of parameters to define (refine) the
+ aspects, variations and boundaries of their execution realm:
+ - resources they use
+ - strategies they adopt
+ - logs they produce etc
+
+Furthermore such parameters are interdependent and conceptually form a logical network which is to be
+ well understood by humans (cognition), and which is most of the time specific to each project or system.
+
+From a 30-year experience working on IT projects I can testify that we software engineers oftentimes
+lack the very tools helping us evaluate the impact made by software configuration changes (what-if scenario) 
+before we run them. Our software artifacts simply lack this "reflective"(2) capability.
+
+This situation is normally mitigated by devops by using continuous integration, however the number of possible
+combinations that can be covered under test remains usually limited. 
+
+Correct software configuration cannot usually be captured, although this is in the present days adressed by 
+container technology such as docker.
+
+No matter what mitigation measures are taken, we run the risk to run an incorrect system as we deploy the 
+software products into production environments, due to slight variations on the target system properties.
+
+This book attempts to give solutions to practitioners such as software developers and devops engineers:
+ - for building systems which can be easily reasoned about and compared
+ - for integration of such reflective capabilities into bigger frameworks
+and advocates the use of logical programming (using Prolog) for this purpose.
+
+*** notes
+ (1) either incorrect, overly complex or obfuscated
+ (2) the capability to reason about oneself
+
+** Driving directions in the development of "paragraph"
+
+Paragraph is a prolog software component that aims at capturing the structure of the logical network made
+up from software configuration parameters. Once this configuration is defined, an analysis on a deployed
+system of software products can be conducted, be it on a development machine or a deployed environment.
+
+The main aspects of this tool is:
+- its availability as a module that can be extended using prolog itself or python (via pengines)
+- its simple configuration which resides into a unique paragraph.yml file
+- its choice of using commands or REPL, in order to ease its integration into any bigger devops framework
+
+Sections of this book will work as a driver for the development of further features of this toolkit.
+
