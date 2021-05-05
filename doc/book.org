@@ -58,6 +58,7 @@ software packages. Paragraph refers to either files or archives (zip or jar file
 
 Top level containers for an application can be described as follows:
 
+#+begin_src yaml
   deployment:
     paragraph:
       paragraph-ui:
@@ -66,6 +67,7 @@ Top level containers for an application can be described as follows:
           - pom_xml: file
         archives:
           - paragraph-ui(-version).war: archive
+#+end_src
 
 In that example paragraph-ui is an application, which is packaged as a web archive (extemsion .war).
 
@@ -73,6 +75,7 @@ That application in development has also the following top level containers: hel
 
 These are references to the "file" section of paragraph.yml: 
 
+#+begin_src yaml
   graph:
     file:
       help_md:
@@ -80,14 +83,17 @@ These are references to the "file" section of paragraph.yml:
         doc: "Help resources"
         params:
           - help_url: param
+#+end_src
 
 Finally help_md contains this parameter: help_url, which is a reference to the "param" section of
 paragraph.yml:
 
+#+begin_src yaml
   param:
     help_url:
         loc: regexp("[(](?<V1L>.*)[)]$")
         doc: "help resource url"
+#+end_src
 
 The help_url parameter defines a loc property using this prolog term: regexp(<regular expression>).
 
@@ -97,18 +103,23 @@ The help_url parameter defines a loc property using this prolog term: regexp(<re
 
 The navigation path for help_url is as follows:
 
+#+begin_src prolog
 ?- navigate_graph_up(help_url, App, Path).
 App = 'paragraph-ui',
 Path = [regexp("[(](?<V1L>.*)[)]$"), applfile("HELP.md")].
+#+end_src
 
 and its value can be extracted as follows:
 
+#+begin_src prolog
 ?- Opts = [ag('paragraph'), ve(''), ad(paragraph_ui)].
+Opts = [ag(paragraph), ve(''), ad(paragraph_ui)].
 
 ?- paramv(help_url, Val, $Opts, _).
 Trying app directory = /opt/paragraph/ParagraphUI
 Val = "https://maven.apache.org/guides/index.html"
+#+end_src
 
-The explaination for the $Opts 
+The explanation for the $Opts is done in the next section.
 
 ** Contraining the search for parameters
