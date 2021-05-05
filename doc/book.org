@@ -18,7 +18,7 @@ lack the very tools helping us evaluate the impact made by software configuratio
 before we run them. Our software artifacts simply lack this "reflective"(2) capability.
 
 This situation is normally mitigated by devops by using continuous integration, however the number of possible
-combinations that can be covered under test remains usually limited. 
+combinations that can be covered under test by organizations remains usually limited. 
 
 Correct software configuration cannot usually be captured, although this is in the present days adressed by 
 container technology such as docker.
@@ -48,3 +48,67 @@ The main aspects of this tool is:
 
 Sections of this book will work as a driver for the development of further features of this toolkit.
 
+** Describing system parameters and how to access them
+
+System parameters can be described in the *paragraph.yml* file.
+Examples below represent small sections inside it, and not the entire file.
+
+The configuration of software products is usually performed inside files which may or may not reside into
+software packages. Paragraph refers to either files or archives (zip or jar files) as "containers".
+
+Top level containers for an application can be described as follows:
+
+  deployment:
+    paragraph:
+      paragraph-ui:
+        files:
+          - help_md: file
+          - pom_xml: file
+        archives:
+          - paragraph-ui(-version).war: archive
+
+In that example paragraph-ui is an application, which is packaged as a web archive (extemsion .war).
+
+That application in development has also the following top level containers: help_md and pom_xml.
+
+These are references to the "file" section of paragraph.yml: 
+
+  graph:
+    file:
+      help_md:
+        loc: applfile("HELP.md")
+        doc: "Help resources"
+        params:
+          - help_url: param
+
+Finally help_md contains this parameter: help_url, which is a reference to the "param" section of
+paragraph.yml:
+
+  param:
+    help_url:
+        loc: regexp("[(](?<V1L>.*)[)]$")
+        doc: "help resource url"
+
+The help_url parameter defines a loc property using this prolog term: regexp(<regular expression>).
+
+"loc" terms give a method to "compute" the value of the declared object:
+  - for a "param", how to extract its value as text 
+  - for a "file", how to locate it, given some additional constraints which we will discuss below
+
+The navigation path for help_url is as follows:
+
+?- navigate_graph_up(help_url, App, Path).
+App = 'paragraph-ui',
+Path = [regexp("[(](?<V1L>.*)[)]$"), applfile("HELP.md")].
+
+and its value can be extracted as follows:
+
+?- Opts = [ag('paragraph'), ve(''), ad(paragraph_ui)].
+
+?- paramv(help_url, Val, $Opts, _).
+Trying app directory = /opt/paragraph/ParagraphUI
+Val = "https://maven.apache.org/guides/index.html"
+
+The explaination for the $Opts 
+
+** Contraining the search for parameters
