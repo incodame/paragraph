@@ -48,9 +48,9 @@ The main aspects of this tool is:
 
 Sections of this book will work as a driver for the development of further features of this toolkit.
 
-** Describing system parameters and how to access them
+** Describing application parameters and how to access them
 
-System parameters can be described in the *paragraph.yml* file.
+Application parameters can be described in the *paragraph.yml* file.
 Examples below represent small sections inside it, and not the entire file.
 
 The configuration of software products is usually performed inside files which may or may not reside into
@@ -69,7 +69,7 @@ Top level containers for an application can be described as follows:
           - paragraph-ui(-version).war: archive
 #+end_src
 
-In that example paragraph-ui is an application, which is packaged as a web archive (extemsion .war).
+In that example paragraph-ui is an application, which is packaged as a web archive (extension .war).
 
 That application in development has also the following top level containers: help_md and pom_xml.
 
@@ -122,4 +122,45 @@ Val = "https://maven.apache.org/guides/index.html"
 
 The explanation for the $Opts is done in the next section.
 
-** Contraining the search for parameters
+** Contraining the search for parameters - an overview
+
+Application containers are not given a fix location (e.g. directory path or url) when declared in
+*paragraph.yaml*.
+
+To extract values of parameters Paragraph needs to have some "scope" constraing how a search is to
+be performed: 
+ - for which application group or application
+ - or for which application version ('' means no version)
+ - or under which root directory or url, using some application directory/url aliases
+ etc...
+
+This scope will determine which application archives or files will get scanned for value extraction.
+
+** Internal programming model based on graph search and predicate chaining
+As discussed above, paragraph resolves all possible navigation paths from a parameter to an application,
+examples:
+
+#+begin_src prolog
+?- navigate_graph_up(json_ktext, 'paragraph-ui', L).
+L = [jsonget('d/_/t'), endswith(".json"), warfile('paragraph-ui(-version).war')].
+
+?- navigate_graph_up(pom_xml_version, 'paragraph-ui', L).
+L = [xpath(//project/version(text)), endswith("/pom.xml"), warfile('paragraph-ui(-version).war')] ;
+L = [xpath(//project/version(text)), applfile("pom.xml")].
+#+end_src
+
+define the respective paths:
+
+#+begin_src text
+json_ktext      --jsonget()--> json_config --endswith()--> <app archive> --warfile()--> paragraph-ui
+
+pom_xml_version --xpath()-->   pom_xml     --endswith()--> <app archive> --warfile()--> paragraph-ui
+pom_xml_version --xpath()-->   pom_xml     --applfile()-------------------------------> paragraph-ui
+#+end_src
+
+Given the high number of possible navigation paths and "loc" terms (xpath(), regexp(), jsonget() etc)
+Paragraph takes the choice of implementing single graph transition predicates once,
+and to use a "fold"(1) as generic mechanism to chain all applicable transitions from application to parameter. 
+
+*** notes
+(1) a technique from functional programming
