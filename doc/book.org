@@ -127,7 +127,7 @@ The explanation for the $Opts is done in the next section.
 Application containers are not given a fix location (e.g. directory path or url) when declared in
 *paragraph.yaml*.
 
-To extract values of parameters Paragraph needs to have some "scope" constraing how a search is to
+To extract values of parameters Paragraph needs to have some "scope" constraining how a search is to
 be performed: 
  - for which application group or application
  - or for which application version ('' means no version)
@@ -137,8 +137,8 @@ be performed:
 This scope will determine which application archives or files will get scanned for value extraction.
 
 ** Internal programming model based on graph search and predicate chaining
-As discussed above, paragraph resolves all possible navigation paths from a parameter to an application,
-examples:
+As discussed above, paragraph resolves all possible navigation paths (bottom-up) from a parameter to an 
+application, as in the following examples:
 
 #+begin_src prolog
 ?- navigate_graph_up(json_ktext, 'paragraph-ui', L).
@@ -160,7 +160,8 @@ pom_xml_version --xpath()-->   pom_xml     --applfile()-------------------------
 
 Given the high number of possible navigation paths and "loc" terms (xpath(), regexp(), jsonget() etc)
 Paragraph takes the choice of implementing single graph transition predicates once,
-and to use a "fold"(1) as generic mechanism to chain all applicable transitions from application to parameter. 
+and to use a "fold"(1) as generic mechanism to chain all applicable transitions from application to parameter
+(the parameter value extraction is performed top-down) 
 
 *** notes
 (1) a technique from functional programming
