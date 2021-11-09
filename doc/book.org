@@ -34,7 +34,7 @@ and advocates the use of logical programming (using Prolog) for this purpose.
 *** notes
  (1) either incorrect, overly complex or obfuscated
  (2) the capability to reason about oneself
-
+ 
 ** Driving directions in the development of "paragraph"
 
 Paragraph is a prolog software component that aims at capturing the structure of the logical network made
@@ -165,3 +165,28 @@ and to use a "fold"(1) as generic mechanism to chain all applicable transitions 
 
 *** notes
 (1) a technique from functional programming
+* Searches for application parameters
+** Examples of configuration parameters' searches
+*** Example 1 - Searching for json file properties inside archives
+
+*** Example 2 - Comparing xml file properties from application archives
+
+** archive analysis for java
+*** Example 3 - Comparing jar or class files between application versions
+** log file analysis for java
+*** Example 4 - Searching for specific text occurrences in application logs
+** source analysis for java
+*** Example 5 - Searching for specific patterns in application code
+* Diff revisited
+** reference to the extensible Xml diff article
+** diff DSL based on paramv
+* Examples of "bridging" searches
+** Scopers to the rescue
+*** Example 6 - Chaining parameter evaluations with scopers
+* Examples of workflows - coordinating search tasks
+** Database containers
+** Operating system containers
+** Web containers
+** Security of systems
+** The coworkers module - resumable workflow system
+
