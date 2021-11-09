@@ -2,7 +2,7 @@
  * paragraph toolkit
  *
  */
-:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, navigate_graph_up/3, objects/0, parameters/0, parameters/2, paramval/3, paramval/4, paramval/6, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
+:- module(paragraph, [application_jar/5, application_jar/4, application_java_class/6, application_java_class/5, doc/3, download_as/4, download_as/5, exported_predicates/2, from_list/1, navigate_graph_up/3, objects/0, parameters/0, parameters/2, paramv/4, paramval/3, paramval/4, paramval/6, pdoc/1, predicates/0, predicates_using/2, search/2, showdoc/1]).
 :- use_module(library(iostream)).
 :- use_module(library(lists)).
 :- use_module(library(list_util)).

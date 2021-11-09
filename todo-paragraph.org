@@ -13,8 +13,8 @@ prevent use of other directory not under workdirectory
 ** paramval
 *** force the use of structured term e.g. earfile(E) for container
 *** solution for removing large number of predicates (and choicepoints) 
- - temporary paramv uses constrained search in graph, and foldl
- - find solution for using setup_call_cleanup in foldl
+ - new paramv uses constrained search in graph, and foldl
+ - find solution for replacing setup_call_cleanup in foldl: use undo/1 from swipl 8.3.24
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
