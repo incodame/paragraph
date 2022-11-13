@@ -26,7 +26,9 @@ prevent use of other directory not under workdirectory
 ** contloc_app_archive 
 processes files . and ..
 it uses directory_files and could filter based on the FileType if it is ground
-tabling not yet working
+** tabling not yet working
+ - document use of tabling with paramval
+ - document differences SWI (table as subsumptive) vs scryer
 ** use yaml paragraph configuration
  - finish implementation for app files and archives
  - directory aliases in separate yaml

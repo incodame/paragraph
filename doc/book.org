@@ -165,7 +165,25 @@ and to use a "fold"(1) as generic mechanism to chain all applicable transitions 
 
 *** notes
 (1) a technique from functional programming
-* Searches for application parameters
+
+* Building a complex graph model using pavements and tags
+** The pavements project
+This project aims at defining paragraph.yml as the composition of individual graph parts called "pavements".
+
+Each pavement can typically describe the configuration of a single application or system.
+In order to avoid duplication of definitions, a pavement itself can inherit container and parameter definitions
+from templates via a set of tag, e.g.
+
+    - Tag build=maven
+    - Tag framework=springboot
+      
+which considerably simplifies its yaml source. These tag reference templates from the pavements library. 
+
+The composed graph can then be described either via a DSL in a pavements.yml file, or via a set of builder
+  commands.
+Confer the pavements project for more details.
+
+* Practical examples of searches for application parameters
 ** Examples of configuration parameters' searches
 *** Example 1 - Searching for json file properties inside archives
 
