@@ -177,7 +177,8 @@ from templates via a set of tag, e.g.
     - Tag build=maven
     - Tag framework=springboot
       
-which considerably simplifies its yaml source. These tag reference templates from the pavements library. 
+which considerably simplifies its yaml source. These tag reference templates from the pavements library.
+Template pavements from the pavements library can themselves use tags to inherit content from other templates.
 
 The composed graph can then be described either via a DSL in a pavements.yml file, or via a set of builder
   commands.
