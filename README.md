@@ -2,10 +2,10 @@
 A configuration management toolkit (module) written in prolog, including:
 
 * application archive analysis (jar, war, ear, zips)
-* declaration of parameters for navigating resources inside hierarchical containers (paramloc, paramval)
-* scoping operators for constraining searches or evaluations
-* diff tools working on xml, json, or yaml resources (diff DSL)
-* coordination of tasks using the coworkers module
+* declaration of application or system parameters, for navigating resources located inside hierarchical containers (paramloc, paramval)
+* scoping operators, for constraining searches or evaluations
+* diff tools working on xml, json, or yaml documents or referencing parameters (diff DSL)
+* coordination of search tasks using the coworkers module
 
 The framework's purpose and examples is covered in this online [book](https://github.com/incodame/paragraph/blob/master/doc/book.org)
 
