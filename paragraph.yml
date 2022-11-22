@@ -1,7 +1,11 @@
 paragraph:
+  versions: []
+  tags:
+    - build: maven
   apps:
     - name: paragraph
-      build: prolog
+      tags:
+        - build: prolog
       repositories:
         - paragraph-repo: webrepo
       deployments:
@@ -11,11 +15,16 @@ paragraph:
         - paragraph-verticles
         - paragraph_conf
     - name: paragraph-ui
-      build: maven
+      tags:
+        - build: maven
+        - framework: springboot
     - name: paragraph-verticles
-      build: maven
+      tags:
+        - build: maven
+        - framework: vert-x
     - name: paragraph_conf
-      build: prolog
+      tags:
+        - build: prolog
   graph:
     file:
       application_xml:
