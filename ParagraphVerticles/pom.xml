@@ -12,7 +12,7 @@
   <properties>
     <vertx.version>3.9.1</vertx.version>
     <commons.codec.version>1.14</commons.codec.version>
-    <groovy.version>3.0.3</groovy.version>
+    <groovy.version>3.0.7</groovy.version>
     <jpowershell.version>3.1.1</jpowershell.version>
     <gmavenplus.plugin.version>1.9.0</gmavenplus.plugin.version>
     <main.verticle>org.incodame.paragraph.MainVerticle</main.verticle>
