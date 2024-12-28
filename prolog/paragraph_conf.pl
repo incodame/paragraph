@@ -4,7 +4,8 @@
 %%
 %% Paragraph Configuration
 %%
-%% - edit your project configuration in paragraph.yaml
+%% - as starting step, edit your project configuration in paragraph.yaml
+%% - use the pavements project for an advanced system configuration
 %%
 
 paragraph_graph('paragraph.yml').
