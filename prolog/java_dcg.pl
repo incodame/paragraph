@@ -2,20 +2,23 @@
 :- use_module(library(dcg/basics)).
 
 
-java_class_decl(class(C,As), Fields, Constructors, Methods) -->
-    java_annotations(As), java_visibility_modifier(_), "class ", string_without(" ", C), { writeln(C) }, 
+java_class_decl(class(CStr,As), Fields, Constructors, Methods) -->
+    java_annotations(As), java_visibility_modifier(_), "class ", string_without(" ", C), { string_codes(CStr, C), writeln(CStr) }, 
     " {", blanks,
     java_field_decls(Fields), blanks,
     java_constructor_decls(Constructors), blanks,
     java_method_decls(Methods), blanks,
-    "}".
+    "}", !.
 
 java_field_decls([]) --> [].
 java_field_decls([Field|Fields]) -->
     java_field_decl(Field), blanks,
     java_field_decls(Fields).
 
-java_field_decl(field(F,As)) -->  java_annotations(As), java_visibility_modifier(_), string_without(";", F), ";", blanks, { writeln(F) }.
+java_field_decl(field(FStr,As)) -->  
+    java_annotations(As), 
+    java_visibility_modifier(_), 
+    string_without(";", F), ";", blanks, { string_codes(FStr, F), writeln(FStr) }, !.
 
 java_visibility_modifier(Modifier) --> ( "public", { ModifierStr = "public"} 
                                        | "private", { ModifierStr = "private"} 
@@ -27,7 +30,7 @@ java_annotations([Annotation|Annotations]) -->
     java_annotation(Annotation), blanks,
     java_annotations(Annotations).
 
-java_annotation(A) --> "@", string_without(" ", A), blanks.
+java_annotation(AStr) --> "@", string_without(" ", A), blanks, { string_codes(AStr, A) }, !.
 
 java_constructor_decls([]) --> [].
 java_constructor_decls([Constructor|Constructors]) -->
@@ -39,20 +42,32 @@ java_method_decls([Method|Methods]) -->
     java_method_decl(Method), blanks,
     java_method_decls(Methods).
 
-java_constructor_decl(C) --> blanks, java_visibility_modifier(_), string(C), "(", java_parameter_list(_), ")", blanks, "{", blanks, "}", blanks.
+java_constructor_decl(CStr) --> 
+    blanks, 
+    java_visibility_modifier(_), 
+    string_without("( ", C), "(", java_parameter_list(_), ")", blanks, 
+    "{", string_without("}", _), "}", blanks, { string_codes(CStr, C), writeln(CStr) }.
 
 java_parameter_list([]) --> [].
+java_parameter_list([P]) --> java_parameter(P).
 java_parameter_list([P|Ps]) --> java_parameter(P), ",", java_parameter_list(Ps).
-java_parameter(P) --> blanks, "final ", string(P), blanks.
+java_parameter(PStr) --> blanks, final_p, string_without("),", P), blanks, { string_codes(PStr, P), writeln(PStr) }.
 
-java_method_decl(M) --> blanks, java_visibility_modifier(_), string(M), "(", java_parameter_list(_), ")", blanks, "{", blanks, "}", blanks.
+final_p --> "final", blanks.
+final_p --> []. 
+
+java_method_decl(MStr) --> 
+    blanks, 
+    java_visibility_modifier(_), 
+    string_without("(", M), "(", java_parameter_list(_), ")", blanks, 
+    "{", string_without("}", _), "}", blanks, { string_codes(MStr, M), writeln(MStr) }.
 
 java_class_file_content(Class) -->
     java_package_decl(_), blanks,
     java_import_statements(_), blanks,
     java_class_decl(Class, _, _, _).
 
-java_package_decl(_) --> "package", blanks, string(_), ";", blanks.
+java_package_decl(_) --> "package", blanks, string_without(";", _), ";", blanks.
 java_package_decl(_) --> [].
 
 java_import_statements([]) --> [].
@@ -60,12 +75,12 @@ java_import_statements([Import|Imports]) -->
     java_import_statement(Import), blanks,
     java_import_statements(Imports).
 
-java_import_statement(Import) --> "import", blanks, string(Import), ";", blanks.
+java_import_statement(Import) --> "import", blanks, string_without(";", Import), ";", blanks.
 
 test1(Class) :-
     Data = "public class MyClass { private String name; }",
     string_codes(Data, Codes),
-    phrase(java_class_decl(class(Class, []), [ field('String name', []) ], _, _), Codes).
+    phrase(java_class_decl(class(Class, []), [ field("String name", []) ], _, _), Codes).
 
 test2(Class) :-
     phrase_from_file(java_class_file_content(class(Class, _)), '/opt/paragraph/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java').
