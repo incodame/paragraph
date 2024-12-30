@@ -1,4 +1,5 @@
 :- module(java_dcg, [java_class_decl//4, java_class_file_content//1]).
+:- use_module(library(apply)).
 :- use_module(library(dcg/basics)).
 :- use_module(library(list_util)).
 
@@ -9,7 +10,7 @@ java_class_decl(class(CStr,As), Fields, Constructors, Methods) -->
     " {", blanks,
     java_field_decls(Fields), blanks,
     java_constructor_decls(Constructors), { replicate(_, CStr, Constructors) }, blanks,
-    java_method_decls(Methods), blanks,
+    java_method_decls(Methods), { include(=(CStr), Methods, []) }, blanks,
     "}", !.
 
 java_field_decls([]) --> [].
@@ -37,10 +38,10 @@ java_annotation(AStr) -->
     "@", string_without("\n", A), blanks,
     { string_codes(AStr, A), format(string(Anno), "annotation: ~w", [AStr]), writeln(Anno) }, !.
 
-java_constructor_decls([]) --> [].
 java_constructor_decls([Constructor|Constructors]) -->
-    java_constructor_decl(Constructor), blanks,
-    java_constructor_decls(Constructors).
+        java_constructor_decl(Constructor), blanks,
+        java_constructor_decls(Constructors).
+java_constructor_decls([]) --> [].
 
 java_method_decls([]) --> [].
 java_method_decls([Method|Methods]) -->
