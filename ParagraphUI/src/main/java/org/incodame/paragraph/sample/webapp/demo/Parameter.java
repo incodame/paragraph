@@ -31,7 +31,9 @@ public class Parameter {
     }
 
     public void setValue(String value) {
-        this.value = value;
+        if (null != value) {
+            this.value = value;
+        }
     }
 
     public String getLoc() {

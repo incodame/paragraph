@@ -1,4 +1,4 @@
-:- module(java_dcg, [java_class_decl//4, java_class_file_content//1]).
+:- module(java_dcg, [java_class_decl//4, java_field_decl//1, java_class_file_content//1]).
 :- use_module(library(apply)).
 :- use_module(library(dcg/basics)).
 :- use_module(library(list_util)).
@@ -52,7 +52,7 @@ java_constructor_decl(CStr) -->
     blanks, 
     java_visibility_modifier(_), 
     string_without("\n( ", C), "(", java_parameter_list(_), ")", blanks, 
-    "{", string_without("}", _), "}", blanks, 
+    "{", balanced_cbrackets, "}", blanks, 
     { string_codes(CStr, C), format(string(Cons), "constructor: ~w", [CStr]), writeln(Cons) }.
 
 java_parameter_list([]) --> [].
@@ -66,11 +66,21 @@ java_parameter(PStr) -->
 final_p --> "final", blanks.
 final_p --> []. 
 
+% balanced curly brackets
+balanced_cbrackets --> [].
+balanced_cbrackets --> string_without("{}", _).
+balanced_cbrackets -->
+    balanced_cbrackets,
+	"{",
+	balanced_cbrackets,
+	"}",
+    balanced_cbrackets.
+
 java_method_decl(MStr) --> 
     blanks, 
     java_visibility_modifier(_), 
     string_without("\n(", M), "(", java_parameter_list(_), ")", blanks, 
-    "{", string_without("}", _), "}", blanks, 
+    "{", balanced_cbrackets, "}", blanks, 
     { string_codes(MStr, M), format(string(Method), "method: ~w", [MStr]), writeln(Method) }.
 
 java_class_file_content(Class) -->
