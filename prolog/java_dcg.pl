@@ -70,8 +70,8 @@ final_p --> [].
 balanced_cbrackets --> [].
 balanced_cbrackets --> string_without("{}", _).
 balanced_cbrackets -->
-    balanced_cbrackets,
-	"{",
+    string_without("{}", _),
+    "{",
 	balanced_cbrackets,
 	"}",
     balanced_cbrackets.
