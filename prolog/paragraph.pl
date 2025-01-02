@@ -869,6 +869,24 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 
 %%% phrase
 
+% new yaml syntax: Dcg to capture a data structure such as a java annotation
+transition(dcg(Dcg), stream(FileStream), Val, Scoper0, Scoper1) :-
+    Val=lazy_dcg(phrase_from_stream(Dcg, FileStream)), % lazy DCG eval
+    Dcg =.. [_, SName, SAttrs],
+    Scoper1 = [ st(SName, SAttrs) | Scoper0 ].
+
+% new yaml syntax: Isa (ref. to DCG) with filter query
+transition(q(FilterQuery), lazy_dcg(LazyDcgEval), Val, Scoper0, Scoper1) :-
+    Val = filter_ldcg(FilterQuery,LazyDcgEval),
+    Scoper1 = Scoper0.
+
+% new yaml syntax: structure component - DCG extract attrs
+transition(q(AttrQuery,V1L), filter_ldcg(FilterQuery, LazyDcgEval), Val, Scoper0, Scoper1) :-
+    call(((FilterQuery, LazyDcgEval), AttrQuery)), % all queries share the same variables e.g. Aname and Aprops, and AttrQuery populates a V1L variable
+    Val = V1L,
+    Scoper1 = Scoper0.
+
+
 % DCG for an archive xml resource (war / jar / zip)
 transition(phrase(Dcg), stream(FileStream), Val, Scoper0, Scoper1) :-
     %setup_call_cleanup(
