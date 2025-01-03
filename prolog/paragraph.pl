@@ -634,9 +634,12 @@ resolve_entry_spec(ActualEntry, ActualEntry, Scoper0, Scoper1) :-
 
 %%% flat files
 
+file_type(Fname, Ftype) --> string_without(".", Prefix), ".", string(Suffix), { atom_codes(Fname, Prefix), atom_codes(Ftype, Suffix) }. 
+
 contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
-    atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
-    contloc_app_file(File, pom, AppId, Version, LocSpec, Scoper0, Scoper1).
+    string_codes(FileStr, Codes),
+    phrase(file_type(Fname, Ftype), Codes),
+    contloc_app_file(Fname, Ftype, AppId, Version, LocSpec, Scoper0, Scoper1).
 
 contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
     want_opt(ag(AppGroup), Scoper0),
@@ -684,7 +687,7 @@ file_match(FileTest, FileList, File, FileType, Version, AppId) :-
     ;atom_concat('*.', FileType, FileTest), atom_concat('*', Suffix, FileTest),
         member(File, FileList), atom_concat(_, Suffix, File)
     ;
-        member(FileTest, FileList), File = FileTest, Version = ''
+        atomic_list_concat([FileTest, '.', FileType], FileName), member(FileName, FileList), File = FileName, Version = ''
     ).
 
 %% parameters defined in paragraph_conf
@@ -718,8 +721,8 @@ paramv(Param, Val, Scoper) :-
     paramv(Param, Val, Scoper, _).
 
 paramv(Param, Val, Scoper0, Scoper1) :-
-    writeln("choose the App using scoper"),
-    App = 'paragraph-ui',
+    writeln("TODO - choose the App using scoper"),
+    App = 'paragraph',
     writeln("build possible lists of transitions TdList from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param"), % uses scoper too !
     navigate_graph_up(Param, App, UpList),
     reverse(UpList, TdList),
@@ -1012,7 +1015,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
         close(FileStream)).
 
 % nested regexp definitions
-transition(regexp(Regexp), ParentTxt, Val, Scoper0, Scoper1) :-
+transition(regexp(Regexp), text(ParentTxt), Val, Scoper0, Scoper1) :-
     open_string(ParentTxt, TxtStream),
     lines(stream(TxtStream), Lines),
     lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]),

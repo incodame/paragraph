@@ -19,14 +19,16 @@ application_group(build, paragraph, 'org.incodame.paragraph').
 pgraph(YamlDoc) :-
     yaml_read('/opt/paragraph/paragraph.yml', YamlDoc).
 
+pgraph_elems(Versions, Tags, Apps, Graph) :-
+    pgraph(yaml{paragraph:yaml{versions: Versions, tags: Tags, apps: Apps, graph: Graph}}).
+
 application(app, paragraph, AppShortName, AppProps) :-
-    pgraph(yaml{paragraph:yaml{apps:AppList, graph:_}}),
+    pgraph_elems(_, _, AppList, _),
     member(App, AppList),
-    select_dict(yaml{name:AppShortNameStr, build:AppBuildStr}, App, _),
+    select_dict(yaml{name:AppShortNameStr, tags:AppTagList}, App, _),
     atom_string(AppShortName, AppShortNameStr),
-    atom_string(AppBuild, AppBuildStr),
-    %AppShortName = App.get(name),
-    %AppBuild = App.get(build),
+    member(AppTag, AppTagList),
+    select_dict(yaml{build:AppBuild}, AppTag, _),
     AppProps = [ build(AppBuild) ].
 
 %% application(app, 'paragraph-ui',        paragraph, [ build(maven) ]).
@@ -49,7 +51,7 @@ application(app, paragraph, AppShortName, AppProps) :-
 % application parameters
 paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
     (app_archive(_, App, Container, _) ; app_file(_, App, Container, _)),
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     LocExprStr = Graph.get(file/Param/loc),
     location_term(LocExprStr, LocTerm),
     Doc = Graph.get(file/Param/doc),
@@ -58,7 +60,7 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 
 % generic parameters
 paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     LocExprStr = Graph.get(param/Param/loc),
     location_term(LocExprStr, LocTerm),
     Doc = Graph.get(param/Param/doc),
@@ -67,7 +69,7 @@ paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 
 :- table parent_param/4.
 parent_param(Param, ParentType, Parent, ParentLocTerm) :-
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     ChildList = Graph.get(ParentType/Parent/params),
     member(Child, ChildList),
     dict_keys(Child, Keys),
@@ -113,7 +115,7 @@ location_term(LocExprStr, LocTerm) :-
 %% application archives ordered alphabetically (ear, war, jar, zip)
 
 app_archive(ArType, AppId, Archive, ArProps) :-
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     AppArList = Graph.get(deployment/paragraph/AppId/archives),
     member(AppAr, AppArList),
     dict_keys(AppAr, Keys),
@@ -132,6 +134,7 @@ app_file(pom, AppId, 'pom.xml',  [ doc("application pom.xml") ]) :-
     application(app, _ApplicationGroup, AppId, AppOpts), memberchk(build(maven), AppOpts).
 
 % add specific files here
+app_file(md,  'paragraph', 'README.md', [ doc("application doc entry point") ]).
 app_file(md,  'paragraph-ui', 'HELP.md', [ doc("application help") ]).
 app_file(xml, 'paragraph-verticles',    '*.xml', []).
 app_file(jar, 'paragraph-verticles',    '*.jar', []).
@@ -148,7 +151,8 @@ search_option(ad(AppDirectory),     "App directory alias",  read(AppDirectory)).
 directory_alias(examples, '/opt/paragraph/examples').
 
 %% application specific directory aliases
-
+%% directory_alias(AppId, Alias, Path).
+directory_alias(paragraph, paragraph_main, '/opt/paragraph').
 directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
 directory_alias('paragraph-ui', paragraph_ui_target, '/opt/paragraph/ParagraphUI/target').
 directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').

@@ -65,6 +65,11 @@ paragraph:
           - pom_xml_artifact_id: param
           - pom_xml_group_id: param
           - pom_xml_version: param
+      readme_md:
+        loc: applfile("README.md")
+        doc: "Documentation entry point"
+        params:
+          - doc_url: param
     param:
       angular_module:
         loc: phrase(js_dcg:angular_module_decl(Val))
@@ -75,6 +80,9 @@ paragraph:
       context_root:
         loc: xpath(//'context-root'(text))
         doc: "context root of a Java EE web application"
+      doc_url:
+        loc: regexp(".book.[(](?<V1L>.*)[)]$")
+        doc: "book resource url"
       help_url:
         loc: regexp("[(](?<V1L>.*)[)]$")
         doc: "help resource url"
