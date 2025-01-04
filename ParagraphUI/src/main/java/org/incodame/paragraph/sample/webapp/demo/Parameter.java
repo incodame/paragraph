@@ -1,5 +1,7 @@
 package org.incodame.paragraph.sample.webapp.demo;
 
+import javax.validation.constraints.NotNull;
+
 public class Parameter {
     
     @NotNull
