@@ -2,6 +2,7 @@ paragraph:
   versions: []
   tags:
     - build: maven
+    - framework: java_persistence
   apps:
     - name: paragraph
       tags:
@@ -52,19 +53,6 @@ paragraph:
         doc: "Any json configuration in an application's web archive"
         params:
           - json_ktext: param
-      persistence_xml:
-        loc: endswith("persistence-context.xml")
-        doc: "Main configuration of JPA"
-        params:
-          - jpa_todo: param
-      pom_xml:
-        loc: applfile("pom.xml"), endswith("/pom.xml")
-        doc: "Application or module's pom.xml"
-        params:
-          - pom_xml_parent: param
-          - pom_xml_artifact_id: param
-          - pom_xml_group_id: param
-          - pom_xml_version: param
       readme_md:
         loc: applfile("README.md")
         doc: "Documentation entry point"
@@ -86,37 +74,9 @@ paragraph:
       help_url:
         loc: regexp("[(](?<V1L>.*)[)]$")
         doc: "help resource url"
-      jpa_todo:
-        loc: xpath("TODO")
-        doc: "TODO"
       json_ktext:
         loc: jsonget('d/_/t')
         doc: "text extracted from json configuration tree"
-      pom_xml_parent:
-        loc: xpath(//project/parent)
-        doc: "pom.xml parent"
-        params:
-          - pom_xml_parent_artifact_id: param
-          - pom_xml_parent_group_id: param
-          - pom_xml_parent_version: param
-      pom_xml_artifact_id:
-        loc: xpath(//artifactId(text))
-        doc: "pom.xml artifactId"
-      pom_xml_group_id:
-        loc: xpath(//groupdId(text))
-        doc: "pom.xml groupdId"
-      pom_xml_parent_artifact_id:
-        loc: xpath(//artifactId(text))
-        doc: "pom.xml parent artifactId"
-      pom_xml_parent_group_id:
-        loc: xpath(//groupdId(text))
-        doc: "pom.xml parent groupdId"
-      pom_xml_parent_version:
-        loc: xpath(//version(text))
-        doc: "pom.xml parent version"
-      pom_xml_version:
-        loc: xpath(//project/version(text))
-        doc: "pom.xml version"
     deployment:
       paragraph:
         paragraph-ui:

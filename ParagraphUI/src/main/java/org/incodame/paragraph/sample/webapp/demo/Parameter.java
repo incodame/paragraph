@@ -2,6 +2,9 @@ package org.incodame.paragraph.sample.webapp.demo;
 
 import javax.validation.constraints.NotNull;
 
+@DatabaseEntity(name = "parameter", 
+                tableName = "parameter", 
+                description = "Parameter entity for storing parameters with name, location, and documentation.")
 public class Parameter {
     
     @NotNull

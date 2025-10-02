@@ -1,6 +1,10 @@
 :- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
+
+py_add_lib_dir('/opt/pavements/lib').
+
 %%
 %% Paragraph Configuration
 %%

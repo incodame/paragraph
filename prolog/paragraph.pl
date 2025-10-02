@@ -23,6 +23,7 @@
 :- use_module(library(yall)).
 :- use_module(paragraph_conf).
 :- use_module(js_dcg).
+:- use_module(java_dcg).
 
 :- table contloc_app_archive/6.
 
@@ -946,12 +947,27 @@ json_prop_(JsonDict, Property, Obj) :-
     Obj = JsonDict.get(Property).
 
 json_sub_prop_(Property, Obj0, Obj1) :-
-    (is_dict(Obj0) -> Obj1 = Obj0.get(Property) ;
+    (is_dict(Obj0) -> extract_property(Property, Obj0, Obj1) ;
      is_list(Obj0) -> (
          atom_number(Property, Int0) -> nth0(Int0, Obj0, Obj1) ;
          Property = '_'   -> length(Obj0, ListLen), Index in 1..ListLen, label([Index]), nth1(Index, Obj0, Obj1)
      ) ;
      Obj1 = Obj0).
+
+extract_property(Property, Obj0, Obj1) :-
+    (atomic_list_concat(Props, ',', Property) -> extract_props(Obj0, Props, Obj1) ;
+        extract_prop(Obj0, Property, Obj1)
+    ).
+
+extract_props(_, [], []) :- !.
+extract_props(Obj0, [P], [O]) :-
+    extract_prop(Obj0, P, O), !.
+extract_props(Obj0, [P|Ps], [O|Os]) :-
+    extract_prop(Obj0, P, O),
+    extract_props(Obj0, Ps, Os).
+
+extract_prop(Obj0, Property, Obj1) :-
+    Obj1 = Obj0.get(Property).
 
 json_prop_chain_o(JsonDict, [P0|Props], Obj) :-
     json_prop_(JsonDict, P0, Obj0),
