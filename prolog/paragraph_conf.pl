@@ -3,7 +3,7 @@
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
 
-py_add_lib_dir('/opt/pavements/lib').
+:- py_add_lib_dir('/opt/pavements/lib').
 
 %%
 %% Paragraph Configuration
