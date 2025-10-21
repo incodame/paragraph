@@ -3,7 +3,27 @@
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
 
-:- py_add_lib_dir('/opt/pavements/lib').
+:- py_add_lib_dir('/opt/pavements/lib/python').
+
+%%
+%% Paragraph python setup
+%%
+
+paragraph_py_setup :-
+    process_create(path(python3), ['-m', 'venv', '/opt/python_venv'], []),
+    process_create('/opt/python_venv/bin/pip', ['install', 'pyyaml'], []),
+    py_add_lib_dir('/opt/python_venv/lib/python3.11/site-packages'),
+    py_import(yaml, []).
+
+%%
+%% Paragraph Configuration from pavements
+%%
+
+load_graph(Name, Pavement) :-
+    format(atom(YamlGraph), '/opt/paragraph/graph/~w.yml', [Name]),
+    py_call(pavements:'Pavement'(Name, Name, [], [], [], [], [], []), Pavement, [py_object(true)]),
+    py_call(Pavement:load_from(YamlGraph)).
+
 
 %%
 %% Paragraph Configuration
