@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
 :- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
@@ -15,12 +15,17 @@ paragraph_py_setup :-
     py_add_lib_dir('/opt/python_venv/lib/python3.11/site-packages'),
     py_import(yaml, []).
 
+% TODO - make paramv test suite run 100%
+% TODO - rewrite application and paramloc predicates
+
+
 %%
 %% Paragraph Configuration from pavements
 %%
 
 load_graph(Name, Pavement) :-
-    format(atom(YamlGraph), '/opt/paragraph/graph/~w.yml', [Name]),
+    para_graph(Name, PGraph),
+    format(atom(YamlGraph), '/opt/paragraph/graph/~w', [PGraph]),
     py_call(pavements:'Pavement'(Name, Name, [], [], [], [], [], []), Pavement, [py_object(true)]),
     py_call(Pavement:load_from(YamlGraph)).
 
@@ -32,7 +37,7 @@ load_graph(Name, Pavement) :-
 %% - use the pavements project for an advanced system configuration
 %%
 
-paragraph_graph('paragraph.yml').
+para_graph('paragraph', 'paragraph.yml').
 
 %% application and groups (ordered by application groups)
 
@@ -46,13 +51,19 @@ pgraph(YamlDoc) :-
 pgraph_elems(Versions, Tags, Apps, Graph) :-
     pgraph(yaml{paragraph:yaml{versions: Versions, tags: Tags, apps: Apps, graph: Graph}}).
 
-application(app, paragraph, AppShortName, AppProps) :-
-    pgraph_elems(_, _, AppList, _),
-    member(App, AppList),
-    select_dict(yaml{name:AppShortNameStr, tags:AppTagList}, App, _),
+application(app, Name, AppShortName, AppProps) :-
+    load_graph(Name, Pavement),
+    py_iter(Pavement:get_apps(), App, [py_object(true)]),
+    %pgraph_elems(_, _, AppList, _),
+    %member(App, AppList),
+    %select_dict(yaml{name:AppShortNameStr, tags:AppTagList}, App, _),
+    py_call(App:name, AppShortNameStr),
     atom_string(AppShortName, AppShortNameStr),
-    member(AppTag, AppTagList),
-    select_dict(yaml{build:AppBuild}, AppTag, _),
+    py_iter(App:tags, AppTag, [py_object(true)]),
+    trace,
+    py_call(AppTag:genre, "build"),
+    py_call(AppTag:name, AppBuild),
+    %select_dict(yaml{build:AppBuild}, AppTag, _),
     AppProps = [ build(AppBuild) ].
 
 %% application(app, 'paragraph-ui',        paragraph, [ build(maven) ]).
@@ -71,6 +82,11 @@ application(app, paragraph, AppShortName, AppProps) :-
 %% Path = param,
 %% To = context_root,
 %% LocTerm = "xpath(//'context-root'(text))" ;
+
+parameter(Name, ParamShortNameStr) :-
+    load_graph(Name, Pavement),
+    py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
+    py_call(Param:name, ParamShortNameStr).
 
 % application parameters
 paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
