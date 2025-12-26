@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, parameter/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
 :- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
@@ -87,6 +87,12 @@ parameter(Name, ParamShortNameStr) :-
     load_graph(Name, Pavement),
     py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
     py_call(Param:name, ParamShortNameStr).
+
+parameter(Name, ParamShortNameStr, SourcePvtStr) :-
+    load_graph(Name, Pavement),
+    py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
+    py_call(Param:name, ParamShortNameStr),
+    py_call(Param:pvt, SourcePvtStr).
 
 % application parameters
 paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-

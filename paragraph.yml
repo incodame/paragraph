@@ -1,4 +1,5 @@
 paragraph:
+  name: paragraph
   versions: []
   tags:
     - source: java
