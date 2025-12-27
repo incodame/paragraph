@@ -57,11 +57,9 @@ application(app, Name, AppShortName, AppProps) :-
     %pgraph_elems(_, _, AppList, _),
     %member(App, AppList),
     %select_dict(yaml{name:AppShortNameStr, tags:AppTagList}, App, _),
-    py_call(App:name, AppShortNameStr),
-    atom_string(AppShortName, AppShortNameStr),
+    py_call(App:name, AppShortName),
     py_iter(App:tags, AppTag, [py_object(true)]),
-    trace,
-    py_call(AppTag:genre, "build"),
+    py_call(AppTag:genre, build),
     py_call(AppTag:name, AppBuild),
     %select_dict(yaml{build:AppBuild}, AppTag, _),
     AppProps = [ build(AppBuild) ].
@@ -83,16 +81,16 @@ application(app, Name, AppShortName, AppProps) :-
 %% To = context_root,
 %% LocTerm = "xpath(//'context-root'(text))" ;
 
-parameter(Name, ParamShortNameStr) :-
+parameter(Name, ParamShortName) :-
     load_graph(Name, Pavement),
     py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
-    py_call(Param:name, ParamShortNameStr).
+    py_call(Param:name, ParamShortName).
 
-parameter(Name, ParamShortNameStr, SourcePvtStr) :-
+parameter(Name, ParamShortName, SourcePvt) :-
     load_graph(Name, Pavement),
     py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
-    py_call(Param:name, ParamShortNameStr),
-    py_call(Param:pvt, SourcePvtStr).
+    py_call(Param:name, ParamShortName),
+    py_call(Param:pvt, SourcePvt).
 
 % application parameters
 paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
