@@ -3,7 +3,7 @@
 %%   and from the application deployment context specified in paramv
 %% their structure is of the form:  
 %%   container_term . p(path_list)                   for specifying where to locate a container in the application structure
-%%   container_term -o param_term(param_props_list)  for specifying parameters associated to a container
+%%   container_term -+ param_term(param_props_list)  for specifying parameters associated to a container
 
 :- op(500, xfy, '.').
 :- op(400, xfy, '-+').
