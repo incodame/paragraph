@@ -80,7 +80,7 @@ paragraph:
         loc: jsonget('d/_/t')
         doc: "text extracted from json configuration tree"
     deployment:
-      paragraph:
+      paragraph-deploy:
         paragraph-ui:
           files:
             - help_md: file
