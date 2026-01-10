@@ -1,9 +1,9 @@
 # paragraph
 A configuration management toolkit (module) written in prolog, including:
 
-* application archive analysis (jar, war, ear, zips)
 * declaration of application or system parameters, for navigating resources located inside hierarchical containers (paramloc, paramval)
 * scoping operators, for constraining searches or evaluations
+* application archive analysis (jar, war, ear, zips)
 * diff tools working on xml, json, or yaml documents or referencing parameters (diff DSL)
 * coordination of search tasks using the coworkers module
 
@@ -73,12 +73,12 @@ true.
 ?- parameters.
 batch_java_home
 context_root
-pom_xml_parent
-pom_xml_parent_artifact_id
-pom_xml_parent_group_id
-pom_xml_parent_version
-pom_xml_version
-war_pom_xml
+parent
+parent_artifact_id
+parent_group_id
+parent_version
+version
+pom_xml
 true.
 ```
 
@@ -89,13 +89,13 @@ true.
 
 % Example of navigation: xpath -> xpath -> xml file -> warfile : find the parent pom artifact/version of the paragraph archives
 
-?- paramv(pom_xml_parent_artifact_id, Val, $Opts, NewScoper).
+?- paramv(parent_artifact_id, Val, $Opts, NewScoper).
 Val = 'spring-boot-starter-parent',
 NewScoper = [ae('META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml'),
              ar(file("/opt/paragraph/ParagraphUI/target/paragraph-ui-0.0.1-SNAPSHOT.war")),
              ag(paragraph), ve('0.0.1-SNAPSHOT'), ad(paragraph_ui_target)]
 
-?- paramv(pom_xml_parent_version, Val, $Opts, NewScoper).
+?- paramv(parent_version, Val, $Opts, NewScoper).
 Val = '2.3.0.RELEASE',
 NewScoper = [ae('META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml'),
              ar(file("/opt/paragraph/ParagraphUI/target/paragraph-ui-0.0.1-SNAPSHOT.war")),
@@ -109,39 +109,55 @@ paragraph relies on the configuration maintained and documented in paragraph.yml
 example of definitions for the above pom_xml* parameters
 
 ```javascript
-    file
+  graph:
+    file:
       pom_xml:
         loc: applfile("pom.xml"), endswith("/pom.xml")
         doc: "Application or module's pom.xml"
         params:
-          - pom_xml_parent: param
-          - pom_xml_artifact_id: param
-          - pom_xml_group_id: param
-          - pom_xml_version: param
+          - parent: structure
+          - dependency: structure
+          - artifact_id: param
+          - group_id: param
+          - version: param
+          - property: structure
+          - build_plugin: structure
+          - profile: structure
+          - module: structure
     param:
-      pom_xml_parent:
+      parent:
         loc: xpath(//project/parent)
         doc: "pom.xml parent"
         params:
-          - pom_xml_parent_artifact_id: param
-          - pom_xml_parent_group_id: param
-          - pom_xml_parent_version: param
-      pom_xml_artifact_id:
+          - parent_artifact_id: param(artifact_id)
+          - parent_group_id: param(group_id)
+          - parent_version: param(version)
+      dependency:
+        loc: xpath(//project/dependencies/dependency)
+        doc: "pom.xml dependency"
+        params:
+          - dep_artifact_id: param(artifact_id)
+          - dep_group_id: param(group_id)
+          - dep_version: param(version)
+      artifact_id:
         loc: xpath(//artifactId(text))
-        doc: "pom.xml artifactId"
-      pom_xml_group_id:
-        loc: xpath(//groupdId(text))
-        doc: "pom.xml groupdId"
-      pom_xml_parent_artifact_id:
-        loc: xpath(//artifactId(text))
-        doc: "pom.xml parent artifactId"
-      pom_xml_parent_group_id:
-        loc: xpath(//groupdId(text))
-        doc: "pom.xml parent groupdId"
-      pom_xml_parent_version:
+        doc: "artifactId"
+      group_id:
+        loc: xpath(//groupId(text))
+        doc: "groupId"
+      version:
         loc: xpath(//version(text))
-        doc: "pom.xml parent version"
-      pom_xml_version:
-        loc: xpath(//project/version(text))
-        doc: "pom.xml version"
+        doc: "version"
+      property:
+        loc: xpath(//properties/*)
+        doc: "Custom properties used in the build"
+      build_plugin:
+        loc: xpath(//build/plugins/plugin)
+        doc: "Plugin used in the build lifecycle"
+      profile:
+        loc: xpath(//profiles/profile)
+        doc: "Build profiles for different environments"
+      module:
+        loc: xpath(//modules/module)
+        doc: "Sub module"
 ```
