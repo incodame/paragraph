@@ -1,4 +1,6 @@
+%%
 %% Example of BDsl definitions for a Java web application built with Maven and deployed on Tomcat.
+%%
 %% these facts are generated from the pavements definitions  
 %%   and from the application deployment context specified in paramv
 %% they can also be input by hand in the paragraph REPL
@@ -48,6 +50,8 @@ z('app.jar', [ f('pom.xml'),
 
 z('lib.jar', [ f('pom.xml') | _]) :> p([ 'webapps', 'WEB-INF', 'lib' ]).
 
+f('a.css') :> p([ 'app.jar', 'web', 'resources', 'css' ]).
+
 %% based on the search context, relative paths can be completed to absolute paths using wilcards
 p([ webapps | _]) :> p([ opt, incodam, tomcat ]).
 
@@ -62,3 +66,11 @@ s([name=parent_pom | _]) -+ i([name=parent_version, loc=xpath('//version(text)')
 d(app, _) -+ f('readme.md').
 z('app.jar', _) -+ f('pom.xml').
       
+%% f('pom.xml') is a synonym for f([name='pom.xml' | _])
+f(Filename) :- f([name=Filename | _]).
+z(Zipname, Contents) :- z([name=Zipname | _], Contents).
+d(Dirname, Contents) :- d([name=Dirname | _], Contents).
+s(Structname) :- s([name=Structname | _]).
+i(Infoname) :- i([name=Infoname | _]).
+
+% end of bdsl.pl

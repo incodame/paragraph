@@ -184,6 +184,40 @@ The composed graph can then be described either via a DSL in a pavements.yml fil
   commands.
 Confer the pavements project for more details.
 
+** Integration of the pavements' models via the paragraph_conf module
+The pavements data get converted to prolog facts described in a specific language called BDSL ("Binding DSL").
++------------+     +-----------------+     +--------------+
+|  pavements |---->|  paragraph_conf |<----|  paragraph   |
+|    model   |     |    BDSL facts   |     |  predicates  |
++------------+     +-----------------+     +--------------+
+
+*** Example of BDSL facts
+Confer the bdsl.pl for some examples of facts described using that language.
+
+*** BDSL design
+The DSL focus is to focus on "container" relationships, with predicates of the form:  
+   container_term :> p(path_list)                  for specifying where to locate a container in the application structure
+   container_term -+ param_term(param_props_list)  for specifying parameters associated to a container
+
+The container term can use the _ wildcard to indicate any container matching the rest of the term.
+
+This approach of connecting terms with operators allows to easily express relationships between containers and parameters or paths, 
+   without duplication of information.
+
+Whenever possible the DSL should allow to assert an incomplete description of the "reality":
+  - incomplete terms, yet still supporting the correlation of facts e.g. 
+      f('pom.xml') is a synonym for f([name='pom.xml' | _])
+  - incomplete directory/archive contents with a "contains" semantic instead of a "is" semantic e.g.
+      z('app.jar', [ f('pom.xml'),
+                     d('-- com/example', 
+                       [ 'a.class',
+                         'b.class' 
+                         | _
+                       ])
+                   ]) 
+For example d and z predicates use some partial information on where one can find some of their child resources.
+The syntax is a "prolog list with indentation using -- ", which allows for a readable display of the tree structure. 
+
 * Practical examples of searches for application parameters
 ** Examples of configuration parameters' searches
 *** Example 1 - Searching for json file properties inside archives
