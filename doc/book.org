@@ -198,7 +198,7 @@ The pavements data get converted to prolog facts described in a specific languag
 Confer the bdsl.pl for some examples of facts described using that language.
 
 *** BDSL design
-The DSL focus is to focus on "container" relationships, with predicates of the form:  
+The DSL focus is on "container" relationships, with predicates of the form:  
 
 #+begin_src text
    container_term :> p(path_list)                  for specifying where to locate a container in the application structure
