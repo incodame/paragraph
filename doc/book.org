@@ -42,7 +42,7 @@ up from software configuration parameters. Once this configuration is defined, a
 system of software products can be conducted, be it on a development machine or a deployed environment.
 
 The main aspects of this tool is:
-- its availability as a module that can be extended using prolog itself or python (via pengines)
+- its availability as a module that can be extended using prolog itself or python (via the Janus interface)
 - its simple configuration which resides into a unique paragraph.yml file
 - its choice of using commands or REPL, in order to ease its integration into any bigger devops framework
 
