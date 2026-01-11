@@ -23,6 +23,7 @@
 :- use_module(library(yall)).
 :- use_module(paragraph_conf).
 :- use_module(js_dcg).
+:- use_module(java_dcg).
 
 :- table contloc_app_archive/6.
 
@@ -634,9 +635,12 @@ resolve_entry_spec(ActualEntry, ActualEntry, Scoper0, Scoper1) :-
 
 %%% flat files
 
+file_type(Fname, Ftype) --> string_without(".", Prefix), ".", string(Suffix), { atom_codes(Fname, Prefix), atom_codes(Ftype, Suffix) }. 
+
 contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
-    atom_string(File, FileStr), %TODO: fails with arg not sufficiently instantiated
-    contloc_app_file(File, pom, AppId, Version, LocSpec, Scoper0, Scoper1).
+    string_codes(FileStr, Codes),
+    phrase(file_type(Fname, Ftype), Codes),
+    contloc_app_file(Fname, Ftype, AppId, Version, LocSpec, Scoper0, Scoper1).
 
 contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
     want_opt(ag(AppGroup), Scoper0),
@@ -684,7 +688,7 @@ file_match(FileTest, FileList, File, FileType, Version, AppId) :-
     ;atom_concat('*.', FileType, FileTest), atom_concat('*', Suffix, FileTest),
         member(File, FileList), atom_concat(_, Suffix, File)
     ;
-        member(FileTest, FileList), File = FileTest, Version = ''
+        atomic_list_concat([FileTest, '.', FileType], FileName), member(FileName, FileList), File = FileName, Version = ''
     ).
 
 %% parameters defined in paragraph_conf
@@ -718,8 +722,8 @@ paramv(Param, Val, Scoper) :-
     paramv(Param, Val, Scoper, _).
 
 paramv(Param, Val, Scoper0, Scoper1) :-
-    writeln("choose the App using scoper"),
-    App = 'paragraph-ui',
+    writeln("TODO - choose the App using scoper"),
+    App = 'paragraph',
     writeln("build possible lists of transitions TdList from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param"), % uses scoper too !
     navigate_graph_up(Param, App, UpList),
     reverse(UpList, TdList),
@@ -869,6 +873,24 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 
 %%% phrase
 
+% new yaml syntax: Dcg to capture a data structure such as a java annotation
+transition(dcg(Dcg), stream(FileStream), Val, Scoper0, Scoper1) :-
+    Val=lazy_dcg(phrase_from_stream(Dcg, FileStream)), % lazy DCG eval
+    Dcg =.. [_, SName, SAttrs],
+    Scoper1 = [ st(SName, SAttrs) | Scoper0 ].
+
+% new yaml syntax: Isa (ref. to DCG) with filter query
+transition(q(FilterQuery), lazy_dcg(LazyDcgEval), Val, Scoper0, Scoper1) :-
+    Val = filter_ldcg(FilterQuery,LazyDcgEval),
+    Scoper1 = Scoper0.
+
+% new yaml syntax: structure component - DCG extract attrs
+transition(q(AttrQuery,V1L), filter_ldcg(FilterQuery, LazyDcgEval), Val, Scoper0, Scoper1) :-
+    call(((FilterQuery, LazyDcgEval), AttrQuery)), % all queries share the same variables e.g. Aname and Aprops, and AttrQuery populates a V1L variable
+    Val = V1L,
+    Scoper1 = Scoper0.
+
+
 % DCG for an archive xml resource (war / jar / zip)
 transition(phrase(Dcg), stream(FileStream), Val, Scoper0, Scoper1) :-
     %setup_call_cleanup(
@@ -925,12 +947,27 @@ json_prop_(JsonDict, Property, Obj) :-
     Obj = JsonDict.get(Property).
 
 json_sub_prop_(Property, Obj0, Obj1) :-
-    (is_dict(Obj0) -> Obj1 = Obj0.get(Property) ;
+    (is_dict(Obj0) -> extract_property(Property, Obj0, Obj1) ;
      is_list(Obj0) -> (
          atom_number(Property, Int0) -> nth0(Int0, Obj0, Obj1) ;
          Property = '_'   -> length(Obj0, ListLen), Index in 1..ListLen, label([Index]), nth1(Index, Obj0, Obj1)
      ) ;
      Obj1 = Obj0).
+
+extract_property(Property, Obj0, Obj1) :-
+    (atomic_list_concat(Props, ',', Property) -> extract_props(Obj0, Props, Obj1) ;
+        extract_prop(Obj0, Property, Obj1)
+    ).
+
+extract_props(_, [], []) :- !.
+extract_props(Obj0, [P], [O]) :-
+    extract_prop(Obj0, P, O), !.
+extract_props(Obj0, [P|Ps], [O|Os]) :-
+    extract_prop(Obj0, P, O),
+    extract_props(Obj0, Ps, Os).
+
+extract_prop(Obj0, Property, Obj1) :-
+    Obj1 = Obj0.get(Property).
 
 json_prop_chain_o(JsonDict, [P0|Props], Obj) :-
     json_prop_(JsonDict, P0, Obj0),
@@ -994,7 +1031,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
         close(FileStream)).
 
 % nested regexp definitions
-transition(regexp(Regexp), ParentTxt, Val, Scoper0, Scoper1) :-
+transition(regexp(Regexp), text(ParentTxt), Val, Scoper0, Scoper1) :-
     open_string(ParentTxt, TxtStream),
     lines(stream(TxtStream), Lines),
     lazy_include({Regexp, Val}/[Line]>>text_match(Line, Regexp, Val), Lines, [_]),

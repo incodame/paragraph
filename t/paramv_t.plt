@@ -125,8 +125,8 @@ test('search file with ad option : find the parent pom version of paragraph') :-
     paragraph:paramv(pom_xml_parent_version, Val, [ag('paragraph'), ve(''), ad(paragraph_ui)], _),
     Val = '2.3.0.RELEASE'.         % value = spring boot starter parent version
 
-test('regexp -> txt file : find help url') :-
-    paragraph:paramv(help_url, Val, [ag('paragraph'), ve(''), ad(paragraph_ui)], _),
-    Val = "https://maven.apache.org/guides/index.html".
+test('regexp -> txt file : find book url') :-
+    paragraph:paramv(doc_url, Val, [ag('paragraph'), ve(''), ad(paragraph_main)], _),
+    Val = "https://github.com/incodame/paragraph/blob/master/doc/book.org".
 
 :- end_tests(paragraph_paramv).

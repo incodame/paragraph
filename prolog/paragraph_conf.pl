@@ -1,13 +1,43 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, parameter/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
+
+:- py_add_lib_dir('/opt/pavements/lib/python').
+
+%%
+%% Paragraph python setup
+%%
+
+paragraph_py_setup :-
+    process_create(path(python3), ['-m', 'venv', '/opt/python_venv'], []),
+    process_create('/opt/python_venv/bin/pip', ['install', 'pyyaml'], []),
+    py_add_lib_dir('/opt/python_venv/lib/python3.11/site-packages'),
+    py_import(yaml, []).
+
+% TODO - make paramv test suite run 100%
+% TODO - rewrite application and paramloc predicates
+
+
+%%
+%% Paragraph Configuration from pavements
+%%
+
+load_graph(Name, Pavement) :-
+    para_graph(Name, PGraph),
+    format(atom(YamlGraph), '/opt/paragraph/graph/~w', [PGraph]),
+    py_call(pavements:'Pavement'(Name, Name, [], [], [], [], [], []), Pavement, [py_object(true)]),
+    py_call(Pavement:load_from(YamlGraph)).
+
+
 %%
 %% Paragraph Configuration
 %%
-%% - edit your project configuration in paragraph.yaml
+%% - as starting step, edit your project configuration in paragraph.yaml
+%% - use the pavements project for an advanced system configuration
 %%
 
-paragraph_graph('paragraph.yml').
+para_graph('paragraph', 'paragraph.yml').
 
 %% application and groups (ordered by application groups)
 
@@ -18,14 +48,20 @@ application_group(build, paragraph, 'org.incodame.paragraph').
 pgraph(YamlDoc) :-
     yaml_read('/opt/paragraph/paragraph.yml', YamlDoc).
 
-application(app, paragraph, AppShortName, AppProps) :-
-    pgraph(yaml{paragraph:yaml{apps:AppList, graph:_}}),
-    member(App, AppList),
-    select_dict(yaml{name:AppShortNameStr, build:AppBuildStr}, App, _),
-    atom_string(AppShortName, AppShortNameStr),
-    atom_string(AppBuild, AppBuildStr),
-    %AppShortName = App.get(name),
-    %AppBuild = App.get(build),
+pgraph_elems(Versions, Tags, Apps, Graph) :-
+    pgraph(yaml{paragraph:yaml{versions: Versions, tags: Tags, apps: Apps, graph: Graph}}).
+
+application(app, Name, AppShortName, AppProps) :-
+    load_graph(Name, Pavement),
+    py_iter(Pavement:get_apps(), App, [py_object(true)]),
+    %pgraph_elems(_, _, AppList, _),
+    %member(App, AppList),
+    %select_dict(yaml{name:AppShortNameStr, tags:AppTagList}, App, _),
+    py_call(App:name, AppShortName),
+    py_iter(App:tags, AppTag, [py_object(true)]),
+    py_call(AppTag:genre, build),
+    py_call(AppTag:name, AppBuild),
+    %select_dict(yaml{build:AppBuild}, AppTag, _),
     AppProps = [ build(AppBuild) ].
 
 %% application(app, 'paragraph-ui',        paragraph, [ build(maven) ]).
@@ -45,10 +81,21 @@ application(app, paragraph, AppShortName, AppProps) :-
 %% To = context_root,
 %% LocTerm = "xpath(//'context-root'(text))" ;
 
+parameter(Name, ParamShortName) :-
+    load_graph(Name, Pavement),
+    py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
+    py_call(Param:name, ParamShortName).
+
+parameter(Name, ParamShortName, SourcePvt) :-
+    load_graph(Name, Pavement),
+    py_iter(Pavement:get_parameters(), Param, [py_object(true)]),
+    py_call(Param:name, ParamShortName),
+    py_call(Param:pvt, SourcePvt).
+
 % application parameters
 paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
     (app_archive(_, App, Container, _) ; app_file(_, App, Container, _)),
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     LocExprStr = Graph.get(file/Param/loc),
     location_term(LocExprStr, LocTerm),
     Doc = Graph.get(file/Param/doc),
@@ -57,7 +104,7 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 
 % generic parameters
 paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     LocExprStr = Graph.get(param/Param/loc),
     location_term(LocExprStr, LocTerm),
     Doc = Graph.get(param/Param/doc),
@@ -66,7 +113,7 @@ paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 
 :- table parent_param/4.
 parent_param(Param, ParentType, Parent, ParentLocTerm) :-
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     ChildList = Graph.get(ParentType/Parent/params),
     member(Child, ChildList),
     dict_keys(Child, Keys),
@@ -112,7 +159,7 @@ location_term(LocExprStr, LocTerm) :-
 %% application archives ordered alphabetically (ear, war, jar, zip)
 
 app_archive(ArType, AppId, Archive, ArProps) :-
-    pgraph(yaml{paragraph:yaml{apps:_, graph:Graph}}),
+    pgraph_elems(_, _, _, Graph),
     AppArList = Graph.get(deployment/paragraph/AppId/archives),
     member(AppAr, AppArList),
     dict_keys(AppAr, Keys),
@@ -131,6 +178,7 @@ app_file(pom, AppId, 'pom.xml',  [ doc("application pom.xml") ]) :-
     application(app, _ApplicationGroup, AppId, AppOpts), memberchk(build(maven), AppOpts).
 
 % add specific files here
+app_file(md,  'paragraph', 'README.md', [ doc("application doc entry point") ]).
 app_file(md,  'paragraph-ui', 'HELP.md', [ doc("application help") ]).
 app_file(xml, 'paragraph-verticles',    '*.xml', []).
 app_file(jar, 'paragraph-verticles',    '*.jar', []).
@@ -147,7 +195,8 @@ search_option(ad(AppDirectory),     "App directory alias",  read(AppDirectory)).
 directory_alias(examples, '/opt/paragraph/examples').
 
 %% application specific directory aliases
-
+%% directory_alias(AppId, Alias, Path).
+directory_alias(paragraph, paragraph_main, '/opt/paragraph').
 directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
 directory_alias('paragraph-ui', paragraph_ui_target, '/opt/paragraph/ParagraphUI/target').
 directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').
