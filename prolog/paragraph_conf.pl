@@ -24,9 +24,12 @@ paragraph_py_setup :-
 
 %%
 %% Paragraph Configuration from pavements
+%%  test as follows:
+%%  ?- load_graph(G, Pav).
+%%  '-+'(Cont, Param).
 %%
 
-:- table load_graph/2.
+%% :- table load_graph/2.
 load_graph(Name, Pavement) :-
     para_graph(Name, PGraph),
     format(atom(YamlGraph), '/opt/paragraph/graph/~w', [PGraph]),
