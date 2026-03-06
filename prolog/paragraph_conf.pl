@@ -2,6 +2,9 @@
 :- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
+:- use_module(paragraph_bdsl).
+:- op(500, xfy, ':>').
+:- op(400, xfy, '-+').
 
 :- py_add_lib_dir('/opt/pavements/lib/python').
 
@@ -21,14 +24,58 @@ paragraph_py_setup :-
 
 %%
 %% Paragraph Configuration from pavements
+%%  test as follows:
+%%  ?- load_graph(G, Pav).
+%%  '-+'(Cont, Param).
 %%
 
+%% :- table load_graph/2.
 load_graph(Name, Pavement) :-
     para_graph(Name, PGraph),
     format(atom(YamlGraph), '/opt/paragraph/graph/~w', [PGraph]),
     py_call(pavements:'Pavement'(Name, Name, [], [], [], [], [], []), Pavement, [py_object(true)]),
-    py_call(Pavement:load_from(YamlGraph)).
+    py_call(Pavement:load_from(YamlGraph)), !,
+    assert_bdsl_facts(Pavement).
 
+%%
+%% Assert BDsl facts from pavement
+%%
+assert_bdsl_facts(Pavement) :-
+    % containers and their child parameters
+    py_iter(Pavement:get_containers(), Container, [py_object(true)]),
+    py_call(Container:name, ContainerName),
+    py_call(Container:type, ContainerType),
+    py_call(Container:params, ParamRefList),
+    member(ParamRef, ParamRefList),
+    py_call(Pavement:get_parameter(ParamRef), Param, [py_object(true)]),
+    Param \= @(none),
+    assert_container_param(ContainerType, ContainerName, Param).
+
+assert_container_param(ContainerType, ContainerName, Param) :-
+    py_call(Param:name, ParamName),
+    py_call(Param:loc, ParamLoc),
+    py_call(Param:doc, ParamDoc),
+    py_call(Param:params, SubParams, [py_object(true)]),
+    % structured parameter ?
+    (   SubParams \= [] ->
+        assert_container_param_binding(ContainerType, ContainerName, s( [ name=ParamName, loc=ParamLoc, doc=ParamDoc ] ))
+        ;
+        assert_container_param_binding(ContainerType, ContainerName, i( [ name=ParamName, loc=ParamLoc, doc=ParamDoc ]))
+    ).
+
+assert_container_param_binding(ContainerType, ContainerName, ParameterTerm) :- 
+    assertz(ParameterTerm),
+    (   ContainerType = file ->
+        assertz(paragraph_bdsl:'-+'(f(ContainerName), ParameterTerm))
+        ;
+        ContainerType = directory ->
+        assertz(paragraph_bdsl:'-+'(d(ContainerName, _), ParameterTerm))
+        ;
+        ContainerType = archive ->
+        assertz(paragraph_bdsl:'-+'(z(ContainerName, _), ParameterTerm))
+        ;
+        true
+    ).
 
 %%
 %% Paragraph Configuration
