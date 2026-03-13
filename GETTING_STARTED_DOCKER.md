@@ -1,6 +1,6 @@
 # First time:
 ```
-docker run -it --network host -v $(pwd):/opt/paragraph -v /tmp/paragraph:/tmp/paragraph --env PARAGRAPH_HOME=/opt/paragraph --env PARAGRAPH_TEMP=/tmp/paragraph --env IPADDRE=$(ipconfig getifaddr en0) swipl
+docker run -it --rm -v $(pwd):/opt/paragraph -v $(pwd)/../pavements:/opt/pavements -v /tmp/paragraph:/tmp/paragraph --env PARAGRAPH_HOME=/opt/paragraph --env PARAGRAPH_TEMP=/tmp/paragraph --env PAVEMENTS_LIBRARY=/opt/pavements/library --env IPADDRE=$(ipconfig getifaddr en0) incodame/swipy
 ```
 
 ## install:
