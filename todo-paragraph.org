@@ -10,7 +10,7 @@ paragraph:contloc_app_archive(_16864, ear, 'paragraph-ui', _16454, _17192, [], [
 ** download_as
 use workdirectory
 prevent use of other directory not under workdirectory
-** paramval
+** paramv vs parmval
 *** force the use of structured term e.g. earfile(E) for container
 *** solution for removing large number of predicates (and choicepoints) 
  - new paramv uses constrained search in graph, and foldl
@@ -18,9 +18,16 @@ prevent use of other directory not under workdirectory
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
+** terminus db for storing para_graphs
+ - explore the branching possibilities
 ** verticles
- - first implementation of Pwsh and Query verticles
+ - document the role of the paragraph verticles
+ - document the security concept
+ - first implementation of Datalog Query verticle using Flix
  - use docker postgres image
+** ai for pavements library
+ - generate pavements using prompt - give example
+ - test pavements using paramv - give example
 ** scratch introduction
 * improve
 ** contloc_app_archive 
@@ -29,9 +36,6 @@ it uses directory_files and could filter based on the FileType if it is ground
 ** tabling not yet working
  - document use of tabling with paramval
  - document differences SWI (table as subsumptive) vs scryer
-** use yaml paragraph configuration
- - finish implementation for app files and archives
- - directory aliases in separate yaml
 ** example of integration with ansible
  - using the python pengine client
 * done

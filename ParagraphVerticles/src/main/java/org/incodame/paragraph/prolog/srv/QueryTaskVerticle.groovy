@@ -1,11 +1,12 @@
 package org.incodame.paragraph.prolog.srv
 
-import com.profesorfalken.jpowershell.PowerShell
-import com.profesorfalken.jpowershell.PowerShellNotAvailableException
 import io.vertx.core.eventbus.Message
 import io.vertx.core.json.JsonObject
 import org.incodame.paragraph.ParagraphVerticle
-import org.incodame.paragraph.prolog.srv.components.TemplateQuery
+
+/**
+ * Execution of a datalog query
+ */
 
 class QueryTaskVerticle extends ParagraphVerticle {
 
@@ -61,16 +62,7 @@ class QueryTaskVerticle extends ParagraphVerticle {
 
   def executeQuery(String environment, String template, Map queryArgs, JsonObject jsonConfig) {
 
-    TemplateQuery templateQuery = new TemplateQuery(jsonConfig.getJsonObject("db.props"),
-                                                    jsonConfig.getString("session.props"))
-
-    JsonObject verticleConfig = jsonConfig.getJsonObject("QueryTaskVerticle")
-
-    def queryHome = verticleConfig.getString("queryHome")
-
-    def iterator = templateQuery.queryResults(environment, key, template, queryArgs)
-
-    /* TODO */
+    /* TODO - run datalog query */
 
   }
 
