@@ -5,9 +5,6 @@ deploy:
       port: 8087
     PrologTestVerticle:
       port: 8089
-PwshTaskVerticle:
-  scriptHome: /opt/paragraph/templates/pwsh
-  maxWait: 80000
 QueryTaskVerticle:
   queryHome: /opt/paragraph/templates/query
 db.props:

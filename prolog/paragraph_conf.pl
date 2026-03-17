@@ -26,7 +26,7 @@ paragraph_py_setup :-
 %% Paragraph Configuration from pavements
 %%  test as follows:
 %%  ?- load_graph(G, Pav).
-%%  '-+'(Cont, Param).
+%%  ?- '-+'(Cont, Param).
 %%
 
 %% :- table load_graph/2.
@@ -151,22 +151,43 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 
 % generic parameters
 paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
-    pgraph_elems(_, _, _, Graph),
-    LocExprStr = Graph.get(param/Param/loc),
+    ( paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=LocExprStr, doc=Doc ])),
+      ContainerTerm =.. [_, Container],
+      ( paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
+        ;
+        paragraph_bdsl:'-+'(_, f([ name=Container, loc=ContLocExprStr, doc=_ ]))
+      )
+      ;
+      paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=LocExprStr, doc=Doc ])),
+      ContainerTerm =.. [_, Container],
+      ( paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
+        ;
+        paragraph_bdsl:'-+'(_, f([ name=Container, loc=ContLocExprStr, doc=_ ]))
+      )
+      ;
+      paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=LocExprStr, doc=Doc ])),
+      ContainerTerm =.. [_, Container],
+      paragraph_bdsl:'-+'(_, z([ name=Container, loc=ContLocExprStr, doc=_ ]))
+    ),
     location_term(LocExprStr, LocTerm),
-    Doc = Graph.get(param/Param/doc),
-    parent_param(Param, _, Container, ContLocTerm),
+    location_term(ContLocExprStr, ContLocTerm),
     ParamProps = [ doc(Doc) ].
+%pgraph_elems(_, _, _, Graph),
+%LocExprStr = Graph.get(param/Param/loc),
+%location_term(LocExprStr, LocTerm),
+%Doc = Graph.get(param/Param/doc),
+%parent_param(Param, _, Container, ContLocTerm),
+%ParamProps = [ doc(Doc) ].
 
-:- table parent_param/4.
-parent_param(Param, ParentType, Parent, ParentLocTerm) :-
-    pgraph_elems(_, _, _, Graph),
-    ChildList = Graph.get(ParentType/Parent/params),
-    member(Child, ChildList),
-    dict_keys(Child, Keys),
-    member(Param, Keys),
-    ParentLocExprStr = Graph.get(ParentType/Parent/loc),
-    location_term(ParentLocExprStr, ParentLocTerm).
+% :- table parent_param/4.
+%parent_param(Param, ParentType, Parent, ParentLocTerm) :-
+%pgraph_elems(_, _, _, Graph),
+%ChildList = Graph.get(ParentType/Parent/params),
+%member(Child, ChildList),
+%dict_keys(Child, Keys),
+%member(Param, Keys),
+%ParentLocExprStr = Graph.get(ParentType/Parent/loc),
+%location_term(ParentLocExprStr, ParentLocTerm).
 
 location_term(LocExprStr, LocTerm) :-
     atom_string(LocExpr, LocExprStr),
