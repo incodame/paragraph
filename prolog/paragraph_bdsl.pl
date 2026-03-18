@@ -1,4 +1,4 @@
-:- module(paragraph_bdsl, [ ':>'/2, '-+'/2, p/1, d/2, z/2, f/1, s/1, i/1 ]).
+:- module(paragraph_bdsl, [ ':>'/2, '-+'/2, p/1, d/2, z/2, f/1, s/1, i/1, contains/4 ]).
 
 :- op(500, xfy, ':>').
 :- op(400, xfy, '-+').
@@ -19,3 +19,27 @@
 :- dynamic i/1.
 :- discontiguous i/1.  % individual parameter specification 
 
+%% derived relationships
+contains(Container, s, InfoName, i) :-
+    s(Container) -+ i([name = InfoName | _]).
+  
+contains(Container, f, InfoName, i) :-
+    f(Container) -+ i([name = InfoName | _]).
+  
+contains(Container, f, StructName, s) :-
+    f(Container) -+ s([name = StructName | _]).
+  
+contains(Container, d, FileName, f) :-
+    d(Container, Contents) :> p(Path),
+    member(FileName, Contents), % TODO: create a specific predicate 
+    f(FileName) :> p(Path).
+  
+contains(Container, z, FileName, f) :-
+    z(Container, Contents) :> p(Path),
+    member(FileName, Contents), % TODO: create a specific predicate 
+    f(FileName) :> p(Path).
+  
+contains(Container, z, DirName, d) :-
+    z(Container, Contents) :> p(Path),
+    member(DirName, Contents), % TODO: create a specific predicate 
+    d(DirName, _) :> p(Path).
