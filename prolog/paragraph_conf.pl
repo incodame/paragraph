@@ -151,23 +151,27 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 
 % generic parameters
 paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
-    ( paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=LocExprStr, doc=Doc ])),
-      ContainerTerm =.. [_, Container],
-      ( paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
-        ;
+    paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
+    ContainerTerm =.. [ContainerType, Container],
+    ( ParamType = i -> 
+        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=LocExprStr, doc=Doc ]))
+      ; ParamType = s ->
+        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=LocExprStr, doc=Doc ]))
+      ; ParamType = f ->
+        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=LocExprStr, doc=Doc ]))
+      ; ParamType = d ->
+        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=LocExprStr, doc=Doc ]))
+      ; ParamType = z ->  
+        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=LocExprStr, doc=Doc ]))
+    ),
+    ( ContainerType = s ->
+        paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
+      ; ContainerType = f ->
         paragraph_bdsl:'-+'(_, f([ name=Container, loc=ContLocExprStr, doc=_ ]))
-      )
-      ;
-      paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=LocExprStr, doc=Doc ])),
-      ContainerTerm =.. [_, Container],
-      ( paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
-        ;
-        paragraph_bdsl:'-+'(_, f([ name=Container, loc=ContLocExprStr, doc=_ ]))
-      )
-      ;
-      paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=LocExprStr, doc=Doc ])),
-      ContainerTerm =.. [_, Container],
-      paragraph_bdsl:'-+'(_, z([ name=Container, loc=ContLocExprStr, doc=_ ]))
+      ; ContainerType = d ->
+        paragraph_bdsl:'>:'(d(Container, _), p(ContLocExprStr))
+      ; ContainerType = z ->
+        paragraph_bdsl:'>:'(z(Container, _), p(ContLocExprStr))
     ),
     location_term(LocExprStr, LocTerm),
     location_term(ContLocExprStr, ContLocTerm),

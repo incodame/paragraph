@@ -73,4 +73,29 @@ d(Dirname, Contents) :- d([name=Dirname | _], Contents).
 s(Structname) :- s([name=Structname | _]).
 i(Infoname) :- i([name=Infoname | _]).
 
+%% derived relationships
+contains(Container, s, InfoName, i) :-
+  s(Container) -+ i([name = InfoName | _]).
+
+contains(Container, f, InfoName, i) :-
+  f(Container) -+ i([name = InfoName | _]).
+
+contains(Container, f, StructName, s) :-
+  f(Container) -+ s([name = StructName | _]).
+
+contains(Container, d, FileName, f) :-
+  d(Container, Contents) :> p(Path),
+  member(FileName, Contents), % TODO: create a specific predicate 
+  f(FileName) :> p(Path).
+
+contains(Container, z, FileName, f) :-
+  z(Container, Contents) :> p(Path),
+  member(FileName, Contents), % TODO: create a specific predicate 
+  f(FileName) :> p(Path).
+
+contains(Container, z, DirName, d) :-
+  z(Container, Contents) :> p(Path),
+  member(DirName, Contents), % TODO: create a specific predicate 
+  d(DirName, _) :> p(Path).
+
 % end of bdsl.pl
