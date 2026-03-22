@@ -55,7 +55,7 @@ assert_container_param(ContainerType, ContainerName, Param) :-
     py_call(Param:name, ParamName),
     py_call(Param:loc, ParamLoc),
     py_call(Param:doc, ParamDoc),
-    py_call(Param:params, SubParams, [py_object(true)]),
+    py_call(Param:params, SubParams, [py_object(false)]),
     % structured parameter ?
     (   SubParams \= [] ->
         assert_container_param_binding(ContainerType, ContainerName, s( [ name=ParamName, loc=ParamLoc, doc=ParamDoc ] ))
