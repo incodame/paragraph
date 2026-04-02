@@ -956,7 +956,7 @@ json_sub_prop_(Property, Obj0, Obj1) :-
 
 extract_property(Property, Obj0, Obj1) :-
     (atomic_list_concat(Props, ',', Property) -> extract_props(Obj0, Props, Obj1) ;
-        Property = ':' -> dict_pairs(Obj0, _, Pairs), extract_props(Pairs, Obj1) ;
+        Property = ':' -> dict_keys(Obj0, Keys), extract_props(Obj0, Keys, Obj1) ;
         extract_prop(Obj0, Property, Obj1)
     ).
 
