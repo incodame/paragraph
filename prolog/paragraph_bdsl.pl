@@ -1,4 +1,4 @@
-:- module(paragraph_bdsl, [ ':>'/2, '-+'/2, p/1, d/2, z/2, f/1, s/1, i/1, contains/4 ]).
+:- module(paragraph_bdsl, [ ':>'/2, '-+'/2, p/1, d/2, z/2, f/1, s/1, i/1, assert_bdsl/1, contains/4 ]).
 
 :- op(500, xfy, ':>').
 :- op(400, xfy, '-+').
@@ -18,6 +18,12 @@
 :- discontiguous s/1.  % structured parameter specification
 :- dynamic i/1.
 :- discontiguous i/1.  % individual parameter specification 
+
+%% syntax helper
+assert_bdsl([]).
+assert_bdsl([H|T]) :-
+    assertz(H),
+    assert_bdsl(T).
 
 %% derived relationships
 contains(Container, s, InfoName, i) :-
