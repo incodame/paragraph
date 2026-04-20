@@ -271,6 +271,7 @@ directory_alias(examples, '/opt/paragraph/examples').
 directory_alias(paragraph, paragraph_main, '/opt/paragraph').
 directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
 directory_alias('paragraph-ui', paragraph_ui_target, '/opt/paragraph/ParagraphUI/target').
+directory_alias('paragraph-queries', paragraph_queries, '/opt/paragraph/ParagraphAng/paragraph-queries-app').
 directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').
 directory_alias('paragraph-verticles', pv_dependencies, '/opt/paragraph/ParagraphVerticles/target/dependency').
 

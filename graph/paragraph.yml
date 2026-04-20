@@ -15,12 +15,17 @@ paragraph:
         - paragraph-deploy: deployment
       modules:
         - paragraph-ui
+        - paragraph-queries
         - paragraph-verticles
         - paragraph_conf
     - name: paragraph-ui
       tags:
         - build: maven
         - framework: springboot
+    - name: paragraph-queries
+      tags:
+        - build: nodejs
+        - framework: angular
     - name: paragraph-verticles
       tags:
         - build: maven

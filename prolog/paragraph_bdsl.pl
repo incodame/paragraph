@@ -34,7 +34,16 @@ contains(Container, f, InfoName, i) :-
   
 contains(Container, f, StructName, s) :-
     f(Container) -+ s([name = StructName | _]).
-  
+
+contains(Container, d, FileName, f) :-
+    f(FileName) :> p(PathList),
+    reverse(PathList, [Container|_]).
+
+contains(Container, d, FileName, f) :-
+    f(FileName) :> pr(PathRef),
+    pr(PathRef) :> p(PathList),
+    reverse(PathList, [Container|_]).
+    
 contains(Container, d, FileName, f) :-
     d(Container, Contents) :> p(Path),
     member(FileName, Contents), % TODO: create a specific predicate 
