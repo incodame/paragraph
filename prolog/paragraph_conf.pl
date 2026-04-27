@@ -153,6 +153,22 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
     paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
     ContainerTerm =.. [ContainerType, Container],
+    extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc),
+    ( paragraph_bdsl:contains(UContainer, UCType, Container, ContainerType) ->
+        UContainerTerm =.. [UCType, UContainer], 
+        extract_loc_and_doc(UContainerTerm, Container, ContainerType, ContLoc, _)
+      ;
+      paragraph_bdsl:contains(_, _, Container, ContainerType, ContLoc)
+    ),
+    ParamProps = [ doc(Doc) ].
+%pgraph_elems(_, _, _, Graph),
+%LocExprStr = Graph.get(param/Param/loc),
+%location_term(LocExprStr, LocTerm),
+%Doc = Graph.get(param/Param/doc),
+%parent_param(Param, _, Container, ContLocTerm),
+%ParamProps = [ doc(Doc) ].
+
+extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc) :-
     ( ParamType = i -> 
         paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=Loc, doc=Doc ]))
       ; ParamType = s ->
@@ -163,17 +179,7 @@ paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
         paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=Loc, doc=Doc ]))
       ; ParamType = z ->  
         paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=Loc, doc=Doc ]))
-    ),
-    paragraph_bdsl:contains(UContainer, UCType, Container, ContainerType, ContLoc),
-    %location_term(LocExprStr, LocTerm),
-    %location_term(ContLocExprList, ContLocTerm),
-    ParamProps = [ doc(Doc) ].
-%pgraph_elems(_, _, _, Graph),
-%LocExprStr = Graph.get(param/Param/loc),
-%location_term(LocExprStr, LocTerm),
-%Doc = Graph.get(param/Param/doc),
-%parent_param(Param, _, Container, ContLocTerm),
-%ParamProps = [ doc(Doc) ].
+    ).
 
 % :- table parent_param/4.
 %parent_param(Param, ParentType, Parent, ParentLocTerm) :-
