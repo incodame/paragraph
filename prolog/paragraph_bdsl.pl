@@ -35,26 +35,26 @@ contains(Container, f, InfoName, i) :-
 contains(Container, f, StructName, s) :-
     f(Container) -+ s([name = StructName | _]).
 
-contains(Container, d, FileName, f) :-
+contains(Container, d, FileName, f, PathList) :-
     f(FileName) :> p(PathList),
     reverse(PathList, [Container|_]).
 
-contains(Container, d, FileName, f) :-
+contains(Container, d, FileName, f, PathList) :-
     f(FileName) :> pr(PathRef),
     pr(PathRef) :> p(PathList),
     reverse(PathList, [Container|_]).
     
-contains(Container, d, FileName, f) :-
+contains(Container, d, FileName, f, Path) :-
     d(Container, Contents) :> p(Path),
-    member(FileName, Contents), % TODO: create a specific predicate 
+    member(FileName, Contents), % TODO: specific predicate to extract sub path 
     f(FileName) :> p(Path).
   
-contains(Container, z, FileName, f) :-
+contains(Container, z, FileName, f, Path) :-
     z(Container, Contents) :> p(Path),
-    member(FileName, Contents), % TODO: create a specific predicate 
+    member(FileName, Contents), % TODO: specific predicate to extract sub path 
     f(FileName) :> p(Path).
   
-contains(Container, z, DirName, d) :-
+contains(Container, z, DirName, d, Path) :-
     z(Container, Contents) :> p(Path),
-    member(DirName, Contents), % TODO: create a specific predicate 
+    member(DirName, Contents), % TODO: specific predicate to extract sub path 
     d(DirName, _) :> p(Path).

@@ -150,31 +150,23 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
     ParamProps = [ doc(Doc) ].
 
 % generic parameters
-paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
+paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
     paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
     ContainerTerm =.. [ContainerType, Container],
     ( ParamType = i -> 
-        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=LocExprStr, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=Loc, doc=Doc ]))
       ; ParamType = s ->
-        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=LocExprStr, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=Loc, doc=Doc ]))
       ; ParamType = f ->
-        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=LocExprStr, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=Loc, doc=Doc ]))
       ; ParamType = d ->
-        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=LocExprStr, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=Loc, doc=Doc ]))
       ; ParamType = z ->  
-        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=LocExprStr, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=Loc, doc=Doc ]))
     ),
-    ( ContainerType = s ->
-        paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
-      ; ContainerType = f ->
-        paragraph_bdsl:'-+'(_, f([ name=Container, loc=ContLocExprStr, doc=_ ]))
-      ; ContainerType = d ->
-        paragraph_bdsl:'>:'(d(Container, _), p(ContLocExprStr))
-      ; ContainerType = z ->
-        paragraph_bdsl:'>:'(z(Container, _), p(ContLocExprStr))
-    ),
-    location_term(LocExprStr, LocTerm),
-    location_term(ContLocExprStr, ContLocTerm),
+    paragraph_bdsl:contains(UContainer, UCType, Container, ContainerType, ContLoc),
+    %location_term(LocExprStr, LocTerm),
+    %location_term(ContLocExprList, ContLocTerm),
     ParamProps = [ doc(Doc) ].
 %pgraph_elems(_, _, _, Graph),
 %LocExprStr = Graph.get(param/Param/loc),
