@@ -150,31 +150,16 @@ paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
     ParamProps = [ doc(Doc) ].
 
 % generic parameters
-paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
+paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
     paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
     ContainerTerm =.. [ContainerType, Container],
-    ( ParamType = i -> 
-        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=LocExprStr, doc=Doc ]))
-      ; ParamType = s ->
-        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=LocExprStr, doc=Doc ]))
-      ; ParamType = f ->
-        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=LocExprStr, doc=Doc ]))
-      ; ParamType = d ->
-        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=LocExprStr, doc=Doc ]))
-      ; ParamType = z ->  
-        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=LocExprStr, doc=Doc ]))
+    extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc),
+    ( paragraph_bdsl:contains(UContainer, UCType, Container, ContainerType) ->
+        UContainerTerm =.. [UCType, UContainer], 
+        extract_loc_and_doc(UContainerTerm, Container, ContainerType, ContLoc, _)
+      ;
+      paragraph_bdsl:contains(_, _, Container, ContainerType, ContLoc)
     ),
-    ( ContainerType = s ->
-        paragraph_bdsl:'-+'(_, s([ name=Container, loc=ContLocExprStr, doc=_ ]))
-      ; ContainerType = f ->
-        paragraph_bdsl:'-+'(_, f([ name=Container, loc=ContLocExprStr, doc=_ ]))
-      ; ContainerType = d ->
-        paragraph_bdsl:'>:'(d(Container, _), p(ContLocExprStr))
-      ; ContainerType = z ->
-        paragraph_bdsl:'>:'(z(Container, _), p(ContLocExprStr))
-    ),
-    location_term(LocExprStr, LocTerm),
-    location_term(ContLocExprStr, ContLocTerm),
     ParamProps = [ doc(Doc) ].
 %pgraph_elems(_, _, _, Graph),
 %LocExprStr = Graph.get(param/Param/loc),
@@ -182,6 +167,19 @@ paramloc(Param, Container, LocTerm, ContLocTerm, ParamProps) :-
 %Doc = Graph.get(param/Param/doc),
 %parent_param(Param, _, Container, ContLocTerm),
 %ParamProps = [ doc(Doc) ].
+
+extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc) :-
+    ( ParamType = i -> 
+        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=Loc, doc=Doc ]))
+      ; ParamType = s ->
+        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=Loc, doc=Doc ]))
+      ; ParamType = f ->
+        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=Loc, doc=Doc ]))
+      ; ParamType = d ->
+        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=Loc, doc=Doc ]))
+      ; ParamType = z ->  
+        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=Loc, doc=Doc ]))
+    ).
 
 % :- table parent_param/4.
 %parent_param(Param, ParentType, Parent, ParentLocTerm) :-
@@ -271,6 +269,7 @@ directory_alias(examples, '/opt/paragraph/examples').
 directory_alias(paragraph, paragraph_main, '/opt/paragraph').
 directory_alias('paragraph-ui', paragraph_ui, '/opt/paragraph/ParagraphUI').
 directory_alias('paragraph-ui', paragraph_ui_target, '/opt/paragraph/ParagraphUI/target').
+directory_alias('paragraph-queries', paragraph_queries, '/opt/paragraph/ParagraphAng/paragraph-queries-app').
 directory_alias('paragraph-verticles', paragraph_verticles, '/opt/paragraph/ParagraphVerticles').
 directory_alias('paragraph-verticles', pv_dependencies, '/opt/paragraph/ParagraphVerticles/target/dependency').
 
