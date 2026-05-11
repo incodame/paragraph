@@ -139,24 +139,30 @@ parameter(Name, ParamShortName, SourcePvt) :-
     py_call(Param:name, ParamShortName),
     py_call(Param:pvt, SourcePvt).
 
-% application parameters - connect the parameter's container to the application and resolve the path to the parameter
-paramloc(App, Param, f(AppFile), LocTerm, p(ResolvePathList), ParamProps) :-
-     paramloc(Param, f(AppFile), LocTerm, p(PathList), ParamProps),
-     resolve_path(PathList, ResolvePathList), % TODO only used in match_app_by_path
-     (match_app_by_container(App, AppFile) ; match_app_by_path(App, ResolvePathList)).
+% application parameters - paramloc/6 
+% connect the parameter's container to the application and resolve the path to the parameter
+paramloc(App, Param, AppFile, LocTerm, ResolvePathList, ParamProps) :-
+    paramloc(Param, AppFile, LocTerm, PathList, ParamProps),
+    resolve_path(PathList, ResolvePathList),
+    (match_app_by_container(App, AppFile, ResolvePathList) ; match_app_by_path(App, AppFile, ResolvePathList)).
 
-paramloc(App, Param, z(AppArchive), LocTerm, p(ResolvePathList), ParamProps) :-
-     paramloc(Param, z(AppArchive), LocTerm, p(PathList), ParamProps),
-     resolve_path(PathList, ResolvePathList), % TODO only used in match_app_by_path
-     (match_app_by_container(App, AppArchive) ; match_app_by_path(App, ResolvePathList)).
+match_app_by_container(App, Container, ResolvePathList) :-
+    (  app_archive(_, App, Container, _) 
+     ;
+       app_file(_, App, Container, _)
+    ),
+    atomic_list_concat(ResolvePathList, '/', ContainerDir),
+    directory_files(ContainerDir, Entries),
+    exclude(is_dot_file, Entries, CleanEntries),
+    member(Container, CleanEntries).
 
-match_app_by_container(App, Container) :-
-    app_archive(_, App, Container, _) ;
-    app_file(_, App, Container, _).
-
-match_app_by_path(App, PathList) :-
-    reverse(PathList, [AppShortName|_]),
-    match_app_by_short_name(App, AppShortName).
+match_app_by_path(App, AppFile, ResolvePathList) :-
+    reverse(ResolvePathList, [AppShortName|_]),
+    match_app_by_short_name(App, AppShortName),
+    atomic_list_concat(ResolvePathList, '/', AppFileDir),
+    directory_files(AppFileDir, Entries),
+    exclude(is_dot_file, Entries, CleanEntries),
+    member(AppFile, CleanEntries).
 
 match_app_by_short_name(App, AppShortName) :-
     application(app, App, AppShortName, _), !.
@@ -167,8 +173,9 @@ match_app_by_short_name(App, AppShortName) :-
 
 %% path resolution
 %% resolution resolves path on the local filesystem
-%% variables in the path list are elements starting with the $ character, they are replaced by their value using the directory_files system predicate,
-%%  assuming that the first element in PathList is not variable and is the root of the path resolution
+%% when variables in the path list are elements starting with the $ character, 
+%%  they are replaced by their value using the directory_files system predicate,
+%%  assuming that the first element in PathList is not a variable and is the root of the path resolution
 resolve_path([RootDir|Rest], [RootDir|ResolvePathList]) :-
     resolve_path(Rest, RootDir, ResolvePathList).
 
@@ -190,7 +197,7 @@ resolve_path([H|T], CurrDir, [H|ResolvedT]) :-
 is_dot_file('.').
 is_dot_file('..').
 
-% generic parameters
+% generic parameters (paramloc/5)
 paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
     paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
     ContainerTerm =.. [ContainerType, Container],
