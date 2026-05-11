@@ -8,7 +8,7 @@
 :- assert_bdsl([
   
   % root dev dir
-  pr('nodeproj') :> p([ '/opt', 'paragraph', '$DevRoot' ]),
+  pr('nodeproj') :> p([ '/opt', 'paragraph', 'ParagraphAng', '$DevRoot' ]),
 
   % build config
   f('package.json') :> pr('nodeproj'), 
