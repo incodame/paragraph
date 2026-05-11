@@ -139,17 +139,65 @@ parameter(Name, ParamShortName, SourcePvt) :-
     py_call(Param:name, ParamShortName),
     py_call(Param:pvt, SourcePvt).
 
-% application parameters
-paramloc(App, Param, Container, LocTerm, ContLocTerm, ParamProps) :-
-    (app_archive(_, App, Container, _) ; app_file(_, App, Container, _)),
-    pgraph_elems(_, _, _, Graph),
-    LocExprStr = Graph.get(file/Param/loc),
-    location_term(LocExprStr, LocTerm),
-    Doc = Graph.get(file/Param/doc),
-    ContLocTerm = 'resolved from directory aliases',
-    ParamProps = [ doc(Doc) ].
+% application parameters - paramloc/6 
+% connect the parameter's container to the application and resolve the path to the parameter
+paramloc(App, Param, AppFile, LocTerm, ResolvePathList, ParamProps) :-
+    paramloc(Param, AppFile, LocTerm, PathList, ParamProps),
+    resolve_path(PathList, ResolvePathList),
+    (match_app_by_container(App, AppFile, ResolvePathList) ; match_app_by_path(App, AppFile, ResolvePathList)).
 
-% generic parameters
+match_app_by_container(App, Container, ResolvePathList) :-
+    (  app_archive(_, App, Container, _) 
+     ;
+       app_file(_, App, Container, _)
+    ),
+    atomic_list_concat(ResolvePathList, '/', ContainerDir),
+    directory_files(ContainerDir, Entries),
+    exclude(is_dot_file, Entries, CleanEntries),
+    member(Container, CleanEntries).
+
+match_app_by_path(App, AppFile, ResolvePathList) :-
+    reverse(ResolvePathList, [AppShortName|_]),
+    match_app_by_short_name(App, AppShortName),
+    atomic_list_concat(ResolvePathList, '/', AppFileDir),
+    directory_files(AppFileDir, Entries),
+    exclude(is_dot_file, Entries, CleanEntries),
+    member(AppFile, CleanEntries).
+
+match_app_by_short_name(App, AppShortName) :-
+    application(app, App, AppShortName, _), !.
+
+%% generate an app on the fly
+match_app_by_short_name(App, AppShortName) :-
+    App = AppShortName.
+
+%% path resolution
+%% resolution resolves path on the local filesystem
+%% when variables in the path list are elements starting with the $ character, 
+%%  they are replaced by their value using the directory_files system predicate,
+%%  assuming that the first element in PathList is not a variable and is the root of the path resolution
+resolve_path([RootDir|Rest], [RootDir|ResolvePathList]) :-
+    resolve_path(Rest, RootDir, ResolvePathList).
+
+resolve_path([], _, []).
+
+resolve_path([H|T], CurrDir, [ResolvedH|ResolvedT]) :-
+    atom_chars(H, ['$'|_]), !,
+    directory_files(CurrDir, Files),
+    exclude(is_dot_file, Files, CleanFiles),
+    member(ResolvedH, CleanFiles),
+    atomic_list_concat([CurrDir, ResolvedH], '/', ChildDir),
+    exists_directory(ChildDir),
+    resolve_path(T, ChildDir, ResolvedT).
+
+resolve_path([H|T], CurrDir, [H|ResolvedT]) :-
+    atomic_list_concat([CurrDir, H], '/', ChildDir),
+    resolve_path(T, ChildDir, ResolvedT).
+
+is_dot_file('.').
+is_dot_file('..').
+
+% generic parameters (paramloc/5)
 paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
     paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
     ContainerTerm =.. [ContainerType, Container],
@@ -161,12 +209,6 @@ paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
       paragraph_bdsl:contains(_, _, Container, ContainerType, ContLoc)
     ),
     ParamProps = [ doc(Doc) ].
-%pgraph_elems(_, _, _, Graph),
-%LocExprStr = Graph.get(param/Param/loc),
-%location_term(LocExprStr, LocTerm),
-%Doc = Graph.get(param/Param/doc),
-%parent_param(Param, _, Container, ContLocTerm),
-%ParamProps = [ doc(Doc) ].
 
 extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc) :-
     ( ParamType = i -> 
@@ -181,15 +223,6 @@ extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc) :-
         paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=Loc, doc=Doc ]))
     ).
 
-% :- table parent_param/4.
-%parent_param(Param, ParentType, Parent, ParentLocTerm) :-
-%pgraph_elems(_, _, _, Graph),
-%ChildList = Graph.get(ParentType/Parent/params),
-%member(Child, ChildList),
-%dict_keys(Child, Keys),
-%member(Param, Keys),
-%ParentLocExprStr = Graph.get(ParentType/Parent/loc),
-%location_term(ParentLocExprStr, ParentLocTerm).
 
 location_term(LocExprStr, LocTerm) :-
     atom_string(LocExpr, LocExprStr),
