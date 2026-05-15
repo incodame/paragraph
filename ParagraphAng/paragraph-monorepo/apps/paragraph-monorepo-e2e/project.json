@@ -1,0 +1,9 @@
+{
+  "name": "paragraph-monorepo-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/paragraph-monorepo-e2e/src",
+  "implicitDependencies": ["paragraph-monorepo"],
+  "// targets": "to see all targets run: nx show project paragraph-monorepo-e2e --web",
+  "targets": {}
+}
