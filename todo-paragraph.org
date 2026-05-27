@@ -18,8 +18,7 @@ prevent use of other directory not under workdirectory
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
-** terminus db for storing para_graphs
- - explore the branching possibilities
+** datalog system for storing para_graphs (SWI prolog or RDFox)
 ** verticles
  - document the role of the paragraph verticles
  - document the security concept
