@@ -717,14 +717,11 @@ paramval(Param, Ve, Val, Options) :-
 :- discontiguous paragraph:paramval/6.
 :- discontiguous paragraph:transition/5.
 
-% TEMPORARY: rewrite of paramval with foldl
+% rewrite of paramval with foldl
 paramv(Param, Val, Scoper) :-
     paramv(Param, Val, Scoper, _).
 
 paramv(Param, Val, Scoper0, Scoper1) :-
-    writeln("TODO - choose the App using scoper"),
-    App = 'paragraph',
-    writeln("build possible lists of transitions TdList from paragraph.yml: App -loc1-> top container(s) -loc2-> ... -> Param"), % uses scoper too !
     navigate_graph_up(Param, App, UpList),
     reverse(UpList, TdList),
     (memberchk(dbg(_), Scoper0) ->
@@ -769,8 +766,16 @@ transition(xpath(Xpath), file(FilePath), Val, Scoper0, Scoper1) :-
     xpath(XmlRoot, Xpath, Val),
     Scoper1 = Scoper0.
 
-transition(applfile(FileSpec), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    contloc(AppId, applfile(FileSpec), file(FilePath), Scoper0, Scoper1).
+% version using paramloc/6, if Scoper0 has no constraint
+transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, AppFile, _LocTerm, ResolvePathList, _ParamProps),
+    append(ResolvePathList, [AppFile], FilePathList),
+    atomic_list_concat(FilePathList, '/', FilePath),
+    Scoper1 = [af(FilePath) | Scoper0].
+
+% version using contloc/5, if Scoper0 has some constraint
+%transition(applfile(FileSpec), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+%    contloc(AppId, applfile(FileSpec), file(FilePath), Scoper0, Scoper1).
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     paramloc(Param, XmlSource, xpath(Xpath), _, _),
@@ -916,12 +921,26 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 %%% jsonget
 
+% jsonget for a flat file
+transition(jsonget(JsonPath), file(FilePath), Val, Scoper0, Scoper1) :-
+    %setup_call_cleanup(
+    open(FilePath, read, FileStream),
+    json_read_dict(FileStream, JsonDict),
+    jsonget(JsonDict, JsonPath, Val),
+    %    close(FileStream)
+    Scoper1 = Scoper0.
+
 % jsonget for an archive json resource (war / jar / zip)
 transition(jsonget(JsonPath), stream(FileStream), Val, Scoper0, Scoper1) :-
     %setup_call_cleanup(
     json_read_dict(FileStream, JsonDict),
     jsonget(JsonDict, JsonPath, Val),
     %    close(FileStream)).
+    Scoper1 = Scoper0.
+
+% jsonget for list of key-value pairs
+transition(jsonget(ExtractFunc), [Head | Tail], Val, Scoper0, Scoper1) :-
+    jsonget([Head | Tail], ExtractFunc, Val),
     Scoper1 = Scoper0.
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
@@ -940,8 +959,17 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
         close(FileStream)).
 
 jsonget(JsonDict, JsonPath, Val) :-
+    is_dict(JsonDict),
     atomic_list_concat(PropsArr, '/', JsonPath),
-    json_prop_chain_o(JsonDict, PropsArr, Val).
+    json_prop_chain_o(JsonDict, PropsArr, Val), !.
+
+jsonget([], _, []) :- !.
+jsonget([Key-_|KeyVals], 'key()', [Key|Keys]) :-
+    jsonget(KeyVals, 'key()', Keys),
+     !.
+jsonget([_-Val|KeyVals], 'val()', [Val|Vals]) :-
+    jsonget(KeyVals, 'val()', Vals),
+     !.
 
 json_prop_(JsonDict, Property, Obj) :-
     Obj = JsonDict.get(Property).
@@ -954,10 +982,18 @@ json_sub_prop_(Property, Obj0, Obj1) :-
      ) ;
      Obj1 = Obj0).
 
+extract_property(':', Obj0, KeyValList) :-
+    is_dict(Obj0),
+    dict_keys(Obj0, Keys), 
+    extract_props(Obj0, Keys, Obj1),
+    pairs_keys_values(KeyValList, Keys, Obj1),
+    !.
+
 extract_property(Property, Obj0, Obj1) :-
-    (atomic_list_concat(Props, ',', Property) -> extract_props(Obj0, Props, Obj1) ;
-        Property = ':' -> dict_keys(Obj0, Keys), extract_props(Obj0, Keys, Obj1) ;
-        extract_prop(Obj0, Property, Obj1)
+    % at least 2 properties to extract if Property is a comma-separated list, otherwise extract a single property
+    (atomic_list_concat([P1, P2 | Props], ',', Property) -> extract_props(Obj0, [P1, P2 | Props], Obj1), ! 
+    ;
+     extract_prop(Obj0, Property, Obj1)
     ).
 
 extract_props(_, [], []) :- !.
