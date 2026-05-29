@@ -104,9 +104,13 @@ NewScoper = [ae('META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml'),
 
 ## paragraph configuration
 
-paragraph relies on the configuration maintained and documented in paragraph.yml and in your own prolog scripts
+Paragraph relies on the configuration maintained and documented in a YAML tree (paragraph.yml).
 
-example of definitions for the above pom_xml* parameters
+Some advanced configuration options are supported:
+  - via the Pavements projects ( https://github.com/incodame/pavements )
+  - via BDsl scripts (located under prolog/bdsl_lib) 
+
+Below is an example of YAML definition for the above mentioned pom_xml* parameters
 
 ```javascript
   graph:
