@@ -5,7 +5,7 @@
 :- op(500, xfy, ':>').
 :- op(400, xfy, '-+').
 
-:- assert_bdsl([
+:- assert_bdsl(nodeproj, [
   
   % root dev dir
   pr('nodeproj') :> p([ '/opt', 'paragraph', 'ParagraphAng', '$DevRoot' ]),

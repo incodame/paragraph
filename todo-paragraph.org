@@ -15,6 +15,7 @@ prevent use of other directory not under workdirectory
 *** solution for removing large number of predicates (and choicepoints) 
  - new paramv uses constrained search in graph, and foldl
  - find solution for replacing setup_call_cleanup in foldl: use undo/1 from swipl 8.3.24
+ - another possible solution is to delay the closing of resources
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
@@ -23,10 +24,13 @@ prevent use of other directory not under workdirectory
  - document the role of the paragraph verticles
  - document the security concept
  - first implementation of Datalog Query verticle using Flix
- - use docker postgres image
+ - use docker postgres imagefor testing db queries
 ** ai for pavements library
  - generate pavements using prompt - give example
  - test pavements using paramv - give example
+** BDsl as integration glue
+ - use BDsl for paragraph:paramv tests
+ - use BDsl for pavements tests
 ** scratch introduction
 * improve
 ** contloc_app_archive 
