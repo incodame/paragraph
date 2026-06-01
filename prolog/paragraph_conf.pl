@@ -158,14 +158,14 @@ match_app_by_container(App, Container, ResolvePathList) :-
 
 match_app_by_path(App, AppFile, ResolvePathList) :-
     reverse(ResolvePathList, [AppShortName|_]),
-    match_app_by_short_name(App, AppShortName),
+    once(match_app_by_short_name(App, AppShortName)),
     atomic_list_concat(ResolvePathList, '/', AppFileDir),
     directory_files(AppFileDir, Entries),
     exclude(is_dot_file, Entries, CleanEntries),
     member(AppFile, CleanEntries).
 
 match_app_by_short_name(App, AppShortName) :-
-    application(app, App, AppShortName, _), !.
+    application(app, App, AppShortName, _).
 
 %% generate an app on the fly
 match_app_by_short_name(App, AppShortName) :-
