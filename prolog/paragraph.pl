@@ -736,11 +736,11 @@ navigate_graph_up(Param,    App, [LocTerm,ContainerTerm|LocRest]) :-
     paramloc(App, Param, Container, LocTerm, _ContLocTerm, _),
     add_container_up(LocTerm),
     container_term(Container, ContainerTerm),
-    navigate_graph_up(app(App), App, LocRest), !.
+    navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm,applfile(Container)|LocRest]) :-
     paramloc(App, Param, Container, LocTerm, _ContLocTerm, _),
     \+add_container_up(LocTerm),
-    navigate_graph_up(app(App), App, LocRest), !.
+    navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
     paramloc(Param, Container, LocTerm, ContLocTerm, _),
     navigate_graph_up(Container, App, [ContLocTerm|ContLocRest]),
