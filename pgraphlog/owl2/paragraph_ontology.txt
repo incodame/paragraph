@@ -4,6 +4,7 @@ Ontology( <https://github.com/Incodam/paragraph>
 
       SubClassOf( :InfoParam :Parameter )
       SubClassOf( :StructParam :Parameter )
+      SubClassOf( :PathRef :Container)
       SubClassOf( :ApplFile :Container )
       SubClassOf( :ArchiveFile :Container )
       SubClassOf( :WebPage :Container )

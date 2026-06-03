@@ -169,9 +169,26 @@ Below is an example of YAML definition for the above mentioned pom_xml* paramete
 ## paragraph visualization
 
 A graph database system (RDFox, terminusdb, neo4j or equivalent) can be used to visualize parts of the graph. This is done by converting the BDsl facts of the prolog bdsl_lib to
-.ttl format, then importing the paragraph ontology and data info that system.
+.ttl format, then importing the paragraph ontology and data into that system.
 
 Example of visualization using RDFox:
 
 ![Paragraph graph visualization](doc/para_graph_visualization_rdfox.png)
 
+Sample SPARQL queries for RDFox:
+
+```sparql
+# Query resources of type Parameter in the named graph :para_graph
+SELECT ?x WHERE {
+  GRAPH :para_graph {
+    ?x rdf:type :Parameter .
+  }
+}
+
+# Query resource of type Container
+SELECT ?x WHERE {
+  GRAPH :para_graph {
+    ?x rdf:type :Container
+  }
+}
+```
