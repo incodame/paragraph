@@ -1,0 +1,14 @@
+Prefix(:=<https://github.com/Incodam/paragraph#>)
+Ontology( <https://github.com/Incodam/paragraph>
+      Annotation(rdfox:NamedGraph :para_graph)
+
+      SubClassOf( :InfoParam :Parameter )
+      SubClassOf( :StructParam :Parameter )
+      SubClassOf( :ApplFile :Container )
+      SubClassOf( :ArchiveFile :Container )
+      SubClassOf( :WebPage :Container )
+      SubClassOf( :ZipFile :ArchiveFile )
+      SubClassOf( :WarFile :ArchiveFile )
+      SubClassOf( :EarFile :ArchiveFile )
+      SubClassOf( :ArchiveFile ObjectUnionOf(:ZipFile :WarFile :EarFile) )
+)

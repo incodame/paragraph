@@ -1,0 +1,32 @@
+@prefix : <https://github.com/Incodam/paragraph#> .
+@prefix node: <https://github.com/Incodam/paragraph/nodeproj#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Faits dérivés de prolog/bdsl_lib/nodeproj.bdsl.pl
+
+node:nodeproj a :Container ;
+    rdfs:label "nodeproj (bdsl pr 'nodeproj')" ;
+    :hasPathList ("/opt" "paragraph" "ParagraphAng" "$DevRoot") .
+
+node:package_json a :ApplFile ;
+    rdfs:label "package.json" ;
+    :fileName "package.json" ;
+    :containedIn node:nodeproj .
+
+node:node_dep a :StructParam ;
+    rdfs:label "node_dep (structured parameter from package.json)" ;
+    :forFile node:package_json ;
+    :loc "jsonget('dependencies/:')" ;
+    :doc "node project dependency" .
+
+node:node_dep_name a :InfoParam ;
+    rdfs:label "node_dep_name" ;
+    :loc "jsonget('key()')" ;
+    :belongsTo node:node_dep .
+
+node:node_dep_ver a :InfoParam ;
+    rdfs:label "node_dep_ver" ;
+    :loc "jsonget('val()')" ;
+    :belongsTo node:node_dep .
