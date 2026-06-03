@@ -6,7 +6,9 @@
 
 # Faits dérivés de prolog/bdsl_lib/nodeproj.bdsl.pl
 
-node:nodeproj a :Container ;
+GRAPH :para_graph {
+
+node:nodeproj a :PathRef ;
     rdfs:label "nodeproj (bdsl pr 'nodeproj')" ;
     :hasPathList ("/opt" "paragraph" "ParagraphAng" "$DevRoot") .
 
@@ -30,3 +32,5 @@ node:node_dep_ver a :InfoParam ;
     rdfs:label "node_dep_ver" ;
     :loc "jsonget('val()')" ;
     :belongsTo node:node_dep .
+
+}

@@ -1,4 +1,4 @@
-:- module(paragraph_bdsl, [ ':>'/2, '-+'/2, p/1, d/2, z/2, f/1, s/1, i/1, assert_bdsl/1, assert_bdsl/2, retract_bdsl/1, retract_bdsl_all/0, contains/4 ]).
+:- module(paragraph_bdsl, [ ':>'/2, '-+'/2, p/1, pr/1,d/2, z/2, f/1, s/1, i/1, assert_bdsl/1, assert_bdsl/2, retract_bdsl/1, retract_bdsl_all/0, contains/4 ]).
 
 :- op(500, xfy, ':>').
 :- op(400, xfy, '-+').
@@ -8,6 +8,8 @@
 :- discontiguous '-+'/2.
 :- dynamic p/1.
 :- discontiguous p/1.  % path specification
+:- dynamic pr/1.
+:- discontiguous pr/1.  % path reference specification
 :- dynamic d/2.
 :- discontiguous d/2.  % directory specification
 :- dynamic z/2.
