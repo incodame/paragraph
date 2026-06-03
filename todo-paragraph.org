@@ -19,7 +19,9 @@ prevent use of other directory not under workdirectory
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
-** datalog system for storing para_graphs (SWI prolog or RDFox)
+** datalog system for storing para_graphs (RDFox)
+*** BDsl to RDF Turtle / OWL2 conversion using ai (sub project pgraphlog)
+*** Import into RDFox
 ** verticles
  - document the role of the paragraph verticles
  - document the security concept

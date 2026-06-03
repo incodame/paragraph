@@ -1,7 +1,7 @@
 # paragraph
 A configuration management toolkit (module) written in prolog, including:
 
-* declaration of application or system parameters, for navigating resources located inside hierarchical containers (paramloc, paramval)
+* declaration of application or system parameters, for navigating resources located inside hierarchical containers (paramloc, paramv)
 * scoping operators, for constraining searches or evaluations
 * application archive analysis (jar, war, ear, zips)
 * diff tools working on xml, json, or yaml documents or referencing parameters (diff DSL)
@@ -165,3 +165,13 @@ Below is an example of YAML definition for the above mentioned pom_xml* paramete
         loc: xpath(//modules/module)
         doc: "Sub module"
 ```
+
+## paragraph visualization
+
+A graph database system (RDFox, terminusdb, neo4j or equivalent) can be used to visualize parts of the graph. This is done by converting the BDsl facts of the prolog bdsl_lib to
+.ttl format, then importing the paragraph ontology and data info that system.
+
+Example of visualization using RDFox:
+
+![Paragraph graph visualization](doc/para_graph_visualization_rdfox.png)
+

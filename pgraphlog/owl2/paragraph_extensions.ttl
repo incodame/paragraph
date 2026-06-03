@@ -1,0 +1,36 @@
+@prefix : <https://github.com/Incodam/paragraph#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Extensions proposées pour l'ontologie Paragraph
+
+:hasPathList a owl:ObjectProperty ;
+    rdfs:label "hasPathList" ;
+    rdfs:comment "Séquence de segments de chemin représentée comme une liste RDF (rdf:List) de littéraux." ;
+    rdfs:range rdf:List .
+
+:containedIn a owl:ObjectProperty ;
+    rdfs:label "containedIn" ;
+    rdfs:comment "Relation indiquant que la ressource (fichier) est contenue dans un conteneur." .
+
+:fileName a owl:DatatypeProperty ;
+    rdfs:label "fileName" ;
+    rdfs:comment "Nom du fichier (littéral)." .
+
+:forFile a owl:ObjectProperty ;
+    rdfs:label "forFile" ;
+    rdfs:comment "Relie un paramètre structuré au fichier concerné." .
+
+:belongsTo a owl:ObjectProperty ;
+    rdfs:label "belongsTo" ;
+    rdfs:comment "Relie un paramètre individuel à son paramètre structuré parent." .
+
+:loc a owl:DatatypeProperty ;
+    rdfs:label "loc" ;
+    rdfs:comment "Expression de localisation (ex: jsonget(...))." .
+
+:doc a owl:DatatypeProperty ;
+    rdfs:label "doc" ;
+    rdfs:comment "Chaîne de documentation décrivant le paramètre." .
