@@ -230,27 +230,19 @@ For example d and z predicates use some partial information on where one can fin
 The syntax is a prolog "list with indentation using -- ", which allows for a readable display of the tree structure. 
 
 * Practical examples of searches for application parameters
-** Examples of configuration parameters' searches
-*** Example 1 - Searching for json file properties inside archives
+** Use case driven examples of configuration parameters' searches
+** Examples of "bridging" searches
+*** Scopers to the rescue
+*** Example - Chaining parameter evaluations with scopers
+** Diff revisited
+*** reference to the extensible Xml diff article
+*** diff DSL based on paramv
 
-*** Example 2 - Comparing xml file properties from application archives
+* Verification of software "contracts"
+** Role of ontologies
+** Defining contracts in a datalog system
+** Example of application: insecure software dependencies for node applications
 
-** archive analysis for java
-*** Example 3 - Comparing jar or class files between application versions
-** log file analysis for java
-*** Example 4 - Searching for specific text occurrences in application logs
-** source analysis for java
-*** Example 5 - Searching for specific patterns in application code
-* Diff revisited
-** reference to the extensible Xml diff article
-** diff DSL based on paramv
-* Examples of "bridging" searches
-** Scopers to the rescue
-*** Example 6 - Chaining parameter evaluations with scopers
-* Examples of workflows - coordinating search tasks
-** Database containers
-** Operating system containers
-** Web containers
-** Security of systems
+* Examples of workflows - coordinating complex search tasks
 ** The coworkers module - resumable workflow system
-
+** Use of datalog system and agentic AI

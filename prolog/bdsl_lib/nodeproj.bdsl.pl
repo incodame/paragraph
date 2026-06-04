@@ -9,12 +9,20 @@
   
   % root dev dir
   pr('nodeproj') :> p([ '/opt', 'paragraph', 'ParagraphAng', '$DevRoot' ]),
+  pr('appdir') :> p([ '/opt', 'paragraph', 'ParagraphAng', 'paragraph-monorepo', apps, '$App' ]),
 
   % build config
   f('package.json') :> pr('nodeproj'), 
   f('package.json') -+ s([name='node_dep', loc=jsonget('dependencies/:'), doc="node project dependency"]),
   s('node_dep') -+ i([name='node_dep_name', loc=jsonget('key()'), doc="node dependency name"]),
-  s('node_dep') -+ i([name='node_dep_ver', loc=jsonget('val()'), doc="node dependency version"])
+  s('node_dep') -+ i([name='node_dep_ver', loc=jsonget('val()'), doc="node dependency version"]),
+
+  % typescript config
+  f('tsconfig.json') :> pr('appdir'),
+  f('tsconfig.app.json') :> pr('appdir'),
+  fr(tsconfig) :> f('tsconfig.json'),
+  fr(tsconfig) :> f('tsconfig.app.json'),
+  fr(tsconfig) -+ s([name='ts_option', loc=jsonget('compilerOptions/:'), doc="typescript compiler option"])
 
 ]).  
 

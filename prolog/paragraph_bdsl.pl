@@ -26,8 +26,25 @@
 assert_bdsl(Facts) :-
     assert_bdsl(default, Facts).
 
-assert_bdsl(_, []).
-assert_bdsl(Source, [H|T]) :-
+assert_bdsl(Source, Facts) :-
+    expand_syntax(Facts, ExpandedFacts),
+    assert_bdsl_expanded(Source, ExpandedFacts).
+
+expand_syntax(Facts, ExpandedFacts) :-
+    syntax_expansion_rules(Rules),
+    apply_syntax_expansion_rules(Rules, Facts, ExpandedFacts).
+
+syntax_expansion_rules([
+    expand_file_ref_bindings
+]).
+
+apply_syntax_expansion_rules([], Facts, Facts).
+apply_syntax_expansion_rules([Rule|Rules], FactsIn, FactsOut) :-
+    call(Rule, FactsIn, IntermediateFacts),
+    apply_syntax_expansion_rules(Rules, IntermediateFacts, FactsOut).
+
+assert_bdsl_expanded(_, []).
+assert_bdsl_expanded(Source, [H|T]) :-
     (   bdsl_owner(Source, H)
     ->  true
     ;   (   bdsl_owner(_, H)
@@ -36,7 +53,34 @@ assert_bdsl(Source, [H|T]) :-
         ),
         assertz(bdsl_owner(Source, H))
     ),
-    assert_bdsl(Source, T).
+    assert_bdsl_expanded(Source, T).
+
+expand_file_ref_bindings(Facts, ExpandedFacts) :-
+    expand_file_ref_bindings(Facts, Facts, ExpandedFacts).
+
+expand_file_ref_bindings([], _, []).
+expand_file_ref_bindings([H|T], AllFacts, ExpandedFacts) :-
+    expand_file_ref_binding(H, AllFacts, ExpandedHead),
+    expand_file_ref_bindings(T, AllFacts, ExpandedTail),
+    append(ExpandedHead, ExpandedTail, ExpandedFacts).
+
+expand_file_ref_binding(fr(FileRef) -+ ParamSpec, Facts, ExpandedFacts) :-
+    findall(
+        f(FileName) -+ ParamSpec,
+        resolve_file_ref(FileRef, Facts, FileName),
+        ResolveList
+    ),
+    sort(ResolveList, SortedResolveList),
+    (   SortedResolveList = []
+        ->  ExpandedFacts = [fr(FileRef) -+ ParamSpec]
+        ;   ExpandedFacts = SortedResolveList
+    ).
+expand_file_ref_binding(Fact, _, [Fact]).
+
+resolve_file_ref(FileRef, Facts, FileName) :-
+    member(fr(FileRef) :> f(FileName), Facts).
+resolve_file_ref(FileRef, _, FileName) :-
+    ':>'(fr(FileRef), f(FileName)).
 
 retract_bdsl(Source) :-
     retract(bdsl_owner(Source, Fact)),
