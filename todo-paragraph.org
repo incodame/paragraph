@@ -33,6 +33,7 @@ prevent use of other directory not under workdirectory
 ** BDsl as integration glue
  - use BDsl for paragraph:paramv tests
  - use BDsl for pavements tests
+** BDsl syntax enabled via "fact expansion" pipeline (t/bdsl_expand_t.plt)
 ** scratch introduction
 * improve
 ** contloc_app_archive 
