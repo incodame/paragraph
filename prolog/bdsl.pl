@@ -31,6 +31,11 @@
 
 %% application structure definition in development environment
 f('pom.xml') :> p([ c, dev, git, app ]).
+%% generative path and path reference
+pr('nodeproj') :> p([ '/opt', 'paragraph', 'ParagraphAng', '$DevRoot' ]). 
+
+%% path reference syntax allows to specify the location of a container abstractly, without having to repeat the full path for each container
+f('package.json') :> pr('nodeproj').
 
 %% subdirectory structure definition in development environment
 d('src', [ '-- main',
@@ -58,6 +63,12 @@ p([ webapps | _]) :> p([ opt, incodam, tomcat ]).
 %% container and related parameter definitions
 f('pom.xml') -+ s([name=parent_pom, loc=xpath('//project/parent'), doc="pom.xml parent"]).
 f('readme.md') -+ i([name=help_url, loc=regexp("[(](?<V1L>.*)[)]$"), doc="help resource url"]).
+
+%% file reference syntax allows to group containers with similar properties, and to specify properties of the container as a whole, 
+%% without having to repeat them for each file
+fr(tsconfig) :> f('tsconfig.json').
+fr(tsconfig) :> f('tsconfig.app.json').
+fr(tsconfig) -+ s([name='ts_option', loc=jsonget('compilerOptions/:'), doc="typescript compiler option"]).
 
 %% structured parameter details
 s([name=parent_pom | _]) -+ i([name=parent_version, loc=xpath('//version(text)'), doc="parent pom version"]).

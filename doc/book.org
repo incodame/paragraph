@@ -195,7 +195,8 @@ The pavements data get converted to prolog facts described in a specific languag
 #+end_src
 
 *** Example of BDSL facts
-Confer the bdsl.pl for some examples of facts described using that language.
+Confer the bdsl.pl for some detailed examples of facts described using that language.
+The prolog/bdsl_lib directory also contains working examples that can be used in daily practice.
 
 *** BDSL design
 The DSL focus is on "container" relationships, with predicates of the form:  
@@ -225,22 +226,43 @@ Whenever possible the DSL should allow to assert an incomplete description of th
                        ])
                    ])
 #+end_src                    
+  - any incomplete information can still be interpreted as "binding" fact(s) during paramv evaluations
 
 For example d and z predicates use some partial information on where one can find some of their child resources.
 The syntax is a prolog "list with indentation using -- ", which allows for a readable display of the tree structure. 
 
+IMPORTANT. The advertised syntax is enabled via assert_bdsl's fact expansion pipeline (confer t/bdsl_expand_t.plt)
+
 * Practical examples of searches for application parameters
 ** Use case driven examples of configuration parameters' searches
+Big Angular applications are a challenge to comprehend as configuration is everywhere and discrepancies between
+modules' configuration can go unnoticed until problems surface in the integrated product.
+    - a node project dependency might not be compatible even for a minor upgrade of angular
+    - a module's eslint rules might not be aligned with other modules' settings 
+    - a module's typescript options might not be aligned with other modules' configuration 
+Below are some example of searches which can be done using the BDsl.    
+
 ** Examples of "bridging" searches
 *** Scopers to the rescue
 *** Example - Chaining parameter evaluations with scopers
+
 ** Diff revisited
 *** reference to the extensible Xml diff article
 *** diff DSL based on paramv
 
 * Verification of software "contracts"
 ** Role of ontologies
+Ontologies defined using the OWL2 standard allow to reason using a more natural framework than just plain prolog:
+    - generalization is made possible through the use of axioms
+Confer the resources in the pgraphlog sub-project.
+
 ** Defining contracts in a datalog system
+Contracts defined as datalog rules can infer additional facts as to whether a captured para_graph together with some 
+calculated paramvs fullfill some expectations, for example:
+    - all project maven dependencies need to be compatible with JDK 21
+    - all project node dependencies must be verified against known compromised packages 
+    - all project B's artifacts (e.g. jar files) must support API v2.1 from project A's API
+
 ** Example of application: insecure software dependencies for node applications
 
 * Examples of workflows - coordinating complex search tasks
