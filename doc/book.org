@@ -247,8 +247,30 @@ Below are some example of searches which can be done using the BDsl.
 *** Example - Chaining parameter evaluations with scopers
 
 ** Diff revisited
+Diff and git diff are great tools to find out whether changes made across applications/application modules were 
+ performed in a consistent manner. Most of the time the difficulty lies into the verbosity of the diff output, 
+ specially when comparing modified large tree structures like Json or Xml documents, which may prevent focussing    
+ on a single configuration point or easily implementing automated checks.
+
 *** reference to the extensible Xml diff article
+This topic was addressed in this blog entry: https://functionmissing.blogspot.com/2018/01/ by showing that 
+diff can be performed for example on XML documents by selecting a subset of the tree, using such expressions:
+
+#+begin_src text 
+    % match branch objects, find diff on bird level
+    diff(on(//branch, @height), from(//bird, @name)) 
+#+end_src
+
 *** diff DSL based on paramv
+A similar solution is implemented by paragraph, using the paramv evaluation:
+
+#+begin_src text 
+    % match project node dependencies, find diff on version
+    diff(on(node_dep, node_dep_name), from(node_dep_ver)) 
+#+end_src
+
+The above query will return a list of node dependencies that are matched but differ by their version.
+The pattern is to match tree nodes using a structured parameter, and calculate diff on the individual parameter.
 
 * Verification of software "contracts"
 ** Role of ontologies
