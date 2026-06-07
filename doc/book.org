@@ -29,7 +29,7 @@ software products into production environments, due to slight variations on the 
 This book attempts to give solutions to practitioners such as software developers and devops engineers:
  - for building systems which can be easily reasoned about and compared
  - for integration of such reflective capabilities into bigger frameworks
-and advocates the use of logical programming (using Prolog) for this purpose.
+and advocates the use of logical programming (using Prolog and Datalog) for this purpose.
 
 *** notes
  (1) either incorrect, overly complex or obfuscated
@@ -136,6 +136,9 @@ be performed:
 
 This scope will determine which application archives or files will get scanned for value extraction.
 
+In the absence of "application scope" the search will generate all possible matching applications, given the 
+minimum information where to start the search from (root directory or base url).
+
 ** Internal programming model based on graph search and predicate chaining
 As discussed above, paragraph resolves all possible navigation paths (bottom-up) from a parameter to an 
 application, as in the following examples:
@@ -156,6 +159,21 @@ json_ktext      --jsonget()--> json_config --endswith()--> <app archive> --warfi
 
 pom_xml_version --xpath()-->   pom_xml     --endswith()--> <app archive> --warfile()--> paragraph-ui
 pom_xml_version --xpath()-->   pom_xml     --applfile()-------------------------------> paragraph-ui
+#+end_src
+
+navigate_graph_up is a generative predicate when the application is passed as a variable ... 
+
+#+begin_src text
+?- navigate_graph_up(ts_option, App, L).
+App = host,
+L = [jsonget('compilerOptions/:'), applfile('tsconfig.app.json')] ;
+App = queries,
+L = [jsonget('compilerOptions/:'), applfile('tsconfig.app.json')] ;
+App = pavements,
+L = [jsonget('compilerOptions/:'), applfile('tsconfig.app.json')] ;
+App = 'pavements-e2e',
+L = [jsonget('compilerOptions/:'), applfile('tsconfig.json')] ;
+App = 'queries-e2e'              % etc...
 #+end_src
 
 Given the high number of possible navigation paths and "loc" terms (xpath(), regexp(), jsonget() etc)
