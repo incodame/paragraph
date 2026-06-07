@@ -16,6 +16,8 @@ prevent use of other directory not under workdirectory
  - new paramv uses constrained search in graph, and foldl
  - find solution for replacing setup_call_cleanup in foldl: use undo/1 from swipl 8.3.24
  - another possible solution is to delay the closing of resources
+*** solution to prune the search tree
+ - use navigate_graph_up for that ?
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
