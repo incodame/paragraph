@@ -1,10 +1,11 @@
 package org.incodame.paragraph.sample.webapp.demo;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Table(name = "parameter", 
-                tableName = "parameter", 
-                description = "Parameter entity for storing parameters with name, location, and documentation.")
+@Entity
+@Table(name = "parameter")
 public class Parameter {
     
     @NotNull

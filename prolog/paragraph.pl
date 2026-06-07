@@ -761,9 +761,10 @@ container_term(Container, zipfile(Container)) :-
 %%% xpath
 
 % xpath for a flat file
-transition(xpath(Xpath), file(FilePath), Val, Scoper0, Scoper1) :-
+transition(xpath(XpathAtom), file(FilePath), Val, Scoper0, Scoper1) :-
+    read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
     load_xml(FilePath, XmlRoot, _),
-    xpath(XmlRoot, Xpath, Val),
+    xpath(XmlRoot, XpathTerm, Val),
     Scoper1 = Scoper0.
 
 % version using paramloc/6, if Scoper0 has no constraint
@@ -789,9 +790,10 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 
 
 % xpath for an archive xml resource (war / jar / zip)
-transition(xpath(Xpath), stream(FileStream), Val, Scoper0, Scoper1) :-
+transition(xpath(XpathAtom), stream(FileStream), Val, Scoper0, Scoper1) :-
+    read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
     load_xml(stream(FileStream), XmlRoot, _),
-    xpath(XmlRoot, Xpath, Val),
+    xpath(XmlRoot, XpathTerm, Val),
     close(FileStream),
     Scoper1 = Scoper0.
 
@@ -863,8 +865,9 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
         close(XmlStream)).
 
 % nested xpath definitions
-transition(xpath(Xpath1), ParentXml, Val, Scoper0, Scoper1) :-
-    xpath(ParentXml, Xpath1, Val),
+transition(xpath(XpathAtom), ParentXml, Val, Scoper0, Scoper1) :-
+    read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
+    xpath(ParentXml, XpathTerm, Val),
     Scoper1 = Scoper0.
 
 paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
