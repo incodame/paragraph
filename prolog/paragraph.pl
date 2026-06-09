@@ -556,19 +556,20 @@ contloc(AppId,    jarfile(JarFile), Version, LocSpec, Scoper0, Scoper1) :-
 contloc(AppId,    zipfile(ZipFile), Version, LocSpec, Scoper0, Scoper1) :-
     contloc_app_archive(ZipFile, zip, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc_app_archive(ArTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
-    want_opt(ag(AppGroup), Scoper0),
-    want_opt(ve(Version), Scoper0),
-    (member(ar(file(LocSpec)), Scoper0) ->
-         Scoper1 = Scoper0
-    ;
-         (appdirectory(AppId, Directory, Scoper0) ; workdirectory(Directory, Scoper0)),
-         application(app, AppGroup, AppId, _),
-         directory_files(Directory, FileList),
-         archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
-         format(string(LocSpec), "~w/~w", [Directory, ArMatch]),
-         Scoper1 = [ar(file(LocSpec)) | Scoper0]
-    ).
+% disabled
+contloc_app_archive(_ArTest, _FileType, _AppId, _Version, file(_LocSpec), _Scoper0, _Scoper1) :- fail.
+%    %want_opt(ag(AppGroup), Scoper0),
+%    %want_opt(ve(Version), Scoper0),
+%    (member(ar(file(LocSpec)), Scoper0) ->
+%         Scoper1 = Scoper0
+%    ;
+%         %(appdirectory(AppId, Directory, Scoper0) ; workdirectory(Directory, Scoper0)),
+%         %application(app, AppGroup, AppId, _),
+%         %directory_files(Directory, FileList),
+%         %archive_match(ArTest, FileList, ArMatch, FileType, Version, AppId),
+%         %format(string(LocSpec), "~w/~w", [Directory, ArMatch]),
+%         Scoper1 = [ar(file(LocSpec)) | Scoper0]
+%    ).
 
 
 list([])     --> [].
@@ -642,19 +643,20 @@ contloc(AppId,    applfile(FileStr), Version, LocSpec, Scoper0, Scoper1) :-
     phrase(file_type(Fname, Ftype), Codes),
     contloc_app_file(Fname, Ftype, AppId, Version, LocSpec, Scoper0, Scoper1).
 
-contloc_app_file(FileTest, FileType, AppId, Version, file(LocSpec), Scoper0, Scoper1) :-
-    want_opt(ag(AppGroup), Scoper0),
-    want_opt(ve(Version), Scoper0),
-    (member(af(file(LocSpec)), Scoper0) ->
-         Scoper1 = Scoper0
-    ;
-         appdirectory(AppId, AppDirectory, Scoper0),
-         application(app, AppGroup, AppId, _),
-         directory_files(AppDirectory, FileList),
-         file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
-         format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]),
-         Scoper1 = [af(file(LocSpec)) | Scoper0]
-    ).
+% disabled
+contloc_app_file(_FileTest, _FileType, _AppId, _Version, file(_LocSpec), _Scoper0, _Scoper1) :- fail.
+%    %want_opt(ag(AppGroup), Scoper0),
+%    %want_opt(ve(Version), Scoper0),
+%    (member(af(file(LocSpec)), Scoper0) ->
+%         Scoper1 = Scoper0
+%    ;
+%         appdirectory(AppId, AppDirectory, Scoper0),
+%         application(app, AppGroup, AppId, _),
+%         directory_files(AppDirectory, FileList),
+%         file_match(FileTest, FileList, FileMatch, FileType, Version, AppId),
+%         format(string(LocSpec), "~w/~w", [AppDirectory, FileMatch]),
+%         Scoper1 = [af(file(LocSpec)) | Scoper0]
+%    ).
 
 % TODO: remove call to app_file, use FileTest only
 file_match(FileTest, FileList, File, FileType, Version, AppId) :-
@@ -774,6 +776,13 @@ transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [af(FilePath) | Scoper0].
 
+% version using paramloc/6, if Scoper0 has no constraint
+transition(warfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, AppFile, _LocTerm, ResolvePathList, _ParamProps),
+    append(ResolvePathList, [AppFile], FilePathList),
+    atomic_list_concat(FilePathList, '/', FilePath),
+    Scoper1 = [ar(FilePath) | Scoper0].
+
 % version using contloc/5, if Scoper0 has some constraint
 %transition(applfile(FileSpec), app(AppId), file(FilePath), Scoper0, Scoper1) :-
 %    contloc(AppId, applfile(FileSpec), file(FilePath), Scoper0, Scoper1).
@@ -794,10 +803,10 @@ transition(xpath(XpathAtom), stream(FileStream), Val, Scoper0, Scoper1) :-
     read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
     load_xml(stream(FileStream), XmlRoot, _),
     xpath(XmlRoot, XpathTerm, Val),
-    close(FileStream),
+    %close(FileStream),
     Scoper1 = Scoper0.
 
-transition(endswith(EntrySpec), archive(AfilePath), stream(FileStream), Scoper0, Scoper1) :-
+transition(endswith(EntrySpec), file(AfilePath), stream(FileStream), Scoper0, Scoper1) :-
     entryloc(AfilePath, endswith(EntrySpec), Entry, Scoper0, Scoper1),
     %setup_call_cleanup(
          open_archive_entry(AfilePath, Entry, FileStream).
