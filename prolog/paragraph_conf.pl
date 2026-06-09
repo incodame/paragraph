@@ -199,7 +199,7 @@ is_dot_file('..').
 
 % generic parameters (paramloc/5)
 paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
-    paragraph_bdsl:contains(Container, ContainerType, Param, ParamType),
+    container_contains_param(Container, ContainerType, Param, ParamType),
     ContainerTerm =.. [ContainerType, Container],
     extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc),
     ( paragraph_bdsl:contains(UContainer, UCType, Container, ContainerType) ->
@@ -209,6 +209,12 @@ paramloc(Param, Container, Loc, ContLoc, ParamProps) :-
       paragraph_bdsl:contains(_, _, Container, ContainerType, ContLoc)
     ),
     ParamProps = [ doc(Doc) ].
+
+container_contains_param(Container, ContainerType, Param, ParamType) :-
+    (paragraph_bdsl:contains(Container, ContainerType, Param, ParamType)
+     ;
+     paragraph_bdsl:contains(Container, ContainerType, Param, ParamType, _Path)
+    ).
 
 extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc) :-
     ( ParamType = i -> 

@@ -35,7 +35,8 @@ expand_syntax(Facts, ExpandedFacts) :-
     apply_syntax_expansion_rules(Rules, Facts, ExpandedFacts).
 
 syntax_expansion_rules([
-    expand_file_ref_bindings
+    expand_file_ref_bindings,
+    expand_archive_ref_bindings
 ]).
 
 apply_syntax_expansion_rules([], Facts, Facts).
@@ -55,6 +56,7 @@ assert_bdsl_expanded(Source, [H|T]) :-
     ),
     assert_bdsl_expanded(Source, T).
 
+%% file reference
 expand_file_ref_bindings(Facts, ExpandedFacts) :-
     expand_file_ref_bindings(Facts, Facts, ExpandedFacts).
 
@@ -81,6 +83,34 @@ resolve_file_ref(FileRef, Facts, FileName) :-
     member(fr(FileRef) :> f(FileName), Facts).
 resolve_file_ref(FileRef, _, FileName) :-
     ':>'(fr(FileRef), f(FileName)).
+
+%% archive reference
+expand_archive_ref_bindings(Facts, ExpandedFacts) :-
+    expand_archive_ref_bindings(Facts, Facts, ExpandedFacts).
+
+expand_archive_ref_bindings([], _, []).
+expand_archive_ref_bindings([H|T], AllFacts, ExpandedFacts) :-
+    expand_archive_ref_binding(H, AllFacts, ExpandedHead),
+    expand_archive_ref_bindings(T, AllFacts, ExpandedTail),
+    append(ExpandedHead, ExpandedTail, ExpandedFacts).
+
+expand_archive_ref_binding(zr(ArchiveRef) -+ FileSpec, Facts, ExpandedFacts) :-
+    findall(
+        z(ArchiveName) -+ FileSpec,
+        resolve_archive_ref(ArchiveRef, Facts, ArchiveName),
+        ResolveList
+    ),
+    sort(ResolveList, SortedResolveList),
+    (   SortedResolveList = []
+        ->  ExpandedFacts = [zr(ArchiveRef) -+ FileSpec]
+        ;   ExpandedFacts = SortedResolveList
+    ).
+expand_archive_ref_binding(Fact, _, [Fact]).
+
+resolve_archive_ref(ArchiveRef, Facts, ArchiveName) :-
+    member(zr(ArchiveRef) :> z(ArchiveName), Facts).
+resolve_archive_ref(ArchiveRef, _, ArchiveName) :-
+    ':>'(zr(ArchiveRef), z(ArchiveName)).
 
 retract_bdsl(Source) :-
     retract(bdsl_owner(Source, Fact)),
@@ -119,12 +149,24 @@ contains(Container, d, FileName, f, PathList) :-
     f(FileName) :> pr(PathRef),
     pr(PathRef) :> p(PathList),
     reverse(PathList, [Container|_]).
+
+contains(Container, d, ArchiveName, z, PathList) :-
+    z(ArchiveName) :> p(PathList),
+    reverse(PathList, [Container|_]).
+
+contains(Container, d, ArchiveName, z, PathList) :-
+    z(ArchiveName) :> pr(PathRef),
+    pr(PathRef) :> p(PathList),
+    reverse(PathList, [Container|_]).
     
 contains(Container, d, FileName, f, Path) :-
     d(Container, Contents) :> p(Path),
     member(FileName, Contents), % TODO: specific predicate to extract sub path 
     f(FileName) :> p(Path).
-  
+
+contains(Container, z, FileName, f, Extract) :-
+    z(Container) -+ f([name=FileName, loc=Extract | _]).
+
 contains(Container, z, FileName, f, Path) :-
     z(Container, Contents) :> p(Path),
     member(FileName, Contents), % TODO: specific predicate to extract sub path 
