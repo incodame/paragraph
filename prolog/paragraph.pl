@@ -21,6 +21,7 @@
 :- use_module(library(regex)).
 :- use_module(library(www_browser)).
 :- use_module(library(yall)).
+:- use_module(paragraph_commons).
 :- use_module(paragraph_conf).
 :- use_module(js_dcg).
 :- use_module(java_dcg).
@@ -572,53 +573,6 @@ contloc_app_archive(_ArTest, _FileType, _AppId, _Version, file(_LocSpec), _Scope
 %    ).
 
 
-list([])     --> [].
-list([L|Ls]) --> [L], list(Ls).
-
-conc_of(Prefix, Suffix) --> list(Prefix), "version", list(Suffix).
-
-version_tok(VersionTokenStr, VePrefixStr, VeSuffixStr) :-
-    string_codes(VersionTokenStr, VersionTokenCodes),
-    phrase(conc_of(VePrefixL, VeSuffixL), VersionTokenCodes),
-    string_codes(VePrefixStr, VePrefixL),
-    string_codes(VeSuffixStr, VeSuffixL).
-
-% TODO: remove call to app_archive, use FileTest only
-archive_match(FileTest, FileList, File, FileType, Version, AppId) :-
-    (app_archive(FileType, AppId, ArNameTemplate, _), atom_codes(ArNameTemplate, Codes), memberchk(0'(, Codes),
-        split_string(ArNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
-        version_tok(VersionTokenStr, VePrefix, VeSuffix),
-        (ground(Version), atom_length(Version, Len)  ->
-             (Len is 0 ->
-                  join_strings([Prefix, Suffix], "", FileStr)
-             ;
-                  join_strings([Prefix, VePrefix, Version, VeSuffix, Suffix], "", FileStr)
-             ),
-        %atom_string(FileTest, FileStr), File = FileTest
-             atom_string(File, FileStr)
-        ;
-             true
-        ),
-        member(File, FileList),
-        (\+ground(Version) ->
-             atom_concat(Prefix, Rest, File),
-             atom_concat(VersionToken, Suffix, Rest),
-             atom_length(VersionToken, VtLen),
-             (VtLen is 0 ->
-                  Version = ''
-             ;
-              atom_concat(VePrefix, VeRest, VersionToken),
-              atom_concat(Version, VeSuffix, VeRest)
-             )
-        ;
-             true
-        )
-    ;atom_concat('*.', FileType, FileTest), atom_concat('*', Suffix, FileTest),
-        member(File, FileList), atom_concat(_, Suffix, File)
-    ;
-        member(FileTest, FileList), File = FileTest, Version = ''
-    ).
-
 %% resolve_entry_spec(pv(Param), ActualEntry, Options) :-
 %%     paramval(Param, ActualEntry, Options),
 %%     format(atom(Message), 'Resolved entry spec pv(~w) to ~w', [Param, ActualEntry]),
@@ -658,40 +612,9 @@ contloc_app_file(_FileTest, _FileType, _AppId, _Version, file(_LocSpec), _Scoper
 %         Scoper1 = [af(file(LocSpec)) | Scoper0]
 %    ).
 
-% TODO: remove call to app_file, use FileTest only
-file_match(FileTest, FileList, File, FileType, Version, AppId) :-
-    (app_file(FileType, AppId, FileNameTemplate, _), atom_codes(FileNameTemplate, Codes), memberchk(0'(, Codes),
-        split_string(FileNameTemplate, "()", "", [Prefix, VersionTokenStr, Suffix]),
-        version_tok(VersionTokenStr, VePrefix, VeSuffix),
-        (ground(Version), atom_length(Version, Len)  ->
-             (Len is 0 ->
-                  join_strings([Prefix, Suffix], "", FileStr)
-             ;
-                  join_strings([Prefix, VePrefix, Version, VeSuffix, Suffix], "", FileStr)
-             ),
-             atom_string(File, FileStr)
-        ;
-             true
-        ),
-        member(File, FileList),
-        (\+ground(Version) ->
-             atom_concat(Prefix, Rest, File),
-             atom_concat(VersionToken, Suffix, Rest),
-             atom_length(VersionToken, VtLen),
-             (VtLen is 0 ->
-                  Version = ''
-             ;
-              atom_concat(VePrefix, VeRest, VersionToken),
-              atom_concat(Version, VeSuffix, VeRest)
-             )
-        ;
-             true
-        )
-    ;atom_concat('*.', FileType, FileTest), atom_concat('*', Suffix, FileTest),
-        member(File, FileList), atom_concat(_, Suffix, File)
-    ;
-        atomic_list_concat([FileTest, '.', FileType], FileName), member(FileName, FileList), File = FileName, Version = ''
-    ).
+% resolves the versioning of a file with -version suffix
+file_match(FileTest, FileList, File, FileType, Version) :-
+    paragraph_commons:file_match(FileTest, FileList, File, FileType, Version).
 
 %% parameters defined in paragraph_conf
 
@@ -734,13 +657,13 @@ paramv(Param, Val, Scoper0, Scoper1) :-
     foldl([A,B-S0,C-S1]>>transition(A,B,C,S0,S1), TdList, app(App)-Scoper0, Val-Scoper1).
 
 navigate_graph_up(app(App), App, []) :- !.
-navigate_graph_up(Param,    App, [LocTerm,ContainerTerm|LocRest]) :-
-    paramloc(App, Param, Container, LocTerm, _ContLocTerm, _),
+navigate_graph_up(Param,    App, [LocTerm,MatchedContainerTerm|LocRest]) :-
+    paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _),
     add_container_up(LocTerm),
-    container_term(Container, ContainerTerm),
+    container_term(MatchedContainer, MatchedContainerTerm),
     navigate_graph_up(app(App), App, LocRest).
-navigate_graph_up(Param,    App, [LocTerm,applfile(Container)|LocRest]) :-
-    paramloc(App, Param, Container, LocTerm, _ContLocTerm, _),
+navigate_graph_up(Param,    App, [LocTerm,applfile(MatchedContainer)|LocRest]) :-
+    paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _),
     \+add_container_up(LocTerm),
     navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
@@ -764,22 +687,22 @@ container_term(Container, zipfile(Container)) :-
 
 % xpath for a flat file
 transition(xpath(XpathAtom), file(FilePath), Val, Scoper0, Scoper1) :-
-    read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
+    read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)]),
     load_xml(FilePath, XmlRoot, _),
     xpath(XmlRoot, XpathTerm, Val),
     Scoper1 = Scoper0.
 
-% version using paramloc/6, if Scoper0 has no constraint
+% version using paramloc/7, if Scoper0 has no constraint
 transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, AppFile, _LocTerm, ResolvePathList, _ParamProps),
-    append(ResolvePathList, [AppFile], FilePathList),
+    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _ParamProps),
+    append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [af(FilePath) | Scoper0].
 
-% version using paramloc/6, if Scoper0 has no constraint
+% version using paramloc/7, if Scoper0 has no constraint
 transition(warfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, AppFile, _LocTerm, ResolvePathList, _ParamProps),
-    append(ResolvePathList, [AppFile], FilePathList),
+    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _ParamProps),
+    append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [ar(FilePath) | Scoper0].
 
@@ -800,7 +723,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
 
 % xpath for an archive xml resource (war / jar / zip)
 transition(xpath(XpathAtom), stream(FileStream), Val, Scoper0, Scoper1) :-
-    read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
+    read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)]),
     load_xml(stream(FileStream), XmlRoot, _),
     xpath(XmlRoot, XpathTerm, Val),
     %close(FileStream),
@@ -875,7 +798,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 % nested xpath definitions
 transition(xpath(XpathAtom), ParentXml, Val, Scoper0, Scoper1) :-
-    read_term_from_atom(XpathAtom, XpathTerm, []), % works if library(xpath) is in use
+    read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)]),
     xpath(ParentXml, XpathTerm, Val),
     Scoper1 = Scoper0.
 

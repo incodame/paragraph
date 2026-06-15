@@ -1,8 +1,9 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, parameter/3, paramloc/5, paramloc/6, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, parameter/3, paramloc/5, paramloc/7, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
 :- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
 :- use_module(paragraph_bdsl).
+:- use_module(paragraph_commons).
 :- op(500, xfy, ':>').
 :- op(400, xfy, '-+').
 
@@ -139,14 +140,16 @@ parameter(Name, ParamShortName, SourcePvt) :-
     py_call(Param:name, ParamShortName),
     py_call(Param:pvt, SourcePvt).
 
-% application parameters - paramloc/6 
+% application parameters - paramloc/7 
 % connect the parameter's container to the application and resolve the path to the parameter
-paramloc(App, Param, AppFile, LocTerm, ResolvePathList, ParamProps) :-
+paramloc(App, Param, AppFile, LocTerm, MatchedFile, ResolvePathList, ParamProps) :-
     paramloc(Param, AppFile, LocTerm, PathList, ParamProps),
     resolve_path(PathList, ResolvePathList),
-    (match_app_by_container(App, AppFile, ResolvePathList) ; match_app_by_path(App, AppFile, ResolvePathList)).
+    (match_app_by_container(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList) 
+     ; 
+     match_app_by_path(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList)).
 
-match_app_by_container(App, Container, ResolvePathList) :-
+match_app_by_container(App, Container, MatchedContainer, MatchedVersion, ResolvePathList) :-
     (  app_archive(_, App, Container, _) 
      ;
        app_file(_, App, Container, _)
@@ -154,15 +157,17 @@ match_app_by_container(App, Container, ResolvePathList) :-
     atomic_list_concat(ResolvePathList, '/', ContainerDir),
     directory_files(ContainerDir, Entries),
     exclude(is_dot_file, Entries, CleanEntries),
-    member(Container, CleanEntries).
+    file_match(Container, CleanEntries, MatchedContainer, _ContainerType, MatchedVersion).
+    %member(Container, CleanEntries).
 
-match_app_by_path(App, AppFile, ResolvePathList) :-
+match_app_by_path(App, AppFile, MatchedFile, MatchedVersion, ResolvePathList) :-
     reverse(ResolvePathList, [AppShortName|_]),
     once(match_app_by_short_name(App, AppShortName)),
     atomic_list_concat(ResolvePathList, '/', AppFileDir),
     directory_files(AppFileDir, Entries),
     exclude(is_dot_file, Entries, CleanEntries),
-    member(AppFile, CleanEntries).
+    file_match(AppFile, CleanEntries, MatchedFile, _FileType, MatchedVersion).
+    %member(AppFile, CleanEntries).
 
 match_app_by_short_name(App, AppShortName) :-
     application(app, App, AppShortName, _).

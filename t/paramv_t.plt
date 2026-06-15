@@ -2,56 +2,8 @@
 :- use_module(library(xpath)).
 :- begin_tests(paragraph_paramv).
 :- getenv('PARAGRAPH_HOME', Ph), format(atom(Ps), '~w/prolog', [ Ph ]), working_directory(_, Ps).
-:- use_module(paragraph).
+:- use_module('../prolog/paragraph').
 
-
-%% package version
-
-test('parse package type, version and app') :-
-    paragraph:package_version('paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui').
-
-%% archive match
-
-% TODO - broken, should fail
-test('archive match, version is known') :-
-    FileList = [ '.', '..', 'paragraph-ui-0.1.war', 'paragraph-ui-0.2.war' ],
-    paragraph:archive_match('paragraph-ui-0.9.war', FileList, 'paragraph-ui-0.1.war', war, '0.1', 'paragraph-ui').
-
-test('archive match, version unknown') :-
-    FileList = [ '.', '..', 'paragraph-ui-0.1.war', 'paragraph-ui-0.2.war' ],
-    (paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.1.war', FileType, Ve1, 'paragraph-ui'),
-     Ve1 = '0.1',
-     FileType = war
-    ),
-    (paragraph:archive_match('paragraph-ui-(version).war', FileList, 'paragraph-ui-0.2.war', FileType, Ve2, 'paragraph-ui'),
-     Ve2 = '0.2',
-     FileType = war
-    ).
-
-test('archive match, with or without version') :-
-    FileList = [ '.', '..', 'paragraph-ui.war', 'paragraph-ui-0.2.war' ],
-    paragraph:archive_match('paragraph-ui(-version).war', FileList, 'paragraph-ui.war', war, '', 'paragraph-ui'),
-    paragraph:archive_match('paragraph-ui(-version).war', FileList, 'paragraph-ui-0.2.war', war, '0.2', 'paragraph-ui').
-
-test('archive match, without version') :-
-    FileList = [ '.', '..', 'paragraph-ui.war', 'paragraph-ui-0.2.war' ],
-    paragraph:archive_match('paragraph-ui.war', FileList, 'paragraph-ui.war', war, '', 'paragraph-ui').
-
-test('archive match, wilcard') :-
-    FileList = [ '.', '..', 'a.jar', 'b.jar' ],
-    paragraph:archive_match('*.jar', FileList, 'a.jar', jar, '', 'paragraph-verticles'),
-    paragraph:archive_match('*.jar', FileList, 'b.jar', jar, '', 'paragraph-verticles').
-
-%% file match
-
-test('file match, without version') :-
-    FileList = [ '.', '..', 'pom.xml', '' ],
-    paragraph:file_match('pom.xml', FileList, 'pom.xml', pom, '', 'paragraph-ui').
-
-test('file match, wilcard') :-
-    FileList = [ '.', '..', 'a.xml', 'b.xml' ],
-    paragraph:file_match('*.xml', FileList, 'a.xml', xml, '', 'paragraph-verticles'),
-    paragraph:file_match('*.xml', FileList, 'b.xml', xml, '', 'paragraph-verticles').
 
 %% contloc
 
@@ -94,7 +46,7 @@ test('navigate graph from json_ktext up') :-
     navigate_graph_up(json_ktext, 'paragraph-ui', L),
     L = [jsonget('d/_/t'), endswith(".json"), warfile('paragraph-ui(-version).war')].
 
-%% paramval
+%% paramv is the rewrite of paramval
 
 test('xpath -> xml file : find the pom version of paragraph project') :-
     paragraph:paramv(pom_xml_version, Val, [ag('paragraph'), ve(''), ad(paragraph_ui)], NewScoper),
