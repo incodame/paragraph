@@ -658,12 +658,12 @@ paramv(Param, Val, Scoper0, Scoper1) :-
 
 navigate_graph_up(app(App), App, []) :- !.
 navigate_graph_up(Param,    App, [LocTerm,MatchedContainerTerm|LocRest]) :-
-    paramloc(App, Param, Container, LocTerm, MatchedContainer, _ContLocTerm, _),
+    paramloc(App, Param, Container, LocTerm, MatchedContainer, _ContLocTerm, _Markers, _),
     add_container_up(LocTerm),
     container_term(Container, MatchedContainer, MatchedContainerTerm),
     navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm,applfile(MatchedContainer)|LocRest]) :-
-    paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _),
+    paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _Markers, _),
     \+add_container_up(LocTerm),
     navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
@@ -703,24 +703,24 @@ transition(xpath(XpathAtom), file(FilePath), Val, Scoper0, Scoper1) :-
     xpath(XmlRoot, XpathTerm, Val),
     Scoper1 = Scoper0.
 
-% version using paramloc/7, if Scoper0 has no constraint
+% version using paramloc/8, if Scoper0 has no constraint
 transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _ParamProps),
+    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [af(FilePath) | Scoper0].
 
-% version using paramloc/7, if Scoper0 has no constraint
+% version using paramloc/8, if Scoper0 has no constraint
 % if AppFile was resolved from FileMatch 
 transition(warfile(_AppFile-FileMatch), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, FileMatch, _LocTerm, MatchedFile, ResolvePathList, _ParamProps),
+    paramloc(AppId, _Param, FileMatch, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [ar(FilePath) | Scoper0].
 
-% version using paramloc/7, if Scoper0 has no constraint
+% version using paramloc/8, if Scoper0 has no constraint
 transition(warfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _ParamProps),
+    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [ar(FilePath) | Scoper0].

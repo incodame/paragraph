@@ -17,7 +17,9 @@ prevent use of other directory not under workdirectory
  - find solution for replacing setup_call_cleanup in foldl: use undo/1 from swipl 8.3.24
  - another possible solution is to delay the closing of resources
 *** solution to prune the search tree
- - use navigate_graph_up for that ?
+ - use navigate_graph_up markers
+ - use the extracted container version: use marker version:
+ - problem: navigate_graph_up yields App = target: use marker app:
 *** file transformation: example with jq
 *** complete example: maven_checks.pl
 *** chaining tests
@@ -35,6 +37,7 @@ prevent use of other directory not under workdirectory
 ** BDsl as integration glue
  - use BDsl for paragraph:paramv tests
  - use BDsl for pavements tests
+ - generate BDsl scripts using prompt - give an example
 ** BDsl syntax enabled via "fact expansion" pipeline (t/bdsl_expand_t.plt)
 ** scratch introduction
 * improve

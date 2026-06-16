@@ -1,7 +1,7 @@
 /*
  * paragraph commons
  */
-:- module(paragraph_commons, [file_match/5, version_tok/3]).
+:- module(paragraph_commons, [file_match/5, version_tok/3, collect_markers/3]).
 
 list([])     --> [].
 list([L|Ls]) --> [L], list(Ls).
@@ -56,3 +56,25 @@ file_match(FileTest, FileList, File, FileType, Version) :-
         File = FileName, 
         Version = ''
     ).
+
+%% collect_markers(+InputList, -MarkerList, -OutputList)
+%% Extracts elements with Key:Value syntax into Key=Value markers
+%% Example: collect_markers([paragraph, app:ParagraphUI, target], [app='ParagraphUI'], [paragraph, ParagraphUI, target])
+collect_markers([], [], []).
+collect_markers([H|T], Markers, [H|RestResult]) :-
+    \+ is_marked_element(H),
+    !,
+    collect_markers(T, Markers, RestResult).
+collect_markers([H|T], [Key=Value|Markers], [Value|RestResult]) :-
+    is_marked_element(H),
+    !,
+    split_marker(H, Key, Value),
+    collect_markers(T, Markers, RestResult).
+
+is_marked_element(Elem) :-
+    atom(Elem),
+    atomic_list_concat(Parts, ':', Elem),
+    length(Parts, 2).
+
+split_marker(Elem, Key, Value) :-
+    atomic_list_concat([Key, Value], ':', Elem).
