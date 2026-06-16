@@ -658,9 +658,9 @@ paramv(Param, Val, Scoper0, Scoper1) :-
 
 navigate_graph_up(app(App), App, []) :- !.
 navigate_graph_up(Param,    App, [LocTerm,MatchedContainerTerm|LocRest]) :-
-    paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _),
+    paramloc(App, Param, Container, LocTerm, MatchedContainer, _ContLocTerm, _),
     add_container_up(LocTerm),
-    container_term(MatchedContainer, MatchedContainerTerm),
+    container_term(Container, MatchedContainer, MatchedContainerTerm),
     navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm,applfile(MatchedContainer)|LocRest]) :-
     paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _),
@@ -674,13 +674,24 @@ navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
 add_container_up(endswith(_)).
 add_container_up(startswith(_)).
 add_container_up(rpath(_)).
-container_term(Container, warfile(Container)) :-
+% container term has 2 versions:
+%   if Container = MatchedContainer, returns a term with Container
+%   otherwise return a term with a pair MatchedContainer-Container 
+container_term(Container, Container, warfile(Container)) :-
+    atom_concat(_Prefix, '.war', Container), !.
+container_term(Container, MatchedContainer, warfile(MatchedContainer-Container)) :-
     atom_concat(_Prefix, '.war', Container).
-container_term(Container, jarfile(Container)) :-
+container_term(Container, Container, jarfile(Container)) :-
+    atom_concat(_Prefix, '.jar', Container), !.
+container_term(Container, MatchedContainer, jarfile(MatchedContainer-Container)) :-
     atom_concat(_Prefix, '.jar', Container).
-container_term(Container, earfile(Container)) :-
+container_term(Container, Container, earfile(Container)) :-
+    atom_concat(_Prefix, '.ear', Container), !.
+container_term(Container, MatchedContainer, earfile(MatchedContainer-Container)) :-
     atom_concat(_Prefix, '.ear', Container).
-container_term(Container, zipfile(Container)) :-
+container_term(Container, Container, zipfile(Container)) :-
+    atom_concat(_Prefix, '.zip', Container), !.
+container_term(Container, MatchedContainer, zipfile(MatchedContainer-Container)) :-
     atom_concat(_Prefix, '.zip', Container).
 
 %%% xpath
@@ -698,6 +709,14 @@ transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [af(FilePath) | Scoper0].
+
+% version using paramloc/7, if Scoper0 has no constraint
+% if AppFile was resolved from FileMatch 
+transition(warfile(_AppFile-FileMatch), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, FileMatch, _LocTerm, MatchedFile, ResolvePathList, _ParamProps),
+    append(ResolvePathList, [MatchedFile], FilePathList),
+    atomic_list_concat(FilePathList, '/', FilePath),
+    Scoper1 = [ar(FilePath) | Scoper0].
 
 % version using paramloc/7, if Scoper0 has no constraint
 transition(warfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
