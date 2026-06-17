@@ -1,4 +1,4 @@
-:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, parameter/3, paramloc/5, paramloc/7, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
+:- module(paragraph_conf, [ application_group/3, application/4, directory_alias/2, directory_alias/3, parameter/2, parameter/3, paramloc/5, paramloc/8, app_archive/4, app_file/4, search_option/3, transform_val/3 ]).
 :- use_module(library(janus)).
 :- use_module(library(xpath)).
 :- use_module(library(yaml)).
@@ -140,14 +140,20 @@ parameter(Name, ParamShortName, SourcePvt) :-
     py_call(Param:name, ParamShortName),
     py_call(Param:pvt, SourcePvt).
 
-% application parameters - paramloc/7 
+% application parameters - paramloc/8 
 % connect the parameter's container to the application and resolve the path to the parameter
-paramloc(App, Param, AppFile, LocTerm, MatchedFile, ResolvePathList, ParamProps) :-
+paramloc(App, Param, AppFile, LocTerm, MatchedFile, ResolvePathList, Markers, ParamProps) :-
     paramloc(Param, AppFile, LocTerm, PathList, ParamProps),
-    resolve_path(PathList, ResolvePathList),
-    (match_app_by_container(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList) 
-     ; 
-     match_app_by_path(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList)).
+    resolve_path_and_markers(PathList, ResolvePathList, Markers),
+    (\+ ground(App) ->
+        (
+         match_app_by_container(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList) 
+        ; 
+         match_app_by_path(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList)
+        )
+    ;
+        true    
+    ).
 
 match_app_by_container(App, Container, MatchedContainer, MatchedVersion, ResolvePathList) :-
     (  app_archive(_, App, Container, _) 
@@ -181,8 +187,11 @@ match_app_by_short_name(App, AppShortName) :-
 %% when variables in the path list are elements starting with the $ character, 
 %%  they are replaced by their value using the directory_files system predicate,
 %%  assuming that the first element in PathList is not a variable and is the root of the path resolution
-resolve_path([RootDir|Rest], [RootDir|ResolvePathList]) :-
-    resolve_path(Rest, RootDir, ResolvePathList).
+%% MarkerList is a list of key=value elements: app='ParagraphUI', ver='0.7', etc 
+%%  these markers are collected from the Rest list, if it includes atoms starting with app:, ver:, etc 
+resolve_path_and_markers([RootDir|Rest], [RootDir|ResolvePathList], MarkerList) :-
+    collect_markers(Rest, MarkerList, RestWithoutMarkers),
+    resolve_path(RestWithoutMarkers, RootDir, ResolvePathList).
 
 resolve_path([], _, []).
 

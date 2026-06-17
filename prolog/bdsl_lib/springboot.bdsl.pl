@@ -9,7 +9,7 @@
   
   % root dev dir
   pr('sbRoot') :> p([ '/opt', 'paragraph', 'ParagraphUI' ]),
-  pr('sbTarget') :> p([ '/opt', 'paragraph', 'ParagraphUI', target ]), % problem: nagivate_graph_up yields App = target
+  pr('sbTarget') :> p([ '/opt', 'paragraph', 'app:ParagraphUI', target ]),
   
   % build config
   f('pom.xml') :> pr('sbRoot'),
