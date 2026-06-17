@@ -656,20 +656,32 @@ paramv(Param, Val, Scoper0, Scoper1) :-
     ),
     foldl([A,B-S0,C-S1]>>transition(A,B,C,S0,S1), TdList, app(App)-Scoper0, Val-Scoper1).
 
+%% navigate_graph_up(+ParamOrApp, -App, -LocList)
 navigate_graph_up(app(App), App, []) :- !.
 navigate_graph_up(Param,    App, [LocTerm,MatchedContainerTerm|LocRest]) :-
-    paramloc(App, Param, Container, LocTerm, MatchedContainer, _ContLocTerm, _Markers, _),
+    paramloc(Iapp, Param, Container, LocTerm, MatchedContainer, _ContLocTerm, Markers, _),
     add_container_up(LocTerm),
     container_term(Container, MatchedContainer, MatchedContainerTerm),
+    % markers override the default match_app_by strategy from paragraph_conf
+    resolve_app_from_markers(Iapp, Markers, App),
     navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm,applfile(MatchedContainer)|LocRest]) :-
-    paramloc(App, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, _Markers, _),
+    paramloc(Iapp, Param, _Container, LocTerm, MatchedContainer, _ContLocTerm, Markers, _),
     \+add_container_up(LocTerm),
+    % markers override the default match_app_by strategy from paragraph_conf
+    resolve_app_from_markers(Iapp, Markers, App),
     navigate_graph_up(app(App), App, LocRest).
 navigate_graph_up(Param,    App, [LocTerm|LocRest]) :-
     paramloc(Param, Container, LocTerm, ContLocTerm, _),
     navigate_graph_up(Container, App, [ContLocTerm|ContLocRest]),
     LocRest = [ContLocTerm|ContLocRest].
+
+resolve_app_from_markers(App, Markers, ResolvedApp) :-
+    (memberchk(app=ResolvedApp, Markers) ->
+        true
+        ;
+        ResolvedApp = App
+    ).
 
 add_container_up(endswith(_)).
 add_container_up(startswith(_)).
@@ -711,8 +723,8 @@ transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
     Scoper1 = [af(FilePath) | Scoper0].
 
 % version using paramloc/8, if Scoper0 has no constraint
-% if AppFile was resolved from FileMatch 
-transition(warfile(_AppFile-FileMatch), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+% if MatchedFile was resolved from FileMatch 
+transition(warfile(MatchedFile-FileMatch), app(AppId), file(FilePath), Scoper0, Scoper1) :-
     paramloc(AppId, _Param, FileMatch, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),

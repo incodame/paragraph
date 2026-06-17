@@ -145,9 +145,15 @@ parameter(Name, ParamShortName, SourcePvt) :-
 paramloc(App, Param, AppFile, LocTerm, MatchedFile, ResolvePathList, Markers, ParamProps) :-
     paramloc(Param, AppFile, LocTerm, PathList, ParamProps),
     resolve_path_and_markers(PathList, ResolvePathList, Markers),
-    (match_app_by_container(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList) 
-     ; 
-     match_app_by_path(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList)).
+    (\+ ground(App) ->
+        (
+         match_app_by_container(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList) 
+        ; 
+         match_app_by_path(App, AppFile, MatchedFile, _MatchedVersion, ResolvePathList)
+        )
+    ;
+        true    
+    ).
 
 match_app_by_container(App, Container, MatchedContainer, MatchedVersion, ResolvePathList) :-
     (  app_archive(_, App, Container, _) 
