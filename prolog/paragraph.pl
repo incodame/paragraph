@@ -716,8 +716,17 @@ transition(xpath(XpathAtom), file(FilePath), Val, Scoper0, Scoper1) :-
     Scoper1 = Scoper0.
 
 % version using paramloc/8, if Scoper0 has no constraint
-transition(applfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
+% NB: paramloc: MatchedFile is not ground if AppId is ground
+transition(applfile(MatchedFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, MatchedFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
+    append(ResolvePathList, [MatchedFile], FilePathList),
+    atomic_list_concat(FilePathList, '/', FilePath),
+    Scoper1 = [af(FilePath) | Scoper0].
+
+% version using paramloc/8, if Scoper0 has no constraint
+% if MatchedFile was resolved from FileMatch
+transition(applfile(MatchedFile-FileMatch), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, FileMatch, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [af(FilePath) | Scoper0].
@@ -731,8 +740,9 @@ transition(warfile(MatchedFile-FileMatch), app(AppId), file(FilePath), Scoper0, 
     Scoper1 = [ar(FilePath) | Scoper0].
 
 % version using paramloc/8, if Scoper0 has no constraint
-transition(warfile(AppFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
-    paramloc(AppId, _Param, AppFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
+% NB: paramloc: MatchedFile is not ground if AppId is ground
+transition(warfile(MatchedFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, MatchedFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
     append(ResolvePathList, [MatchedFile], FilePathList),
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [ar(FilePath) | Scoper0].
