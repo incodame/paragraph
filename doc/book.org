@@ -1,4 +1,4 @@
-* Software Configuration Management with Prolog
+* Software Configuration Management with Prolog / Datalog
 ** Subtitle: a cookbook for solving real life scenarios
 ** Introduction - Reflective systems and devops
 
