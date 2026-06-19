@@ -409,6 +409,24 @@ which yields the same result as in the above section, but does not requires a co
 
 [[file:./DatalogRule_insecure_dependencies.png]]
 
+*** explaining "broken contracts" - "explainable AI" logically and graphically
+
+Explanation as to why a contract is not fulfilled is an important function that the Datalog system should support,
+ to assist the decision making process for all involved stakeholders (technical and legal).
+
+Carrying on the previous example where an insecure node dependency has been identified, the user can right click
+on the newly created "isInsecure" fact and obtain a menu which includes the "explain fact" option.
+
+[[file:./Explain_inferred_fact_2.png]]
+
+By selecting individual clauses of the datalog rule step by step, the user gets a completed graph representation where
+ the matching elements can be displayed side by side. 
+
+In the case of the insecure node dependencies, that the packageName and packageVersion found in the application node_dep
+ match those of a compromised node dependency from the reference list. 
+
+[[file:./Explain_inferred_fact_4.png]] 
+
 * Examples of workflows - coordinating complex search tasks
 ** The coworkers module - resumable workflow system
 ** Use of datalog system and agentic AI
