@@ -33,4 +33,13 @@ node:node_dep_ver a :InfoParam ;
     :loc "jsonget('val()')" ;
     :belongsTo node:node_dep .
 
+# manually added nodes
+
+node:compromised_node_dep a node:node_dep ;
+    rdfs:label "compromised_node_dep (instance of node_dep)" ;
+    :doc "compromised node project dependency" .
+
+node:application_node_dep a node:node_dep ;
+    rdfs:label "application_node_dep (instance of node_dep)" ;
+    :doc "actual application dependency" .
 }

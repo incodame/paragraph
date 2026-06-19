@@ -34,3 +34,23 @@
 :doc a owl:DatatypeProperty ;
     rdfs:label "doc" ;
     rdfs:comment "Chaîne de documentation décrivant le paramètre." .
+
+:val a owl:DatatypeProperty ;
+    rdfs:label "val" ;
+    rdfs:comment "Valeur d'une instance de paramètre individuel" .   
+
+:appName a owl:DatatypeProperty ;
+    rdfs:label "appName" ;
+    rdfs:comment "Nom d'application pour une instance de paramètre individuel" . 
+
+:packageName a owl:DatatypeProperty ;
+    rdfs:label "packageName" ;
+    rdfs:comment "Nom d'une dépendance node" .   
+
+:packageVersion a owl:DatatypeProperty ;
+    rdfs:label "packageVersion" ;
+    rdfs:comment "Version d'une dépendance node" .      
+
+:isInsecure a owl:ObjectProperty ;
+    rdfs:label "isInsecure" ;
+    rdfs:comment "Marqueur pour une dépendance node compromise" .      

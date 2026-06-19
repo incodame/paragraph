@@ -290,20 +290,124 @@ A similar solution is implemented by paragraph, using the paramv evaluation:
 The above query will return a list of node dependencies that are matched but differ by their version.
 The pattern is to match tree nodes using a structured parameter, and calculate diff on the individual parameter.
 
-* Verification of software "contracts"
+* Automatic verification of software "contracts"
+
 ** Role of ontologies
 Ontologies defined using the OWL2 standard allow to reason using a more natural framework than just plain prolog:
     - generalization is made possible through the use of axioms
 Confer the resources in the pgraphlog sub-project.
 
 ** Defining contracts in a datalog system
-Contracts defined as datalog rules can infer additional facts as to whether a captured para_graph together with some 
-calculated paramvs fullfill some expectations, for example:
+
+Datalog rules can infer additional facts as to whether a captured para_graph together with some 
+calculated paramvs fullfill some expectations ("contracts"), for example:
     - all project maven dependencies need to be compatible with JDK 21
     - all project node dependencies must be verified against known compromised packages 
     - all project B's artifacts (e.g. jar files) must support API v2.1 from project A's API
 
 ** Example of application: insecure software dependencies for node applications
+
+nodejs applications are managing their dependencies through the package.json file and keep track of the transitive dependencies
+via the package-lock.json. Slight changes in the package.json generate big changes in the dependency tree in package-lock.json,
+and it's fairly easy to loose oversight on these dependencies and inherit a whole set of new third-party artifacts.
+
+With the advent of supply chain attacks and compromised node packages, several solutions can be choosen:
+#+begin_src text 
+    A - scan only the company's package repository and rely on it to ensure no compromised packages are present there 
+    B - scan the already packaged applications themselves with some specialized security solution
+    C - react on any package-lock change in a CI (continuous integration) pipeline and enforce an evaluation of how secure it is
+#+end_src 
+
+Most scanning solutions are done at certain intervals to ensure security compliance. If the reference list of compromised 
+node packages gets updated, a full rescan of existing applications is required. So solution C is an appealing solution in that
+it prevents to package an application with a compromised dependency. However if an already merged node dependency is identified
+a-posteriori to be a compromised dependency, chances are that the CI pipeline will use the dependency for example when running
+end to end tests. To avoid rescanning of packaged applications or rechecks of recent package-lock changes, a Datalog system can
+be used to record the actual application dependencies and use inference rules to automatically flag such dependencies as insecure,
+upon reference list changes.
+ 
+This is covered in detail in the following sections, using the RDFox graph/datalog functions.
+
+*** data modeling using BDsl and reference data into a knowledge graph db
+
+The following graph represents 2 sub-graphs connected via the "node_dep" StructParam:
+
+[[file:./Graph_insecure_node_dependencies.png]]
+
+#+begin_src text 
+    - nodes connected to the "compromised_node_dep" represent the reference list obtained from a csv file (safedep.io)
+    - nodes connected to the "application_node_dep" represent the paramv values of "node_dep" for a given application
+    - other nodes stem from the nodeproj BDsl converted to RDF (nodeproj_bdsl.ttl) 
+#+end_src 
+
+Confer resources available in the "pgraphlog" directory.
+
+*** performing queries
+
+The following section gives simple examples of SPARQL queries. 
+
+Searching for application dependencies:
+
+#+begin_src text 
+SELECT ?app ?name ?ver WHERE {
+  GRAPH :para_graph {
+    ?app a node:application_node_dep ;
+     :packageName ?name ;
+     :packageVersion ?ver .
+  }
+}
+#+end_src 
+
+Joining application dependencies with matching compromised node packages:
+
+#+begin_src text 
+SELECT ?app ?comp ?name ?ver WHERE {
+  GRAPH :para_graph {
+    ?app a node:application_node_dep ;
+     :packageName ?name ;
+     :packageVersion ?ver .  
+    ?comp a node:compromised_node_dep ;
+     :packageName ?name ;
+     :packageVersion ?ver .
+  }
+}
+#+end_src 
+
+As simulation the rxjs dependency has been added as record "0" in the compromised-node-deps.ttl:
+
+[[file:./Searching_insecure_dependencies.png]]
+
+*** automatically checking "contracts" fullfilment with the help of datalog rules
+
+Automated inference of new facts such as "this dependency is insecure" can be implemented through such a 
+datalog rule (the syntax is using the named graph :para_graph):
+
+#+begin_src text
+[?appdep, :isInsecure, true] :para_graph :-
+    [?appdep, a, node:application_node_dep] :para_graph,
+    [?appdep, :packageName, ?name] :para_graph,
+    [?appdep, :packageVersion, ?ver] :para_graph,
+    [?compdep, a, node:compromised_node_dep] :para_graph,
+    [?compdep, :packageName, ?name] :para_graph,
+    [?compdep, :packageVersion, ?ver] :para_graph. 
+#+end_src
+
+and queried very easily using:
+
+#+begin_src text
+SELECT ?app ?name ?ver WHERE {
+  GRAPH :para_graph {
+    ?app a node:application_node_dep ;
+     :packageName ?name ;
+     :packageVersion ?ver ;
+     :isInsecure true .
+  }
+}
+#+end_src
+
+which yields the same result as in the above section, but does not requires a complex graph traversal:
+
+[[file:./DatalogRule_insecure_dependencies.png]]
 
 * Examples of workflows - coordinating complex search tasks
 ** The coworkers module - resumable workflow system

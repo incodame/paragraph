@@ -1,1 +1,7 @@
-%% define paragraph rules here
+[?appdep, :isInsecure, true] :para_graph :-
+    [?appdep, a, node:application_node_dep] :para_graph,
+    [?appdep, :packageName, ?name] :para_graph,
+    [?appdep, :packageVersion, ?ver] :para_graph,
+    [?compdep, a, node:compromised_node_dep] :para_graph,
+    [?compdep, :packageName, ?name] :para_graph,
+    [?compdep, :packageVersion, ?ver] :para_graph. 
