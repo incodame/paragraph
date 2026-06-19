@@ -305,6 +305,23 @@ calculated paramvs fullfill some expectations, for example:
 
 ** Example of application: insecure software dependencies for node applications
 
+SELECT ?app ?name ?ver WHERE {
+  GRAPH :para_graph {
+    ?app a node:application_node_dep ;
+     :packageName ?name ;
+     :packageVersion ?ver .
+  }
+}
+
+SELECT ?app ?name ?ver WHERE {
+  GRAPH :para_graph {
+    ?app a node:application_node_dep ;
+     :packageName ?name ;
+     :packageVersion ?ver ;
+     :isInsecure true .
+  }
+}
+
 * Examples of workflows - coordinating complex search tasks
 ** The coworkers module - resumable workflow system
 ** Use of datalog system and agentic AI

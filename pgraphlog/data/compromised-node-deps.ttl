@@ -1,0 +1,3199 @@
+@prefix : <https://github.com/Incodam/paragraph#> .
+@prefix node: <https://github.com/Incodam/paragraph/nodeproj#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+GRAPH :para_graph {
+  # simulated "insecure"  
+  _:compromised_node_dep_0 a node:compromised_node_dep ;
+      rdfs:label "rxjs ~7.8.0" ;
+      :packageName "rxjs" ;
+      :packageVersion "~7.8.0"  .
+
+  _:compromised_node_dep_1 a node:compromised_node_dep ;
+      rdfs:label "ai-figure 0.5.0" ;
+      :packageName "ai-figure" ;
+      :packageVersion "0.5.0"  .
+
+  _:compromised_node_dep_2 a node:compromised_node_dep ;
+      rdfs:label "ai-figure 0.6.0" ;
+      :packageName "ai-figure" ;
+      :packageVersion "0.6.0"  .
+
+  _:compromised_node_dep_3 a node:compromised_node_dep ;
+      rdfs:label "amapcn 0.2.2" ;
+      :packageName "amapcn" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_4 a node:compromised_node_dep ;
+      rdfs:label "amapcn 0.3.2" ;
+      :packageName "amapcn" ;
+      :packageVersion "0.3.2"  .
+
+  _:compromised_node_dep_5 a node:compromised_node_dep ;
+      rdfs:label "@antv/a8 0.1.1" ;
+      :packageName "@antv/a8" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_6 a node:compromised_node_dep ;
+      rdfs:label "@antv/a8 0.2.1" ;
+      :packageName "@antv/a8" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_7 a node:compromised_node_dep ;
+      rdfs:label "@antv/adjust 0.3.5" ;
+      :packageName "@antv/adjust" ;
+      :packageVersion "0.3.5"  .
+
+  _:compromised_node_dep_8 a node:compromised_node_dep ;
+      rdfs:label "@antv/adjust 0.4.5" ;
+      :packageName "@antv/adjust" ;
+      :packageVersion "0.4.5"  .
+
+  _:compromised_node_dep_9 a node:compromised_node_dep ;
+      rdfs:label "@antv/algorithm 0.2.26" ;
+      :packageName "@antv/algorithm" ;
+      :packageVersion "0.2.26"  .
+
+  _:compromised_node_dep_10 a node:compromised_node_dep ;
+      rdfs:label "@antv/algorithm 0.3.26" ;
+      :packageName "@antv/algorithm" ;
+      :packageVersion "0.3.26"  .
+
+  _:compromised_node_dep_11 a node:compromised_node_dep ;
+      rdfs:label "@antv/async-hook 2.3.9" ;
+      :packageName "@antv/async-hook" ;
+      :packageVersion "2.3.9"  .
+
+  _:compromised_node_dep_12 a node:compromised_node_dep ;
+      rdfs:label "@antv/async-hook 2.4.9" ;
+      :packageName "@antv/async-hook" ;
+      :packageVersion "2.4.9"  .
+
+  _:compromised_node_dep_13 a node:compromised_node_dep ;
+      rdfs:label "@antv/attr 0.4.5" ;
+      :packageName "@antv/attr" ;
+      :packageVersion "0.4.5"  .
+
+  _:compromised_node_dep_14 a node:compromised_node_dep ;
+      rdfs:label "@antv/attr 0.5.5" ;
+      :packageName "@antv/attr" ;
+      :packageVersion "0.5.5"  .
+
+  _:compromised_node_dep_15 a node:compromised_node_dep ;
+      rdfs:label "@antv/ava 3.5.1" ;
+      :packageName "@antv/ava" ;
+      :packageVersion "3.5.1"  .
+
+  _:compromised_node_dep_16 a node:compromised_node_dep ;
+      rdfs:label "@antv/ava 3.6.1" ;
+      :packageName "@antv/ava" ;
+      :packageVersion "3.6.1"  .
+
+  _:compromised_node_dep_17 a node:compromised_node_dep ;
+      rdfs:label "@antv/ava-react 3.4.2" ;
+      :packageName "@antv/ava-react" ;
+      :packageVersion "3.4.2"  .
+
+  _:compromised_node_dep_18 a node:compromised_node_dep ;
+      rdfs:label "@antv/ava-react 3.5.2" ;
+      :packageName "@antv/ava-react" ;
+      :packageVersion "3.5.2"  .
+
+  _:compromised_node_dep_19 a node:compromised_node_dep ;
+      rdfs:label "@antv/awards 0.1.9" ;
+      :packageName "@antv/awards" ;
+      :packageVersion "0.1.9"  .
+
+  _:compromised_node_dep_20 a node:compromised_node_dep ;
+      rdfs:label "@antv/awards 0.2.9" ;
+      :packageName "@antv/awards" ;
+      :packageVersion "0.2.9"  .
+
+  _:compromised_node_dep_21 a node:compromised_node_dep ;
+      rdfs:label "@antv/calendar-heatmap 1.2.2" ;
+      :packageName "@antv/calendar-heatmap" ;
+      :packageVersion "1.2.2"  .
+
+  _:compromised_node_dep_22 a node:compromised_node_dep ;
+      rdfs:label "@antv/calendar-heatmap 1.3.2" ;
+      :packageName "@antv/calendar-heatmap" ;
+      :packageVersion "1.3.2"  .
+
+  _:compromised_node_dep_23 a node:compromised_node_dep ;
+      rdfs:label "@antv/chart-linter 1.2.6" ;
+      :packageName "@antv/chart-linter" ;
+      :packageVersion "1.2.6"  .
+
+  _:compromised_node_dep_24 a node:compromised_node_dep ;
+      rdfs:label "@antv/chart-linter 1.3.6" ;
+      :packageName "@antv/chart-linter" ;
+      :packageVersion "1.3.6"  .
+
+  _:compromised_node_dep_25 a node:compromised_node_dep ;
+      rdfs:label "@antv/chart-node-g6 0.1.4" ;
+      :packageName "@antv/chart-node-g6" ;
+      :packageVersion "0.1.4"  .
+
+  _:compromised_node_dep_26 a node:compromised_node_dep ;
+      rdfs:label "@antv/chart-node-g6 0.2.4" ;
+      :packageName "@antv/chart-node-g6" ;
+      :packageVersion "0.2.4"  .
+
+  _:compromised_node_dep_27 a node:compromised_node_dep ;
+      rdfs:label "@antv/chart-visualization-skills 0.2.3" ;
+      :packageName "@antv/chart-visualization-skills" ;
+      :packageVersion "0.2.3"  .
+
+  _:compromised_node_dep_28 a node:compromised_node_dep ;
+      rdfs:label "@antv/chart-visualization-skills 0.3.3" ;
+      :packageName "@antv/chart-visualization-skills" ;
+      :packageVersion "0.3.3"  .
+
+  _:compromised_node_dep_29 a node:compromised_node_dep ;
+      rdfs:label "@antv/ckb 2.1.4" ;
+      :packageName "@antv/ckb" ;
+      :packageVersion "2.1.4"  .
+
+  _:compromised_node_dep_30 a node:compromised_node_dep ;
+      rdfs:label "@antv/ckb 2.2.4" ;
+      :packageName "@antv/ckb" ;
+      :packageVersion "2.2.4"  .
+
+  _:compromised_node_dep_31 a node:compromised_node_dep ;
+      rdfs:label "@antv/color-schema 0.3.3" ;
+      :packageName "@antv/color-schema" ;
+      :packageVersion "0.3.3"  .
+
+  _:compromised_node_dep_32 a node:compromised_node_dep ;
+      rdfs:label "@antv/color-schema 0.4.3" ;
+      :packageName "@antv/color-schema" ;
+      :packageVersion "0.4.3"  .
+
+  _:compromised_node_dep_33 a node:compromised_node_dep ;
+      rdfs:label "@antv/color-util 2.1.6" ;
+      :packageName "@antv/color-util" ;
+      :packageVersion "2.1.6"  .
+
+  _:compromised_node_dep_34 a node:compromised_node_dep ;
+      rdfs:label "@antv/color-util 2.2.6" ;
+      :packageName "@antv/color-util" ;
+      :packageVersion "2.2.6"  .
+
+  _:compromised_node_dep_35 a node:compromised_node_dep ;
+      rdfs:label "@antv/component 2.2.11" ;
+      :packageName "@antv/component" ;
+      :packageVersion "2.2.11"  .
+
+  _:compromised_node_dep_36 a node:compromised_node_dep ;
+      rdfs:label "@antv/component 2.3.11" ;
+      :packageName "@antv/component" ;
+      :packageVersion "2.3.11"  .
+
+  _:compromised_node_dep_37 a node:compromised_node_dep ;
+      rdfs:label "@antv/coord 0.5.7" ;
+      :packageName "@antv/coord" ;
+      :packageVersion "0.5.7"  .
+
+  _:compromised_node_dep_38 a node:compromised_node_dep ;
+      rdfs:label "@antv/coord 0.6.7" ;
+      :packageName "@antv/coord" ;
+      :packageVersion "0.6.7"  .
+
+  _:compromised_node_dep_39 a node:compromised_node_dep ;
+      rdfs:label "@antv/d3-color 1.1.0" ;
+      :packageName "@antv/d3-color" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_40 a node:compromised_node_dep ;
+      rdfs:label "@antv/d3-color 1.2.0" ;
+      :packageName "@antv/d3-color" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_41 a node:compromised_node_dep ;
+      rdfs:label "@antv/d3-interpolate 1.1.3" ;
+      :packageName "@antv/d3-interpolate" ;
+      :packageVersion "1.1.3"  .
+
+  _:compromised_node_dep_42 a node:compromised_node_dep ;
+      rdfs:label "@antv/d3-interpolate 1.2.3" ;
+      :packageName "@antv/d3-interpolate" ;
+      :packageVersion "1.2.3"  .
+
+  _:compromised_node_dep_43 a node:compromised_node_dep ;
+      rdfs:label "@antv/data-samples 1.1.1" ;
+      :packageName "@antv/data-samples" ;
+      :packageVersion "1.1.1"  .
+
+  _:compromised_node_dep_44 a node:compromised_node_dep ;
+      rdfs:label "@antv/data-samples 1.2.1" ;
+      :packageName "@antv/data-samples" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_45 a node:compromised_node_dep ;
+      rdfs:label "@antv/data-set 0.12.8" ;
+      :packageName "@antv/data-set" ;
+      :packageVersion "0.12.8"  .
+
+  _:compromised_node_dep_46 a node:compromised_node_dep ;
+      rdfs:label "@antv/data-set 0.13.8" ;
+      :packageName "@antv/data-set" ;
+      :packageVersion "0.13.8"  .
+
+  _:compromised_node_dep_47 a node:compromised_node_dep ;
+      rdfs:label "@antv/data-wizard 2.1.4" ;
+      :packageName "@antv/data-wizard" ;
+      :packageVersion "2.1.4"  .
+
+  _:compromised_node_dep_48 a node:compromised_node_dep ;
+      rdfs:label "@antv/data-wizard 2.2.4" ;
+      :packageName "@antv/data-wizard" ;
+      :packageVersion "2.2.4"  .
+
+  _:compromised_node_dep_49 a node:compromised_node_dep ;
+      rdfs:label "@antv/dipper-component 0.1.4" ;
+      :packageName "@antv/dipper-component" ;
+      :packageVersion "0.1.4"  .
+
+  _:compromised_node_dep_50 a node:compromised_node_dep ;
+      rdfs:label "@antv/dipper-component 0.2.4" ;
+      :packageName "@antv/dipper-component" ;
+      :packageVersion "0.2.4"  .
+
+  _:compromised_node_dep_51 a node:compromised_node_dep ;
+      rdfs:label "@antv/dipper-hooks 0.3.1" ;
+      :packageName "@antv/dipper-hooks" ;
+      :packageVersion "0.3.1"  .
+
+  _:compromised_node_dep_52 a node:compromised_node_dep ;
+      rdfs:label "@antv/dipper-hooks 0.4.1" ;
+      :packageName "@antv/dipper-hooks" ;
+      :packageVersion "0.4.1"  .
+
+  _:compromised_node_dep_53 a node:compromised_node_dep ;
+      rdfs:label "@antv/dipper-map 1.1.10" ;
+      :packageName "@antv/dipper-map" ;
+      :packageVersion "1.1.10"  .
+
+  _:compromised_node_dep_54 a node:compromised_node_dep ;
+      rdfs:label "@antv/dipper-map 1.2.10" ;
+      :packageName "@antv/dipper-map" ;
+      :packageVersion "1.2.10"  .
+
+  _:compromised_node_dep_55 a node:compromised_node_dep ;
+      rdfs:label "@antv/dom-util 2.1.4" ;
+      :packageName "@antv/dom-util" ;
+      :packageVersion "2.1.4"  .
+
+  _:compromised_node_dep_56 a node:compromised_node_dep ;
+      rdfs:label "@antv/dom-util 2.2.4" ;
+      :packageName "@antv/dom-util" ;
+      :packageVersion "2.2.4"  .
+
+  _:compromised_node_dep_57 a node:compromised_node_dep ;
+      rdfs:label "@antv/dumi-theme-antv 0.10.4" ;
+      :packageName "@antv/dumi-theme-antv" ;
+      :packageVersion "0.10.4"  .
+
+  _:compromised_node_dep_58 a node:compromised_node_dep ;
+      rdfs:label "@antv/dumi-theme-antv 0.9.4" ;
+      :packageName "@antv/dumi-theme-antv" ;
+      :packageVersion "0.9.4"  .
+
+  _:compromised_node_dep_59 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-analyzer 1.2.5" ;
+      :packageName "@antv/dw-analyzer" ;
+      :packageVersion "1.2.5"  .
+
+  _:compromised_node_dep_60 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-analyzer 1.3.5" ;
+      :packageName "@antv/dw-analyzer" ;
+      :packageVersion "1.3.5"  .
+
+  _:compromised_node_dep_61 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-random 1.2.7" ;
+      :packageName "@antv/dw-random" ;
+      :packageVersion "1.2.7"  .
+
+  _:compromised_node_dep_62 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-random 1.3.7" ;
+      :packageName "@antv/dw-random" ;
+      :packageVersion "1.3.7"  .
+
+  _:compromised_node_dep_63 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-transform 1.2.7" ;
+      :packageName "@antv/dw-transform" ;
+      :packageVersion "1.2.7"  .
+
+  _:compromised_node_dep_64 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-transform 1.3.7" ;
+      :packageName "@antv/dw-transform" ;
+      :packageVersion "1.3.7"  .
+
+  _:compromised_node_dep_65 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-util 1.2.4" ;
+      :packageName "@antv/dw-util" ;
+      :packageVersion "1.2.4"  .
+
+  _:compromised_node_dep_66 a node:compromised_node_dep ;
+      rdfs:label "@antv/dw-util 1.3.4" ;
+      :packageName "@antv/dw-util" ;
+      :packageVersion "1.3.4"  .
+
+  _:compromised_node_dep_67 a node:compromised_node_dep ;
+      rdfs:label "@antv/event-emitter 0.2.3" ;
+      :packageName "@antv/event-emitter" ;
+      :packageVersion "0.2.3"  .
+
+  _:compromised_node_dep_68 a node:compromised_node_dep ;
+      rdfs:label "@antv/event-emitter 0.3.3" ;
+      :packageName "@antv/event-emitter" ;
+      :packageVersion "0.3.3"  .
+
+  _:compromised_node_dep_69 a node:compromised_node_dep ;
+      rdfs:label "@antv/expr 1.1.2" ;
+      :packageName "@antv/expr" ;
+      :packageVersion "1.1.2"  .
+
+  _:compromised_node_dep_70 a node:compromised_node_dep ;
+      rdfs:label "@antv/expr 1.2.2" ;
+      :packageName "@antv/expr" ;
+      :packageVersion "1.2.2"  .
+
+  _:compromised_node_dep_71 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2 5.15.0" ;
+      :packageName "@antv/f2" ;
+      :packageVersion "5.15.0"  .
+
+  _:compromised_node_dep_72 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2 5.16.0" ;
+      :packageName "@antv/f2" ;
+      :packageVersion "5.16.0"  .
+
+  _:compromised_node_dep_73 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-algorithm 5.8.0" ;
+      :packageName "@antv/f2-algorithm" ;
+      :packageVersion "5.8.0"  .
+
+  _:compromised_node_dep_74 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-algorithm 5.9.0" ;
+      :packageName "@antv/f2-algorithm" ;
+      :packageVersion "5.9.0"  .
+
+  _:compromised_node_dep_75 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-canvas 1.1.5" ;
+      :packageName "@antv/f2-canvas" ;
+      :packageVersion "1.1.5"  .
+
+  _:compromised_node_dep_76 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-canvas 1.2.5" ;
+      :packageName "@antv/f2-canvas" ;
+      :packageVersion "1.2.5"  .
+
+  _:compromised_node_dep_77 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-context 0.1.1" ;
+      :packageName "@antv/f2-context" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_78 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-context 0.2.1" ;
+      :packageName "@antv/f2-context" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_79 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-graphic 0.1.16" ;
+      :packageName "@antv/f2-graphic" ;
+      :packageVersion "0.1.16"  .
+
+  _:compromised_node_dep_80 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-graphic 0.2.16" ;
+      :packageName "@antv/f2-graphic" ;
+      :packageVersion "0.2.16"  .
+
+  _:compromised_node_dep_81 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-my 4.1.52" ;
+      :packageName "@antv/f2-my" ;
+      :packageVersion "4.1.52"  .
+
+  _:compromised_node_dep_82 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-my 4.2.52" ;
+      :packageName "@antv/f2-my" ;
+      :packageVersion "4.2.52"  .
+
+  _:compromised_node_dep_83 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-react 5.15.0" ;
+      :packageName "@antv/f2-react" ;
+      :packageVersion "5.15.0"  .
+
+  _:compromised_node_dep_84 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-react 5.16.0" ;
+      :packageName "@antv/f2-react" ;
+      :packageVersion "5.16.0"  .
+
+  _:compromised_node_dep_85 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-site 4.1.42" ;
+      :packageName "@antv/f2-site" ;
+      :packageVersion "4.1.42"  .
+
+  _:compromised_node_dep_86 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-site 4.2.42" ;
+      :packageName "@antv/f2-site" ;
+      :packageVersion "4.2.42"  .
+
+  _:compromised_node_dep_87 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-vue 4.1.33" ;
+      :packageName "@antv/f2-vue" ;
+      :packageVersion "4.1.33"  .
+
+  _:compromised_node_dep_88 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-vue 4.2.33" ;
+      :packageName "@antv/f2-vue" ;
+      :packageVersion "4.2.33"  .
+
+  _:compromised_node_dep_89 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-wordcloud 5.15.0" ;
+      :packageName "@antv/f2-wordcloud" ;
+      :packageVersion "5.15.0"  .
+
+  _:compromised_node_dep_90 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-wordcloud 5.16.0" ;
+      :packageName "@antv/f2-wordcloud" ;
+      :packageVersion "5.16.0"  .
+
+  _:compromised_node_dep_91 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-wx 4.1.51" ;
+      :packageName "@antv/f2-wx" ;
+      :packageVersion "4.1.51"  .
+
+  _:compromised_node_dep_92 a node:compromised_node_dep ;
+      rdfs:label "@antv/f2-wx 4.2.51" ;
+      :packageName "@antv/f2-wx" ;
+      :packageVersion "4.2.51"  .
+
+  _:compromised_node_dep_93 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6 0.1.19" ;
+      :packageName "@antv/f6" ;
+      :packageVersion "0.1.19"  .
+
+  _:compromised_node_dep_94 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6 0.2.19" ;
+      :packageName "@antv/f6" ;
+      :packageVersion "0.2.19"  .
+
+  _:compromised_node_dep_95 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-alipay 0.1.7" ;
+      :packageName "@antv/f6-alipay" ;
+      :packageVersion "0.1.7"  .
+
+  _:compromised_node_dep_96 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-alipay 0.2.7" ;
+      :packageName "@antv/f6-alipay" ;
+      :packageVersion "0.2.7"  .
+
+  _:compromised_node_dep_97 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-core 0.1.2" ;
+      :packageName "@antv/f6-core" ;
+      :packageVersion "0.1.2"  .
+
+  _:compromised_node_dep_98 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-core 0.2.2" ;
+      :packageName "@antv/f6-core" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_99 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-element 0.1.1" ;
+      :packageName "@antv/f6-element" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_100 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-element 0.2.1" ;
+      :packageName "@antv/f6-element" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_101 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-hammerjs 0.1.2" ;
+      :packageName "@antv/f6-hammerjs" ;
+      :packageVersion "0.1.2"  .
+
+  _:compromised_node_dep_102 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-hammerjs 0.2.2" ;
+      :packageName "@antv/f6-hammerjs" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_103 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-plugin 1.1.6" ;
+      :packageName "@antv/f6-plugin" ;
+      :packageVersion "1.1.6"  .
+
+  _:compromised_node_dep_104 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-plugin 1.2.6" ;
+      :packageName "@antv/f6-plugin" ;
+      :packageVersion "1.2.6"  .
+
+  _:compromised_node_dep_105 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-ui 1.1.3" ;
+      :packageName "@antv/f6-ui" ;
+      :packageVersion "1.1.3"  .
+
+  _:compromised_node_dep_106 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-ui 1.2.3" ;
+      :packageName "@antv/f6-ui" ;
+      :packageVersion "1.2.3"  .
+
+  _:compromised_node_dep_107 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-wx 0.1.7" ;
+      :packageName "@antv/f6-wx" ;
+      :packageVersion "0.1.7"  .
+
+  _:compromised_node_dep_108 a node:compromised_node_dep ;
+      rdfs:label "@antv/f6-wx 0.2.7" ;
+      :packageName "@antv/f6-wx" ;
+      :packageVersion "0.2.7"  .
+
+  _:compromised_node_dep_109 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-charts 0.1.0" ;
+      :packageName "@antv/f-charts" ;
+      :packageVersion "0.1.0"  .
+
+  _:compromised_node_dep_110 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-charts 0.2.0" ;
+      :packageName "@antv/f-charts" ;
+      :packageVersion "0.2.0"  .
+
+  _:compromised_node_dep_111 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-engine 1.11.0" ;
+      :packageName "@antv/f-engine" ;
+      :packageVersion "1.11.0"  .
+
+  _:compromised_node_dep_112 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-engine 1.12.0" ;
+      :packageName "@antv/f-engine" ;
+      :packageVersion "1.12.0"  .
+
+  _:compromised_node_dep_113 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-lottie 1.11.0" ;
+      :packageName "@antv/f-lottie" ;
+      :packageVersion "1.11.0"  .
+
+  _:compromised_node_dep_114 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-lottie 1.12.0" ;
+      :packageName "@antv/f-lottie" ;
+      :packageVersion "1.12.0"  .
+
+  _:compromised_node_dep_115 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-my 1.11.0" ;
+      :packageName "@antv/f-my" ;
+      :packageVersion "1.11.0"  .
+
+  _:compromised_node_dep_116 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-my 1.12.0" ;
+      :packageName "@antv/f-my" ;
+      :packageVersion "1.12.0"  .
+
+  _:compromised_node_dep_117 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-react 1.11.0" ;
+      :packageName "@antv/f-react" ;
+      :packageVersion "1.11.0"  .
+
+  _:compromised_node_dep_118 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-react 1.12.0" ;
+      :packageName "@antv/f-react" ;
+      :packageVersion "1.12.0"  .
+
+  _:compromised_node_dep_119 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-test-utils 1.1.9" ;
+      :packageName "@antv/f-test-utils" ;
+      :packageVersion "1.1.9"  .
+
+  _:compromised_node_dep_120 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-test-utils 1.2.9" ;
+      :packageName "@antv/f-test-utils" ;
+      :packageVersion "1.2.9"  .
+
+  _:compromised_node_dep_121 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-vue 1.11.0" ;
+      :packageName "@antv/f-vue" ;
+      :packageVersion "1.11.0"  .
+
+  _:compromised_node_dep_122 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-vue 1.12.0" ;
+      :packageName "@antv/f-vue" ;
+      :packageVersion "1.12.0"  .
+
+  _:compromised_node_dep_123 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-wx 1.11.0" ;
+      :packageName "@antv/f-wx" ;
+      :packageVersion "1.11.0"  .
+
+  _:compromised_node_dep_124 a node:compromised_node_dep ;
+      rdfs:label "@antv/f-wx 1.12.0" ;
+      :packageName "@antv/f-wx" ;
+      :packageVersion "1.12.0"  .
+
+  _:compromised_node_dep_125 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2 5.5.8" ;
+      :packageName "@antv/g2" ;
+      :packageVersion "5.5.8"  .
+
+  _:compromised_node_dep_126 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2 5.6.8" ;
+      :packageName "@antv/g2" ;
+      :packageVersion "5.6.8"  .
+
+  _:compromised_node_dep_127 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-brush 0.1.2" ;
+      :packageName "@antv/g2-brush" ;
+      :packageVersion "0.1.2"  .
+
+  _:compromised_node_dep_128 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-brush 0.2.2" ;
+      :packageName "@antv/g2-brush" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_129 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-extension-3d 0.3.0" ;
+      :packageName "@antv/g2-extension-3d" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_130 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-extension-3d 0.4.0" ;
+      :packageName "@antv/g2-extension-3d" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_131 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-extension-ava 0.3.0" ;
+      :packageName "@antv/g2-extension-ava" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_132 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-extension-ava 0.4.0" ;
+      :packageName "@antv/g2-extension-ava" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_133 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-extension-plot 0.3.2" ;
+      :packageName "@antv/g2-extension-plot" ;
+      :packageVersion "0.3.2"  .
+
+  _:compromised_node_dep_134 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-extension-plot 0.4.2" ;
+      :packageName "@antv/g2-extension-plot" ;
+      :packageVersion "0.4.2"  .
+
+  _:compromised_node_dep_135 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2plot 2.5.35" ;
+      :packageName "@antv/g2plot" ;
+      :packageVersion "2.5.35"  .
+
+  _:compromised_node_dep_136 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2plot 2.6.35" ;
+      :packageName "@antv/g2plot" ;
+      :packageVersion "2.6.35"  .
+
+  _:compromised_node_dep_137 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2plot-schemas 1.3.2" ;
+      :packageName "@antv/g2plot-schemas" ;
+      :packageVersion "1.3.2"  .
+
+  _:compromised_node_dep_138 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2plot-schemas 1.4.2" ;
+      :packageName "@antv/g2plot-schemas" ;
+      :packageVersion "1.4.2"  .
+
+  _:compromised_node_dep_139 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-plugin-slider 2.2.1" ;
+      :packageName "@antv/g2-plugin-slider" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_140 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-plugin-slider 2.3.1" ;
+      :packageName "@antv/g2-plugin-slider" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_141 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-ssr 0.3.0" ;
+      :packageName "@antv/g2-ssr" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_142 a node:compromised_node_dep ;
+      rdfs:label "@antv/g2-ssr 0.4.0" ;
+      :packageName "@antv/g2-ssr" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_143 a node:compromised_node_dep ;
+      rdfs:label "@antv/g 6.4.1" ;
+      :packageName "@antv/g" ;
+      :packageVersion "6.4.1"  .
+
+  _:compromised_node_dep_144 a node:compromised_node_dep ;
+      rdfs:label "@antv/g 6.5.1" ;
+      :packageName "@antv/g" ;
+      :packageVersion "6.5.1"  .
+
+  _:compromised_node_dep_145 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6 5.2.1" ;
+      :packageName "@antv/g6" ;
+      :packageVersion "5.2.1"  .
+
+  _:compromised_node_dep_146 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6 5.3.1" ;
+      :packageName "@antv/g6" ;
+      :packageVersion "5.3.1"  .
+
+  _:compromised_node_dep_147 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-alipay 0.1.1" ;
+      :packageName "@antv/g6-alipay" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_148 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-alipay 0.2.1" ;
+      :packageName "@antv/g6-alipay" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_149 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-cli 0.1.4" ;
+      :packageName "@antv/g6-cli" ;
+      :packageVersion "0.1.4"  .
+
+  _:compromised_node_dep_150 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-cli 0.2.4" ;
+      :packageName "@antv/g6-cli" ;
+      :packageVersion "0.2.4"  .
+
+  _:compromised_node_dep_151 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-core 0.10.24" ;
+      :packageName "@antv/g6-core" ;
+      :packageVersion "0.10.24"  .
+
+  _:compromised_node_dep_152 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-core 0.9.24" ;
+      :packageName "@antv/g6-core" ;
+      :packageVersion "0.9.24"  .
+
+  _:compromised_node_dep_153 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-editor 1.3.0" ;
+      :packageName "@antv/g6-editor" ;
+      :packageVersion "1.3.0"  .
+
+  _:compromised_node_dep_154 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-editor 1.4.0" ;
+      :packageName "@antv/g6-editor" ;
+      :packageVersion "1.4.0"  .
+
+  _:compromised_node_dep_155 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-element 0.10.25" ;
+      :packageName "@antv/g6-element" ;
+      :packageVersion "0.10.25"  .
+
+  _:compromised_node_dep_156 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-element 0.9.25" ;
+      :packageName "@antv/g6-element" ;
+      :packageVersion "0.9.25"  .
+
+  _:compromised_node_dep_157 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-extension-3d 0.2.23" ;
+      :packageName "@antv/g6-extension-3d" ;
+      :packageVersion "0.2.23"  .
+
+  _:compromised_node_dep_158 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-extension-3d 0.3.23" ;
+      :packageName "@antv/g6-extension-3d" ;
+      :packageVersion "0.3.23"  .
+
+  _:compromised_node_dep_159 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-extension-react 0.3.7" ;
+      :packageName "@antv/g6-extension-react" ;
+      :packageVersion "0.3.7"  .
+
+  _:compromised_node_dep_160 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-extension-react 0.4.7" ;
+      :packageName "@antv/g6-extension-react" ;
+      :packageVersion "0.4.7"  .
+
+  _:compromised_node_dep_161 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-mobile 0.2.2" ;
+      :packageName "@antv/g6-mobile" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_162 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-mobile 0.3.2" ;
+      :packageName "@antv/g6-mobile" ;
+      :packageVersion "0.3.2"  .
+
+  _:compromised_node_dep_163 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-pc 0.10.25" ;
+      :packageName "@antv/g6-pc" ;
+      :packageVersion "0.10.25"  .
+
+  _:compromised_node_dep_164 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-pc 0.9.25" ;
+      :packageName "@antv/g6-pc" ;
+      :packageVersion "0.9.25"  .
+
+  _:compromised_node_dep_165 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-plugin 0.10.25" ;
+      :packageName "@antv/g6-plugin" ;
+      :packageVersion "0.10.25"  .
+
+  _:compromised_node_dep_166 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-plugin 0.9.25" ;
+      :packageName "@antv/g6-plugin" ;
+      :packageVersion "0.9.25"  .
+
+  _:compromised_node_dep_167 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-plugin-map-view 0.1.4" ;
+      :packageName "@antv/g6-plugin-map-view" ;
+      :packageVersion "0.1.4"  .
+
+  _:compromised_node_dep_168 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-plugin-map-view 0.2.4" ;
+      :packageName "@antv/g6-plugin-map-view" ;
+      :packageVersion "0.2.4"  .
+
+  _:compromised_node_dep_169 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-plugins 1.1.9" ;
+      :packageName "@antv/g6-plugins" ;
+      :packageVersion "1.1.9"  .
+
+  _:compromised_node_dep_170 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-plugins 1.2.9" ;
+      :packageName "@antv/g6-plugins" ;
+      :packageVersion "1.2.9"  .
+
+  _:compromised_node_dep_171 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-react-node 1.5.8" ;
+      :packageName "@antv/g6-react-node" ;
+      :packageVersion "1.5.8"  .
+
+  _:compromised_node_dep_172 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-react-node 1.6.8" ;
+      :packageName "@antv/g6-react-node" ;
+      :packageVersion "1.6.8"  .
+
+  _:compromised_node_dep_173 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-ssr 0.2.1" ;
+      :packageName "@antv/g6-ssr" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_174 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-ssr 0.3.1" ;
+      :packageName "@antv/g6-ssr" ;
+      :packageVersion "0.3.1"  .
+
+  _:compromised_node_dep_175 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-wx 0.1.1" ;
+      :packageName "@antv/g6-wx" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_176 a node:compromised_node_dep ;
+      rdfs:label "@antv/g6-wx 0.2.1" ;
+      :packageName "@antv/g6-wx" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_177 a node:compromised_node_dep ;
+      rdfs:label "@antv/gatsby-theme 0.2.0" ;
+      :packageName "@antv/gatsby-theme" ;
+      :packageVersion "0.2.0"  .
+
+  _:compromised_node_dep_178 a node:compromised_node_dep ;
+      rdfs:label "@antv/gatsby-theme 0.3.0" ;
+      :packageName "@antv/gatsby-theme" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_179 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-base 0.6.16" ;
+      :packageName "@antv/g-base" ;
+      :packageVersion "0.6.16"  .
+
+  _:compromised_node_dep_180 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-base 0.7.16" ;
+      :packageName "@antv/g-base" ;
+      :packageVersion "0.7.16"  .
+
+  _:compromised_node_dep_181 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-camera-api 2.1.45" ;
+      :packageName "@antv/g-camera-api" ;
+      :packageVersion "2.1.45"  .
+
+  _:compromised_node_dep_182 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-camera-api 2.2.45" ;
+      :packageName "@antv/g-camera-api" ;
+      :packageVersion "2.2.45"  .
+
+  _:compromised_node_dep_183 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-canvas 2.3.0" ;
+      :packageName "@antv/g-canvas" ;
+      :packageVersion "2.3.0"  .
+
+  _:compromised_node_dep_184 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-canvas 2.4.0" ;
+      :packageName "@antv/g-canvas" ;
+      :packageVersion "2.4.0"  .
+
+  _:compromised_node_dep_185 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-canvaskit 1.2.1" ;
+      :packageName "@antv/g-canvaskit" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_186 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-canvaskit 1.3.1" ;
+      :packageName "@antv/g-canvaskit" ;
+      :packageVersion "1.3.1"  .
+
+  _:compromised_node_dep_187 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-compat 1.1.11" ;
+      :packageName "@antv/g-compat" ;
+      :packageVersion "1.1.11"  .
+
+  _:compromised_node_dep_188 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-compat 1.2.11" ;
+      :packageName "@antv/g-compat" ;
+      :packageVersion "1.2.11"  .
+
+  _:compromised_node_dep_189 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-components 2.1.42" ;
+      :packageName "@antv/g-components" ;
+      :packageVersion "2.1.42"  .
+
+  _:compromised_node_dep_190 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-components 2.2.42" ;
+      :packageName "@antv/g-components" ;
+      :packageVersion "2.2.42"  .
+
+  _:compromised_node_dep_191 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-css-layout-api 1.1.38" ;
+      :packageName "@antv/g-css-layout-api" ;
+      :packageVersion "1.1.38"  .
+
+  _:compromised_node_dep_192 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-css-layout-api 1.2.38" ;
+      :packageName "@antv/g-css-layout-api" ;
+      :packageVersion "1.2.38"  .
+
+  _:compromised_node_dep_193 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-css-typed-om-api 1.1.38" ;
+      :packageName "@antv/g-css-typed-om-api" ;
+      :packageVersion "1.1.38"  .
+
+  _:compromised_node_dep_194 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-css-typed-om-api 1.2.38" ;
+      :packageName "@antv/g-css-typed-om-api" ;
+      :packageVersion "1.2.38"  .
+
+  _:compromised_node_dep_195 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-device-api 1.7.13" ;
+      :packageName "@antv/g-device-api" ;
+      :packageVersion "1.7.13"  .
+
+  _:compromised_node_dep_196 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-device-api 1.8.13" ;
+      :packageName "@antv/g-device-api" ;
+      :packageVersion "1.8.13"  .
+
+  _:compromised_node_dep_197 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-dom-mutation-observer-api 2.1.42" ;
+      :packageName "@antv/g-dom-mutation-observer-api" ;
+      :packageVersion "2.1.42"  .
+
+  _:compromised_node_dep_198 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-dom-mutation-observer-api 2.2.42" ;
+      :packageName "@antv/g-dom-mutation-observer-api" ;
+      :packageVersion "2.2.42"  .
+
+  _:compromised_node_dep_199 a node:compromised_node_dep ;
+      rdfs:label "@antv/geo-coord 1.1.8" ;
+      :packageName "@antv/geo-coord" ;
+      :packageVersion "1.1.8"  .
+
+  _:compromised_node_dep_200 a node:compromised_node_dep ;
+      rdfs:label "@antv/geo-coord 1.2.8" ;
+      :packageName "@antv/geo-coord" ;
+      :packageVersion "1.2.8"  .
+
+  _:compromised_node_dep_201 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-gesture 3.1.42" ;
+      :packageName "@antv/g-gesture" ;
+      :packageVersion "3.1.42"  .
+
+  _:compromised_node_dep_202 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-gesture 3.2.42" ;
+      :packageName "@antv/g-gesture" ;
+      :packageVersion "3.2.42"  .
+
+  _:compromised_node_dep_203 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-advance 2.6.22" ;
+      :packageName "@antv/gi-assets-advance" ;
+      :packageVersion "2.6.22"  .
+
+  _:compromised_node_dep_204 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-advance 2.7.22" ;
+      :packageName "@antv/gi-assets-advance" ;
+      :packageVersion "2.7.22"  .
+
+  _:compromised_node_dep_205 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-algorithm 2.4.19" ;
+      :packageName "@antv/gi-assets-algorithm" ;
+      :packageVersion "2.4.19"  .
+
+  _:compromised_node_dep_206 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-algorithm 2.5.19" ;
+      :packageName "@antv/gi-assets-algorithm" ;
+      :packageVersion "2.5.19"  .
+
+  _:compromised_node_dep_207 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-basic 2.5.40" ;
+      :packageName "@antv/gi-assets-basic" ;
+      :packageVersion "2.5.40"  .
+
+  _:compromised_node_dep_208 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-basic 2.6.40" ;
+      :packageName "@antv/gi-assets-basic" ;
+      :packageVersion "2.6.40"  .
+
+  _:compromised_node_dep_209 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-galaxybase 1.3.15" ;
+      :packageName "@antv/gi-assets-galaxybase" ;
+      :packageVersion "1.3.15"  .
+
+  _:compromised_node_dep_210 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-galaxybase 1.4.15" ;
+      :packageName "@antv/gi-assets-galaxybase" ;
+      :packageVersion "1.4.15"  .
+
+  _:compromised_node_dep_211 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-graphscope 2.2.15" ;
+      :packageName "@antv/gi-assets-graphscope" ;
+      :packageVersion "2.2.15"  .
+
+  _:compromised_node_dep_212 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-graphscope 2.3.15" ;
+      :packageName "@antv/gi-assets-graphscope" ;
+      :packageVersion "2.3.15"  .
+
+  _:compromised_node_dep_213 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-hugegraph 1.2.15" ;
+      :packageName "@antv/gi-assets-hugegraph" ;
+      :packageVersion "1.2.15"  .
+
+  _:compromised_node_dep_214 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-hugegraph 1.3.15" ;
+      :packageName "@antv/gi-assets-hugegraph" ;
+      :packageVersion "1.3.15"  .
+
+  _:compromised_node_dep_215 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-janusgraph 1.2.15" ;
+      :packageName "@antv/gi-assets-janusgraph" ;
+      :packageVersion "1.2.15"  .
+
+  _:compromised_node_dep_216 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-janusgraph 1.3.15" ;
+      :packageName "@antv/gi-assets-janusgraph" ;
+      :packageVersion "1.3.15"  .
+
+  _:compromised_node_dep_217 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-neo4j 2.2.15" ;
+      :packageName "@antv/gi-assets-neo4j" ;
+      :packageVersion "2.2.15"  .
+
+  _:compromised_node_dep_218 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-neo4j 2.3.15" ;
+      :packageName "@antv/gi-assets-neo4j" ;
+      :packageVersion "2.3.15"  .
+
+  _:compromised_node_dep_219 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-scene 2.3.21" ;
+      :packageName "@antv/gi-assets-scene" ;
+      :packageVersion "2.3.21"  .
+
+  _:compromised_node_dep_220 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-scene 2.4.21" ;
+      :packageName "@antv/gi-assets-scene" ;
+      :packageVersion "2.4.21"  .
+
+  _:compromised_node_dep_221 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-tugraph 2.2.15" ;
+      :packageName "@antv/gi-assets-tugraph" ;
+      :packageVersion "2.2.15"  .
+
+  _:compromised_node_dep_222 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-tugraph 2.3.15" ;
+      :packageName "@antv/gi-assets-tugraph" ;
+      :packageVersion "2.3.15"  .
+
+  _:compromised_node_dep_223 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-tugraph-analytics 0.3.15" ;
+      :packageName "@antv/gi-assets-tugraph-analytics" ;
+      :packageVersion "0.3.15"  .
+
+  _:compromised_node_dep_224 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-tugraph-analytics 0.4.15" ;
+      :packageName "@antv/gi-assets-tugraph-analytics" ;
+      :packageVersion "0.4.15"  .
+
+  _:compromised_node_dep_225 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-xlab 0.2.30" ;
+      :packageName "@antv/gi-assets-xlab" ;
+      :packageVersion "0.2.30"  .
+
+  _:compromised_node_dep_226 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-assets-xlab 0.3.30" ;
+      :packageName "@antv/gi-assets-xlab" ;
+      :packageVersion "0.3.30"  .
+
+  _:compromised_node_dep_227 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-cli 1.3.11" ;
+      :packageName "@antv/gi-cli" ;
+      :packageVersion "1.3.11"  .
+
+  _:compromised_node_dep_228 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-cli 1.4.11" ;
+      :packageName "@antv/gi-cli" ;
+      :packageVersion "1.4.11"  .
+
+  _:compromised_node_dep_229 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-common-components 1.4.16" ;
+      :packageName "@antv/gi-common-components" ;
+      :packageVersion "1.4.16"  .
+
+  _:compromised_node_dep_230 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-common-components 1.5.16" ;
+      :packageName "@antv/gi-common-components" ;
+      :packageVersion "1.5.16"  .
+
+  _:compromised_node_dep_231 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-image-exporter 1.1.42" ;
+      :packageName "@antv/g-image-exporter" ;
+      :packageVersion "1.1.42"  .
+
+  _:compromised_node_dep_232 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-image-exporter 1.2.42" ;
+      :packageName "@antv/g-image-exporter" ;
+      :packageVersion "1.2.42"  .
+
+  _:compromised_node_dep_233 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-mock-data 1.1.5" ;
+      :packageName "@antv/gi-mock-data" ;
+      :packageVersion "1.1.5"  .
+
+  _:compromised_node_dep_234 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-mock-data 1.2.5" ;
+      :packageName "@antv/gi-mock-data" ;
+      :packageVersion "1.2.5"  .
+
+  _:compromised_node_dep_235 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-public-data 1.1.1" ;
+      :packageName "@antv/gi-public-data" ;
+      :packageVersion "1.1.1"  .
+
+  _:compromised_node_dep_236 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-public-data 1.2.1" ;
+      :packageName "@antv/gi-public-data" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_237 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-sdk 3.1.0" ;
+      :packageName "@antv/gi-sdk" ;
+      :packageVersion "3.1.0"  .
+
+  _:compromised_node_dep_238 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-sdk 3.2.0" ;
+      :packageName "@antv/gi-sdk" ;
+      :packageVersion "3.2.0"  .
+
+  _:compromised_node_dep_239 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-sdk-app 1.3.10" ;
+      :packageName "@antv/gi-sdk-app" ;
+      :packageVersion "1.3.10"  .
+
+  _:compromised_node_dep_240 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-sdk-app 1.4.10" ;
+      :packageName "@antv/gi-sdk-app" ;
+      :packageVersion "1.4.10"  .
+
+  _:compromised_node_dep_241 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-theme-antd 0.7.11" ;
+      :packageName "@antv/gi-theme-antd" ;
+      :packageVersion "0.7.11"  .
+
+  _:compromised_node_dep_242 a node:compromised_node_dep ;
+      rdfs:label "@antv/gi-theme-antd 0.8.11" ;
+      :packageName "@antv/gi-theme-antd" ;
+      :packageVersion "0.8.11"  .
+
+  _:compromised_node_dep_243 a node:compromised_node_dep ;
+      rdfs:label "@antv/github-config-cli 0.2.0" ;
+      :packageName "@antv/github-config-cli" ;
+      :packageVersion "0.2.0"  .
+
+  _:compromised_node_dep_244 a node:compromised_node_dep ;
+      rdfs:label "@antv/github-config-cli 0.3.0" ;
+      :packageName "@antv/github-config-cli" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_245 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-layout-blocklike 1.8.49" ;
+      :packageName "@antv/g-layout-blocklike" ;
+      :packageVersion "1.8.49"  .
+
+  _:compromised_node_dep_246 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-layout-blocklike 1.9.49" ;
+      :packageName "@antv/g-layout-blocklike" ;
+      :packageVersion "1.9.49"  .
+
+  _:compromised_node_dep_247 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-lite 2.8.0" ;
+      :packageName "@antv/g-lite" ;
+      :packageVersion "2.8.0"  .
+
+  _:compromised_node_dep_248 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-lite 2.9.0" ;
+      :packageName "@antv/g-lite" ;
+      :packageVersion "2.9.0"  .
+
+  _:compromised_node_dep_249 a node:compromised_node_dep ;
+      rdfs:label "@antv/gl-matrix 2.8.1" ;
+      :packageName "@antv/gl-matrix" ;
+      :packageVersion "2.8.1"  .
+
+  _:compromised_node_dep_250 a node:compromised_node_dep ;
+      rdfs:label "@antv/gl-matrix 2.9.1" ;
+      :packageName "@antv/gl-matrix" ;
+      :packageVersion "2.9.1"  .
+
+  _:compromised_node_dep_251 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-lottie-player 1.2.1" ;
+      :packageName "@antv/g-lottie-player" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_252 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-lottie-player 1.3.1" ;
+      :packageName "@antv/g-lottie-player" ;
+      :packageVersion "1.3.1"  .
+
+  _:compromised_node_dep_253 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-math 3.2.0" ;
+      :packageName "@antv/g-math" ;
+      :packageVersion "3.2.0"  .
+
+  _:compromised_node_dep_254 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-math 3.3.0" ;
+      :packageName "@antv/g-math" ;
+      :packageVersion "3.3.0"  .
+
+  _:compromised_node_dep_255 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile 1.2.5" ;
+      :packageName "@antv/g-mobile" ;
+      :packageVersion "1.2.5"  .
+
+  _:compromised_node_dep_256 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile 1.3.5" ;
+      :packageName "@antv/g-mobile" ;
+      :packageVersion "1.3.5"  .
+
+  _:compromised_node_dep_257 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-canvas 1.2.1" ;
+      :packageName "@antv/g-mobile-canvas" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_258 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-canvas 1.3.1" ;
+      :packageName "@antv/g-mobile-canvas" ;
+      :packageVersion "1.3.1"  .
+
+  _:compromised_node_dep_259 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-canvas-element 1.1.42" ;
+      :packageName "@antv/g-mobile-canvas-element" ;
+      :packageVersion "1.1.42"  .
+
+  _:compromised_node_dep_260 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-canvas-element 1.2.42" ;
+      :packageName "@antv/g-mobile-canvas-element" ;
+      :packageVersion "1.2.42"  .
+
+  _:compromised_node_dep_261 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-svg 1.2.1" ;
+      :packageName "@antv/g-mobile-svg" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_262 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-svg 1.3.1" ;
+      :packageName "@antv/g-mobile-svg" ;
+      :packageVersion "1.3.1"  .
+
+  _:compromised_node_dep_263 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-webgl 1.2.1" ;
+      :packageName "@antv/g-mobile-webgl" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_264 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-mobile-webgl 1.3.1" ;
+      :packageName "@antv/g-mobile-webgl" ;
+      :packageVersion "1.3.1"  .
+
+  _:compromised_node_dep_265 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-pattern 2.1.42" ;
+      :packageName "@antv/g-pattern" ;
+      :packageVersion "2.1.42"  .
+
+  _:compromised_node_dep_266 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-pattern 2.2.42" ;
+      :packageName "@antv/g-pattern" ;
+      :packageVersion "2.2.42"  .
+
+  _:compromised_node_dep_267 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-perf 1.1.0" ;
+      :packageName "@antv/g-perf" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_268 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-perf 1.2.0" ;
+      :packageName "@antv/g-perf" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_269 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-3d 2.2.1" ;
+      :packageName "@antv/g-plugin-3d" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_270 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-3d 2.3.1" ;
+      :packageName "@antv/g-plugin-3d" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_271 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-a11y 1.5.1" ;
+      :packageName "@antv/g-plugin-a11y" ;
+      :packageVersion "1.5.1"  .
+
+  _:compromised_node_dep_272 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-a11y 1.6.1" ;
+      :packageName "@antv/g-plugin-a11y" ;
+      :packageVersion "1.6.1"  .
+
+  _:compromised_node_dep_273 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-annotation 1.3.0" ;
+      :packageName "@antv/g-plugin-annotation" ;
+      :packageVersion "1.3.0"  .
+
+  _:compromised_node_dep_274 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-annotation 1.4.0" ;
+      :packageName "@antv/g-plugin-annotation" ;
+      :packageVersion "1.4.0"  .
+
+  _:compromised_node_dep_275 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-box2d 2.2.1" ;
+      :packageName "@antv/g-plugin-box2d" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_276 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-box2d 2.3.1" ;
+      :packageName "@antv/g-plugin-box2d" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_277 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvaskit-renderer 2.4.1" ;
+      :packageName "@antv/g-plugin-canvaskit-renderer" ;
+      :packageVersion "2.4.1"  .
+
+  _:compromised_node_dep_278 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvaskit-renderer 2.5.1" ;
+      :packageName "@antv/g-plugin-canvaskit-renderer" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_279 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvas-path-generator 2.2.26" ;
+      :packageName "@antv/g-plugin-canvas-path-generator" ;
+      :packageVersion "2.2.26"  .
+
+  _:compromised_node_dep_280 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvas-path-generator 2.3.26" ;
+      :packageName "@antv/g-plugin-canvas-path-generator" ;
+      :packageVersion "2.3.26"  .
+
+  _:compromised_node_dep_281 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvas-picker 2.4.1" ;
+      :packageName "@antv/g-plugin-canvas-picker" ;
+      :packageVersion "2.4.1"  .
+
+  _:compromised_node_dep_282 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvas-picker 2.5.1" ;
+      :packageName "@antv/g-plugin-canvas-picker" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_283 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvas-renderer 2.6.1" ;
+      :packageName "@antv/g-plugin-canvas-renderer" ;
+      :packageVersion "2.6.1"  .
+
+  _:compromised_node_dep_284 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-canvas-renderer 2.7.1" ;
+      :packageName "@antv/g-plugin-canvas-renderer" ;
+      :packageVersion "2.7.1"  .
+
+  _:compromised_node_dep_285 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-control 2.2.1" ;
+      :packageName "@antv/g-plugin-control" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_286 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-control 2.3.1" ;
+      :packageName "@antv/g-plugin-control" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_287 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-css-select 2.2.1" ;
+      :packageName "@antv/g-plugin-css-select" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_288 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-css-select 2.3.1" ;
+      :packageName "@antv/g-plugin-css-select" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_289 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-device-renderer 2.7.1" ;
+      :packageName "@antv/g-plugin-device-renderer" ;
+      :packageVersion "2.7.1"  .
+
+  _:compromised_node_dep_290 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-device-renderer 2.8.1" ;
+      :packageName "@antv/g-plugin-device-renderer" ;
+      :packageVersion "2.8.1"  .
+
+  _:compromised_node_dep_291 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-dom-interaction 2.2.31" ;
+      :packageName "@antv/g-plugin-dom-interaction" ;
+      :packageVersion "2.2.31"  .
+
+  _:compromised_node_dep_292 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-dom-interaction 2.3.31" ;
+      :packageName "@antv/g-plugin-dom-interaction" ;
+      :packageVersion "2.3.31"  .
+
+  _:compromised_node_dep_293 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-dragndrop 2.2.1" ;
+      :packageName "@antv/g-plugin-dragndrop" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_294 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-dragndrop 2.3.1" ;
+      :packageName "@antv/g-plugin-dragndrop" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_295 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-gesture 2.2.1" ;
+      :packageName "@antv/g-plugin-gesture" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_296 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-gesture 2.3.1" ;
+      :packageName "@antv/g-plugin-gesture" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_297 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-gpgpu 1.10.20" ;
+      :packageName "@antv/g-plugin-gpgpu" ;
+      :packageVersion "1.10.20"  .
+
+  _:compromised_node_dep_298 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-gpgpu 1.11.20" ;
+      :packageName "@antv/g-plugin-gpgpu" ;
+      :packageVersion "1.11.20"  .
+
+  _:compromised_node_dep_299 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-html-renderer 2.4.1" ;
+      :packageName "@antv/g-plugin-html-renderer" ;
+      :packageVersion "2.4.1"  .
+
+  _:compromised_node_dep_300 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-html-renderer 2.5.1" ;
+      :packageName "@antv/g-plugin-html-renderer" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_301 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-image-loader 2.4.1" ;
+      :packageName "@antv/g-plugin-image-loader" ;
+      :packageVersion "2.4.1"  .
+
+  _:compromised_node_dep_302 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-image-loader 2.5.1" ;
+      :packageName "@antv/g-plugin-image-loader" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_303 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-matterjs 2.2.1" ;
+      :packageName "@antv/g-plugin-matterjs" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_304 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-matterjs 2.3.1" ;
+      :packageName "@antv/g-plugin-matterjs" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_305 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-mobile-interaction 1.1.42" ;
+      :packageName "@antv/g-plugin-mobile-interaction" ;
+      :packageVersion "1.1.42"  .
+
+  _:compromised_node_dep_306 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-mobile-interaction 1.2.42" ;
+      :packageName "@antv/g-plugin-mobile-interaction" ;
+      :packageVersion "1.2.42"  .
+
+  _:compromised_node_dep_307 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-physx 2.2.1" ;
+      :packageName "@antv/g-plugin-physx" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_308 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-physx 2.3.1" ;
+      :packageName "@antv/g-plugin-physx" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_309 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-rough-canvas-renderer 2.2.1" ;
+      :packageName "@antv/g-plugin-rough-canvas-renderer" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_310 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-rough-canvas-renderer 2.3.1" ;
+      :packageName "@antv/g-plugin-rough-canvas-renderer" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_311 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-rough-svg-renderer 2.2.1" ;
+      :packageName "@antv/g-plugin-rough-svg-renderer" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_312 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-rough-svg-renderer 2.3.1" ;
+      :packageName "@antv/g-plugin-rough-svg-renderer" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_313 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-svg-picker 2.1.46" ;
+      :packageName "@antv/g-plugin-svg-picker" ;
+      :packageVersion "2.1.46"  .
+
+  _:compromised_node_dep_314 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-svg-picker 2.2.46" ;
+      :packageName "@antv/g-plugin-svg-picker" ;
+      :packageVersion "2.2.46"  .
+
+  _:compromised_node_dep_315 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-svg-renderer 2.5.1" ;
+      :packageName "@antv/g-plugin-svg-renderer" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_316 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-svg-renderer 2.6.1" ;
+      :packageName "@antv/g-plugin-svg-renderer" ;
+      :packageVersion "2.6.1"  .
+
+  _:compromised_node_dep_317 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-webgl-device 1.10.17" ;
+      :packageName "@antv/g-plugin-webgl-device" ;
+      :packageVersion "1.10.17"  .
+
+  _:compromised_node_dep_318 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-webgl-device 1.11.17" ;
+      :packageName "@antv/g-plugin-webgl-device" ;
+      :packageVersion "1.11.17"  .
+
+  _:compromised_node_dep_319 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-webgl-renderer 1.1.26" ;
+      :packageName "@antv/g-plugin-webgl-renderer" ;
+      :packageVersion "1.1.26"  .
+
+  _:compromised_node_dep_320 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-webgl-renderer 1.2.26" ;
+      :packageName "@antv/g-plugin-webgl-renderer" ;
+      :packageVersion "1.2.26"  .
+
+  _:compromised_node_dep_321 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-webgpu-device 1.10.17" ;
+      :packageName "@antv/g-plugin-webgpu-device" ;
+      :packageVersion "1.10.17"  .
+
+  _:compromised_node_dep_322 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-webgpu-device 1.11.17" ;
+      :packageName "@antv/g-plugin-webgpu-device" ;
+      :packageVersion "1.11.17"  .
+
+  _:compromised_node_dep_323 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-yoga 2.4.1" ;
+      :packageName "@antv/g-plugin-yoga" ;
+      :packageVersion "2.4.1"  .
+
+  _:compromised_node_dep_324 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-yoga 2.5.1" ;
+      :packageName "@antv/g-plugin-yoga" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_325 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-zdog-canvas-renderer 2.2.1" ;
+      :packageName "@antv/g-plugin-zdog-canvas-renderer" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_326 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-zdog-canvas-renderer 2.3.1" ;
+      :packageName "@antv/g-plugin-zdog-canvas-renderer" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_327 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-zdog-svg-renderer 2.2.1" ;
+      :packageName "@antv/g-plugin-zdog-svg-renderer" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_328 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-plugin-zdog-svg-renderer 2.3.1" ;
+      :packageName "@antv/g-plugin-zdog-svg-renderer" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_329 a node:compromised_node_dep ;
+      rdfs:label "@antv/gpt-vis 1.1.0" ;
+      :packageName "@antv/gpt-vis" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_330 a node:compromised_node_dep ;
+      rdfs:label "@antv/gpt-vis 1.2.0" ;
+      :packageName "@antv/gpt-vis" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_331 a node:compromised_node_dep ;
+      rdfs:label "@antv/gpt-vis-ssr 0.4.7" ;
+      :packageName "@antv/gpt-vis-ssr" ;
+      :packageVersion "0.4.7"  .
+
+  _:compromised_node_dep_332 a node:compromised_node_dep ;
+      rdfs:label "@antv/gpt-vis-ssr 0.5.7" ;
+      :packageName "@antv/gpt-vis-ssr" ;
+      :packageVersion "0.5.7"  .
+
+  _:compromised_node_dep_333 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin 3.1.5" ;
+      :packageName "@antv/graphin" ;
+      :packageVersion "3.1.5"  .
+
+  _:compromised_node_dep_334 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin 3.2.5" ;
+      :packageName "@antv/graphin" ;
+      :packageVersion "3.2.5"  .
+
+  _:compromised_node_dep_335 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin-components 2.5.1" ;
+      :packageName "@antv/graphin-components" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_336 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin-components 2.6.1" ;
+      :packageName "@antv/graphin-components" ;
+      :packageVersion "2.6.1"  .
+
+  _:compromised_node_dep_337 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin-graphscope 1.1.5" ;
+      :packageName "@antv/graphin-graphscope" ;
+      :packageVersion "1.1.5"  .
+
+  _:compromised_node_dep_338 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin-graphscope 1.2.5" ;
+      :packageName "@antv/graphin-graphscope" ;
+      :packageVersion "1.2.5"  .
+
+  _:compromised_node_dep_339 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin-icons 1.1.0" ;
+      :packageName "@antv/graphin-icons" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_340 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphin-icons 1.2.0" ;
+      :packageName "@antv/graphin-icons" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_341 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphlib 2.1.4" ;
+      :packageName "@antv/graphlib" ;
+      :packageVersion "2.1.4"  .
+
+  _:compromised_node_dep_342 a node:compromised_node_dep ;
+      rdfs:label "@antv/graphlib 2.2.4" ;
+      :packageName "@antv/graphlib" ;
+      :packageVersion "2.2.4"  .
+
+  _:compromised_node_dep_343 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-shader-components 2.1.0" ;
+      :packageName "@antv/g-shader-components" ;
+      :packageVersion "2.1.0"  .
+
+  _:compromised_node_dep_344 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-shader-components 2.2.0" ;
+      :packageName "@antv/g-shader-components" ;
+      :packageVersion "2.2.0"  .
+
+  _:compromised_node_dep_345 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-svg 2.2.1" ;
+      :packageName "@antv/g-svg" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_346 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-svg 2.3.1" ;
+      :packageName "@antv/g-svg" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_347 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-web-animations-api 2.2.32" ;
+      :packageName "@antv/g-web-animations-api" ;
+      :packageVersion "2.2.32"  .
+
+  _:compromised_node_dep_348 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-web-animations-api 2.3.32" ;
+      :packageName "@antv/g-web-animations-api" ;
+      :packageVersion "2.3.32"  .
+
+  _:compromised_node_dep_349 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-web-components 2.2.1" ;
+      :packageName "@antv/g-web-components" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_350 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-web-components 2.3.1" ;
+      :packageName "@antv/g-web-components" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_351 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgl 2.2.1" ;
+      :packageName "@antv/g-webgl" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_352 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgl 2.3.1" ;
+      :packageName "@antv/g-webgl" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_353 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgl-compute 0.1.1" ;
+      :packageName "@antv/g-webgl-compute" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_354 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgl-compute 0.2.1" ;
+      :packageName "@antv/g-webgl-compute" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_355 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu 2.2.1" ;
+      :packageName "@antv/g-webgpu" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_356 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu 2.3.1" ;
+      :packageName "@antv/g-webgpu" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_357 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-compiler 0.8.2" ;
+      :packageName "@antv/g-webgpu-compiler" ;
+      :packageVersion "0.8.2"  .
+
+  _:compromised_node_dep_358 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-compiler 0.9.2" ;
+      :packageName "@antv/g-webgpu-compiler" ;
+      :packageVersion "0.9.2"  .
+
+  _:compromised_node_dep_359 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-core 0.8.2" ;
+      :packageName "@antv/g-webgpu-core" ;
+      :packageVersion "0.8.2"  .
+
+  _:compromised_node_dep_360 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-core 0.9.2" ;
+      :packageName "@antv/g-webgpu-core" ;
+      :packageVersion "0.9.2"  .
+
+  _:compromised_node_dep_361 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-engine 0.8.2" ;
+      :packageName "@antv/g-webgpu-engine" ;
+      :packageVersion "0.8.2"  .
+
+  _:compromised_node_dep_362 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-engine 0.9.2" ;
+      :packageName "@antv/g-webgpu-engine" ;
+      :packageVersion "0.9.2"  .
+
+  _:compromised_node_dep_363 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-raytracer 0.6.1" ;
+      :packageName "@antv/g-webgpu-raytracer" ;
+      :packageVersion "0.6.1"  .
+
+  _:compromised_node_dep_364 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-raytracer 0.7.1" ;
+      :packageName "@antv/g-webgpu-raytracer" ;
+      :packageVersion "0.7.1"  .
+
+  _:compromised_node_dep_365 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-unitchart 0.6.1" ;
+      :packageName "@antv/g-webgpu-unitchart" ;
+      :packageVersion "0.6.1"  .
+
+  _:compromised_node_dep_366 a node:compromised_node_dep ;
+      rdfs:label "@antv/g-webgpu-unitchart 0.7.1" ;
+      :packageName "@antv/g-webgpu-unitchart" ;
+      :packageVersion "0.7.1"  .
+
+  _:compromised_node_dep_367 a node:compromised_node_dep ;
+      rdfs:label "@antv/hierarchy 0.8.1" ;
+      :packageName "@antv/hierarchy" ;
+      :packageVersion "0.8.1"  .
+
+  _:compromised_node_dep_368 a node:compromised_node_dep ;
+      rdfs:label "@antv/hierarchy 0.9.1" ;
+      :packageName "@antv/hierarchy" ;
+      :packageVersion "0.9.1"  .
+
+  _:compromised_node_dep_369 a node:compromised_node_dep ;
+      rdfs:label "@antv/infographic 0.3.19" ;
+      :packageName "@antv/infographic" ;
+      :packageVersion "0.3.19"  .
+
+  _:compromised_node_dep_370 a node:compromised_node_dep ;
+      rdfs:label "@antv/infographic 0.4.19" ;
+      :packageName "@antv/infographic" ;
+      :packageVersion "0.4.19"  .
+
+  _:compromised_node_dep_371 a node:compromised_node_dep ;
+      rdfs:label "@antv/insight-component 1.1.0" ;
+      :packageName "@antv/insight-component" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_372 a node:compromised_node_dep ;
+      rdfs:label "@antv/insight-component 1.2.0" ;
+      :packageName "@antv/insight-component" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_373 a node:compromised_node_dep ;
+      rdfs:label "@antv/interaction 0.2.5" ;
+      :packageName "@antv/interaction" ;
+      :packageVersion "0.2.5"  .
+
+  _:compromised_node_dep_374 a node:compromised_node_dep ;
+      rdfs:label "@antv/interaction 0.3.5" ;
+      :packageName "@antv/interaction" ;
+      :packageVersion "0.3.5"  .
+
+  _:compromised_node_dep_375 a node:compromised_node_dep ;
+      rdfs:label "@antv/istanbul 0.1.0" ;
+      :packageName "@antv/istanbul" ;
+      :packageVersion "0.1.0"  .
+
+  _:compromised_node_dep_376 a node:compromised_node_dep ;
+      rdfs:label "@antv/istanbul 0.2.0" ;
+      :packageName "@antv/istanbul" ;
+      :packageVersion "0.2.0"  .
+
+  _:compromised_node_dep_377 a node:compromised_node_dep ;
+      rdfs:label "@antv/knowledge 1.2.4" ;
+      :packageName "@antv/knowledge" ;
+      :packageVersion "1.2.4"  .
+
+  _:compromised_node_dep_378 a node:compromised_node_dep ;
+      rdfs:label "@antv/knowledge 1.3.4" ;
+      :packageName "@antv/knowledge" ;
+      :packageVersion "1.3.4"  .
+
+  _:compromised_node_dep_379 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7 2.26.10" ;
+      :packageName "@antv/l7" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_380 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7 2.27.10" ;
+      :packageName "@antv/l7" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_381 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-component 2.26.10" ;
+      :packageName "@antv/l7-component" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_382 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-component 2.27.10" ;
+      :packageName "@antv/l7-component" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_383 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-composite-layers 0.18.1" ;
+      :packageName "@antv/l7-composite-layers" ;
+      :packageVersion "0.18.1"  .
+
+  _:compromised_node_dep_384 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-composite-layers 0.19.1" ;
+      :packageName "@antv/l7-composite-layers" ;
+      :packageVersion "0.19.1"  .
+
+  _:compromised_node_dep_385 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-core 2.26.10" ;
+      :packageName "@antv/l7-core" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_386 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-core 2.27.10" ;
+      :packageName "@antv/l7-core" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_387 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-district 2.4.12" ;
+      :packageName "@antv/l7-district" ;
+      :packageVersion "2.4.12"  .
+
+  _:compromised_node_dep_388 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-district 2.5.12" ;
+      :packageName "@antv/l7-district" ;
+      :packageVersion "2.5.12"  .
+
+  _:compromised_node_dep_389 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-draw 3.2.5" ;
+      :packageName "@antv/l7-draw" ;
+      :packageVersion "3.2.5"  .
+
+  _:compromised_node_dep_390 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-draw 3.3.5" ;
+      :packageName "@antv/l7-draw" ;
+      :packageVersion "3.3.5"  .
+
+  _:compromised_node_dep_391 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-editor 1.2.13" ;
+      :packageName "@antv/l7-editor" ;
+      :packageVersion "1.2.13"  .
+
+  _:compromised_node_dep_392 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-editor 1.3.13" ;
+      :packageName "@antv/l7-editor" ;
+      :packageVersion "1.3.13"  .
+
+  _:compromised_node_dep_393 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-extension-g-layer 1.1.0" ;
+      :packageName "@antv/l7-extension-g-layer" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_394 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-extension-g-layer 1.2.0" ;
+      :packageName "@antv/l7-extension-g-layer" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_395 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-layers 2.26.10" ;
+      :packageName "@antv/l7-layers" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_396 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-layers 2.27.10" ;
+      :packageName "@antv/l7-layers" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_397 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-leaflet 1.1.2" ;
+      :packageName "@antv/l7-leaflet" ;
+      :packageVersion "1.1.2"  .
+
+  _:compromised_node_dep_398 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-leaflet 1.2.2" ;
+      :packageName "@antv/l7-leaflet" ;
+      :packageVersion "1.2.2"  .
+
+  _:compromised_node_dep_399 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-map 2.26.10" ;
+      :packageName "@antv/l7-map" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_400 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-map 2.27.10" ;
+      :packageName "@antv/l7-map" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_401 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-mapkit 0.6.0" ;
+      :packageName "@antv/l7-mapkit" ;
+      :packageVersion "0.6.0"  .
+
+  _:compromised_node_dep_402 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-mapkit 0.7.0" ;
+      :packageName "@antv/l7-mapkit" ;
+      :packageVersion "0.7.0"  .
+
+  _:compromised_node_dep_403 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-maps 2.26.10" ;
+      :packageName "@antv/l7-maps" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_404 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-maps 2.27.10" ;
+      :packageName "@antv/l7-maps" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_405 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-mini 2.21.8" ;
+      :packageName "@antv/l7-mini" ;
+      :packageVersion "2.21.8"  .
+
+  _:compromised_node_dep_406 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-mini 2.22.8" ;
+      :packageName "@antv/l7-mini" ;
+      :packageVersion "2.22.8"  .
+
+  _:compromised_node_dep_407 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-pass 1.1.0" ;
+      :packageName "@antv/l7-pass" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_408 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-pass 1.2.0" ;
+      :packageName "@antv/l7-pass" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_409 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7plot 0.6.11" ;
+      :packageName "@antv/l7plot" ;
+      :packageVersion "0.6.11"  .
+
+  _:compromised_node_dep_410 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7plot 0.7.11" ;
+      :packageName "@antv/l7plot" ;
+      :packageVersion "0.7.11"  .
+
+  _:compromised_node_dep_411 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7plot-component 0.1.11" ;
+      :packageName "@antv/l7plot-component" ;
+      :packageVersion "0.1.11"  .
+
+  _:compromised_node_dep_412 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7plot-component 0.2.11" ;
+      :packageName "@antv/l7plot-component" ;
+      :packageVersion "0.2.11"  .
+
+  _:compromised_node_dep_413 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-react 2.5.3" ;
+      :packageName "@antv/l7-react" ;
+      :packageVersion "2.5.3"  .
+
+  _:compromised_node_dep_414 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-react 2.6.3" ;
+      :packageName "@antv/l7-react" ;
+      :packageVersion "2.6.3"  .
+
+  _:compromised_node_dep_415 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-renderer 2.26.10" ;
+      :packageName "@antv/l7-renderer" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_416 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-renderer 2.27.10" ;
+      :packageName "@antv/l7-renderer" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_417 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-scene 2.26.10" ;
+      :packageName "@antv/l7-scene" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_418 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-scene 2.27.10" ;
+      :packageName "@antv/l7-scene" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_419 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-source 2.26.10" ;
+      :packageName "@antv/l7-source" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_420 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-source 2.27.10" ;
+      :packageName "@antv/l7-source" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_421 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-three 2.26.10" ;
+      :packageName "@antv/l7-three" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_422 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-three 2.27.10" ;
+      :packageName "@antv/l7-three" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_423 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-utils 2.26.10" ;
+      :packageName "@antv/l7-utils" ;
+      :packageVersion "2.26.10"  .
+
+  _:compromised_node_dep_424 a node:compromised_node_dep ;
+      rdfs:label "@antv/l7-utils 2.27.10" ;
+      :packageName "@antv/l7-utils" ;
+      :packageVersion "2.27.10"  .
+
+  _:compromised_node_dep_425 a node:compromised_node_dep ;
+      rdfs:label "@antv/larkmap 1.6.1" ;
+      :packageName "@antv/larkmap" ;
+      :packageVersion "1.6.1"  .
+
+  _:compromised_node_dep_426 a node:compromised_node_dep ;
+      rdfs:label "@antv/larkmap 1.7.1" ;
+      :packageName "@antv/larkmap" ;
+      :packageVersion "1.7.1"  .
+
+  _:compromised_node_dep_427 a node:compromised_node_dep ;
+      rdfs:label "@antv/layout-gpu 1.2.7" ;
+      :packageName "@antv/layout-gpu" ;
+      :packageVersion "1.2.7"  .
+
+  _:compromised_node_dep_428 a node:compromised_node_dep ;
+      rdfs:label "@antv/layout-gpu 1.3.7" ;
+      :packageName "@antv/layout-gpu" ;
+      :packageVersion "1.3.7"  .
+
+  _:compromised_node_dep_429 a node:compromised_node_dep ;
+      rdfs:label "@antv/layout-wasm 1.5.2" ;
+      :packageName "@antv/layout-wasm" ;
+      :packageVersion "1.5.2"  .
+
+  _:compromised_node_dep_430 a node:compromised_node_dep ;
+      rdfs:label "@antv/layout-wasm 1.6.2" ;
+      :packageName "@antv/layout-wasm" ;
+      :packageVersion "1.6.2"  .
+
+  _:compromised_node_dep_431 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-aiearth-assets 0.5.7" ;
+      :packageName "@antv/li-aiearth-assets" ;
+      :packageVersion "0.5.7"  .
+
+  _:compromised_node_dep_432 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-aiearth-assets 0.6.7" ;
+      :packageName "@antv/li-aiearth-assets" ;
+      :packageVersion "0.6.7"  .
+
+  _:compromised_node_dep_433 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-analysis-assets 1.10.1" ;
+      :packageName "@antv/li-analysis-assets" ;
+      :packageVersion "1.10.1"  .
+
+  _:compromised_node_dep_434 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-analysis-assets 1.11.1" ;
+      :packageName "@antv/li-analysis-assets" ;
+      :packageVersion "1.11.1"  .
+
+  _:compromised_node_dep_435 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-core-assets 1.4.7" ;
+      :packageName "@antv/li-core-assets" ;
+      :packageVersion "1.4.7"  .
+
+  _:compromised_node_dep_436 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-core-assets 1.5.7" ;
+      :packageName "@antv/li-core-assets" ;
+      :packageVersion "1.5.7"  .
+
+  _:compromised_node_dep_437 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-editor 1.7.1" ;
+      :packageName "@antv/li-editor" ;
+      :packageVersion "1.7.1"  .
+
+  _:compromised_node_dep_438 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-editor 1.8.1" ;
+      :packageName "@antv/li-editor" ;
+      :packageVersion "1.8.1"  .
+
+  _:compromised_node_dep_439 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-p2 1.10.2" ;
+      :packageName "@antv/li-p2" ;
+      :packageVersion "1.10.2"  .
+
+  _:compromised_node_dep_440 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-p2 1.9.2" ;
+      :packageName "@antv/li-p2" ;
+      :packageVersion "1.9.2"  .
+
+  _:compromised_node_dep_441 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-sam-assets 0.2.4" ;
+      :packageName "@antv/li-sam-assets" ;
+      :packageVersion "0.2.4"  .
+
+  _:compromised_node_dep_442 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-sam-assets 0.3.4" ;
+      :packageName "@antv/li-sam-assets" ;
+      :packageVersion "0.3.4"  .
+
+  _:compromised_node_dep_443 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-sdk 1.6.1" ;
+      :packageName "@antv/li-sdk" ;
+      :packageVersion "1.6.1"  .
+
+  _:compromised_node_dep_444 a node:compromised_node_dep ;
+      rdfs:label "@antv/li-sdk 1.7.1" ;
+      :packageName "@antv/li-sdk" ;
+      :packageVersion "1.7.1"  .
+
+  _:compromised_node_dep_445 a node:compromised_node_dep ;
+      rdfs:label "@antv/lite-insight 2.2.1" ;
+      :packageName "@antv/lite-insight" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_446 a node:compromised_node_dep ;
+      rdfs:label "@antv/lite-insight 2.3.1" ;
+      :packageName "@antv/lite-insight" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_447 a node:compromised_node_dep ;
+      rdfs:label "@antv/matrix-util 3.1.4" ;
+      :packageName "@antv/matrix-util" ;
+      :packageVersion "3.1.4"  .
+
+  _:compromised_node_dep_448 a node:compromised_node_dep ;
+      rdfs:label "@antv/matrix-util 3.2.4" ;
+      :packageName "@antv/matrix-util" ;
+      :packageVersion "3.2.4"  .
+
+  _:compromised_node_dep_449 a node:compromised_node_dep ;
+      rdfs:label "@antv/mcp-server-antv 0.2.8" ;
+      :packageName "@antv/mcp-server-antv" ;
+      :packageVersion "0.2.8"  .
+
+  _:compromised_node_dep_450 a node:compromised_node_dep ;
+      rdfs:label "@antv/mcp-server-antv 0.3.8" ;
+      :packageName "@antv/mcp-server-antv" ;
+      :packageVersion "0.3.8"  .
+
+  _:compromised_node_dep_451 a node:compromised_node_dep ;
+      rdfs:label "@antv/mcp-server-chart 0.10.10" ;
+      :packageName "@antv/mcp-server-chart" ;
+      :packageVersion "0.10.10"  .
+
+  _:compromised_node_dep_452 a node:compromised_node_dep ;
+      rdfs:label "@antv/mcp-server-chart 0.11.10" ;
+      :packageName "@antv/mcp-server-chart" ;
+      :packageVersion "0.11.10"  .
+
+  _:compromised_node_dep_453 a node:compromised_node_dep ;
+      rdfs:label "@antv/my-f2 2.2.7" ;
+      :packageName "@antv/my-f2" ;
+      :packageVersion "2.2.7"  .
+
+  _:compromised_node_dep_454 a node:compromised_node_dep ;
+      rdfs:label "@antv/my-f2 2.3.7" ;
+      :packageName "@antv/my-f2" ;
+      :packageVersion "2.3.7"  .
+
+  _:compromised_node_dep_455 a node:compromised_node_dep ;
+      rdfs:label "@antv/my-f2-pc 0.2.1" ;
+      :packageName "@antv/my-f2-pc" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_456 a node:compromised_node_dep ;
+      rdfs:label "@antv/my-f2-pc 0.3.1" ;
+      :packageName "@antv/my-f2-pc" ;
+      :packageVersion "0.3.1"  .
+
+  _:compromised_node_dep_457 a node:compromised_node_dep ;
+      rdfs:label "@antv/narrative-text-editor 0.3.20" ;
+      :packageName "@antv/narrative-text-editor" ;
+      :packageVersion "0.3.20"  .
+
+  _:compromised_node_dep_458 a node:compromised_node_dep ;
+      rdfs:label "@antv/narrative-text-editor 0.4.20" ;
+      :packageName "@antv/narrative-text-editor" ;
+      :packageVersion "0.4.20"  .
+
+  _:compromised_node_dep_459 a node:compromised_node_dep ;
+      rdfs:label "@antv/narrative-text-schema 0.4.7" ;
+      :packageName "@antv/narrative-text-schema" ;
+      :packageVersion "0.4.7"  .
+
+  _:compromised_node_dep_460 a node:compromised_node_dep ;
+      rdfs:label "@antv/narrative-text-schema 0.5.7" ;
+      :packageName "@antv/narrative-text-schema" ;
+      :packageVersion "0.5.7"  .
+
+  _:compromised_node_dep_461 a node:compromised_node_dep ;
+      rdfs:label "@antv/narrative-text-vis 0.4.16" ;
+      :packageName "@antv/narrative-text-vis" ;
+      :packageVersion "0.4.16"  .
+
+  _:compromised_node_dep_462 a node:compromised_node_dep ;
+      rdfs:label "@antv/narrative-text-vis 0.5.16" ;
+      :packageName "@antv/narrative-text-vis" ;
+      :packageVersion "0.5.16"  .
+
+  _:compromised_node_dep_463 a node:compromised_node_dep ;
+      rdfs:label "@antv/path-util 3.1.1" ;
+      :packageName "@antv/path-util" ;
+      :packageVersion "3.1.1"  .
+
+  _:compromised_node_dep_464 a node:compromised_node_dep ;
+      rdfs:label "@antv/path-util 3.2.1" ;
+      :packageName "@antv/path-util" ;
+      :packageVersion "3.2.1"  .
+
+  _:compromised_node_dep_465 a node:compromised_node_dep ;
+      rdfs:label "@antv/react-g 2.2.1" ;
+      :packageName "@antv/react-g" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_466 a node:compromised_node_dep ;
+      rdfs:label "@antv/react-g 2.3.1" ;
+      :packageName "@antv/react-g" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_467 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2 2.8.1" ;
+      :packageName "@antv/s2" ;
+      :packageVersion "2.8.1"  .
+
+  _:compromised_node_dep_468 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2 2.9.1" ;
+      :packageName "@antv/s2" ;
+      :packageVersion "2.9.1"  .
+
+  _:compromised_node_dep_469 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-react 2.4.1" ;
+      :packageName "@antv/s2-react" ;
+      :packageVersion "2.4.1"  .
+
+  _:compromised_node_dep_470 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-react 2.5.1" ;
+      :packageName "@antv/s2-react" ;
+      :packageVersion "2.5.1"  .
+
+  _:compromised_node_dep_471 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-react-components 2.2.2" ;
+      :packageName "@antv/s2-react-components" ;
+      :packageVersion "2.2.2"  .
+
+  _:compromised_node_dep_472 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-react-components 2.3.2" ;
+      :packageName "@antv/s2-react-components" ;
+      :packageVersion "2.3.2"  .
+
+  _:compromised_node_dep_473 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-ssr 0.2.1" ;
+      :packageName "@antv/s2-ssr" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_474 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-ssr 0.3.1" ;
+      :packageName "@antv/s2-ssr" ;
+      :packageVersion "0.3.1"  .
+
+  _:compromised_node_dep_475 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-vue 2.3.0" ;
+      :packageName "@antv/s2-vue" ;
+      :packageVersion "2.3.0"  .
+
+  _:compromised_node_dep_476 a node:compromised_node_dep ;
+      rdfs:label "@antv/s2-vue 2.4.0" ;
+      :packageName "@antv/s2-vue" ;
+      :packageVersion "2.4.0"  .
+
+  _:compromised_node_dep_477 a node:compromised_node_dep ;
+      rdfs:label "@antv/sam 0.3.0" ;
+      :packageName "@antv/sam" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_478 a node:compromised_node_dep ;
+      rdfs:label "@antv/sam 0.4.0" ;
+      :packageName "@antv/sam" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_479 a node:compromised_node_dep ;
+      rdfs:label "@antv/scale 0.6.2" ;
+      :packageName "@antv/scale" ;
+      :packageVersion "0.6.2"  .
+
+  _:compromised_node_dep_480 a node:compromised_node_dep ;
+      rdfs:label "@antv/scale 0.7.2" ;
+      :packageName "@antv/scale" ;
+      :packageVersion "0.7.2"  .
+
+  _:compromised_node_dep_481 a node:compromised_node_dep ;
+      rdfs:label "@antv/semantic-release-pnpm 1.1.4" ;
+      :packageName "@antv/semantic-release-pnpm" ;
+      :packageVersion "1.1.4"  .
+
+  _:compromised_node_dep_482 a node:compromised_node_dep ;
+      rdfs:label "@antv/semantic-release-pnpm 1.2.4" ;
+      :packageName "@antv/semantic-release-pnpm" ;
+      :packageVersion "1.2.4"  .
+
+  _:compromised_node_dep_483 a node:compromised_node_dep ;
+      rdfs:label "@antv/smart-color 0.3.1" ;
+      :packageName "@antv/smart-color" ;
+      :packageVersion "0.3.1"  .
+
+  _:compromised_node_dep_484 a node:compromised_node_dep ;
+      rdfs:label "@antv/smart-color 0.4.1" ;
+      :packageName "@antv/smart-color" ;
+      :packageVersion "0.4.1"  .
+
+  _:compromised_node_dep_485 a node:compromised_node_dep ;
+      rdfs:label "@antv/stat 0.1.2" ;
+      :packageName "@antv/stat" ;
+      :packageVersion "0.1.2"  .
+
+  _:compromised_node_dep_486 a node:compromised_node_dep ;
+      rdfs:label "@antv/stat 0.2.2" ;
+      :packageName "@antv/stat" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_487 a node:compromised_node_dep ;
+      rdfs:label "@antv/t8 0.4.0" ;
+      :packageName "@antv/t8" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_488 a node:compromised_node_dep ;
+      rdfs:label "@antv/t8 0.5.0" ;
+      :packageName "@antv/t8" ;
+      :packageVersion "0.5.0"  .
+
+  _:compromised_node_dep_489 a node:compromised_node_dep ;
+      rdfs:label "@antv/thumbnails 2.1.0" ;
+      :packageName "@antv/thumbnails" ;
+      :packageVersion "2.1.0"  .
+
+  _:compromised_node_dep_490 a node:compromised_node_dep ;
+      rdfs:label "@antv/thumbnails 2.2.0" ;
+      :packageName "@antv/thumbnails" ;
+      :packageVersion "2.2.0"  .
+
+  _:compromised_node_dep_491 a node:compromised_node_dep ;
+      rdfs:label "@antv/thumbnails-component 2.1.0" ;
+      :packageName "@antv/thumbnails-component" ;
+      :packageVersion "2.1.0"  .
+
+  _:compromised_node_dep_492 a node:compromised_node_dep ;
+      rdfs:label "@antv/thumbnails-component 2.2.0" ;
+      :packageName "@antv/thumbnails-component" ;
+      :packageVersion "2.2.0"  .
+
+  _:compromised_node_dep_493 a node:compromised_node_dep ;
+      rdfs:label "@antv/torch 1.1.6" ;
+      :packageName "@antv/torch" ;
+      :packageVersion "1.1.6"  .
+
+  _:compromised_node_dep_494 a node:compromised_node_dep ;
+      rdfs:label "@antv/torch 1.2.6" ;
+      :packageName "@antv/torch" ;
+      :packageVersion "1.2.6"  .
+
+  _:compromised_node_dep_495 a node:compromised_node_dep ;
+      rdfs:label "@antv/translator 1.1.1" ;
+      :packageName "@antv/translator" ;
+      :packageVersion "1.1.1"  .
+
+  _:compromised_node_dep_496 a node:compromised_node_dep ;
+      rdfs:label "@antv/translator 1.2.1" ;
+      :packageName "@antv/translator" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_497 a node:compromised_node_dep ;
+      rdfs:label "@antv/util 3.4.11" ;
+      :packageName "@antv/util" ;
+      :packageVersion "3.4.11"  .
+
+  _:compromised_node_dep_498 a node:compromised_node_dep ;
+      rdfs:label "@antv/util 3.5.11" ;
+      :packageName "@antv/util" ;
+      :packageVersion "3.5.11"  .
+
+  _:compromised_node_dep_499 a node:compromised_node_dep ;
+      rdfs:label "@antv/vendor 1.1.11" ;
+      :packageName "@antv/vendor" ;
+      :packageVersion "1.1.11"  .
+
+  _:compromised_node_dep_500 a node:compromised_node_dep ;
+      rdfs:label "@antv/vendor 1.2.11" ;
+      :packageName "@antv/vendor" ;
+      :packageVersion "1.2.11"  .
+
+  _:compromised_node_dep_501 a node:compromised_node_dep ;
+      rdfs:label "@antv/vis-predict-engine 0.2.1" ;
+      :packageName "@antv/vis-predict-engine" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_502 a node:compromised_node_dep ;
+      rdfs:label "@antv/vis-predict-engine 0.3.1" ;
+      :packageName "@antv/vis-predict-engine" ;
+      :packageVersion "0.3.1"  .
+
+  _:compromised_node_dep_503 a node:compromised_node_dep ;
+      rdfs:label "@antv/webgpu-graph 1.1.0" ;
+      :packageName "@antv/webgpu-graph" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_504 a node:compromised_node_dep ;
+      rdfs:label "@antv/webgpu-graph 1.2.0" ;
+      :packageName "@antv/webgpu-graph" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_505 a node:compromised_node_dep ;
+      rdfs:label "@antv/word-scale-chart 0.4.4" ;
+      :packageName "@antv/word-scale-chart" ;
+      :packageVersion "0.4.4"  .
+
+  _:compromised_node_dep_506 a node:compromised_node_dep ;
+      rdfs:label "@antv/word-scale-chart 0.5.4" ;
+      :packageName "@antv/word-scale-chart" ;
+      :packageVersion "0.5.4"  .
+
+  _:compromised_node_dep_507 a node:compromised_node_dep ;
+      rdfs:label "@antv/wx-f2 2.2.1" ;
+      :packageName "@antv/wx-f2" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_508 a node:compromised_node_dep ;
+      rdfs:label "@antv/wx-f2 2.3.1" ;
+      :packageName "@antv/wx-f2" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_509 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6 3.2.7" ;
+      :packageName "@antv/x6" ;
+      :packageVersion "3.2.7"  .
+
+  _:compromised_node_dep_510 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6 3.3.7" ;
+      :packageName "@antv/x6" ;
+      :packageVersion "3.3.7"  .
+
+  _:compromised_node_dep_511 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-angular-shape 3.1.1" ;
+      :packageName "@antv/x6-angular-shape" ;
+      :packageVersion "3.1.1"  .
+
+  _:compromised_node_dep_512 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-angular-shape 3.2.1" ;
+      :packageName "@antv/x6-angular-shape" ;
+      :packageVersion "3.2.1"  .
+
+  _:compromised_node_dep_513 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-common 2.1.17" ;
+      :packageName "@antv/x6-common" ;
+      :packageVersion "2.1.17"  .
+
+  _:compromised_node_dep_514 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-common 2.2.17" ;
+      :packageName "@antv/x6-common" ;
+      :packageVersion "2.2.17"  .
+
+  _:compromised_node_dep_515 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-components 0.11.7" ;
+      :packageName "@antv/x6-components" ;
+      :packageVersion "0.11.7"  .
+
+  _:compromised_node_dep_516 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-components 0.12.7" ;
+      :packageName "@antv/x6-components" ;
+      :packageVersion "0.12.7"  .
+
+  _:compromised_node_dep_517 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-geometry 2.1.5" ;
+      :packageName "@antv/x6-geometry" ;
+      :packageVersion "2.1.5"  .
+
+  _:compromised_node_dep_518 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-geometry 2.2.5" ;
+      :packageName "@antv/x6-geometry" ;
+      :packageVersion "2.2.5"  .
+
+  _:compromised_node_dep_519 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-clipboard 2.2.6" ;
+      :packageName "@antv/x6-plugin-clipboard" ;
+      :packageVersion "2.2.6"  .
+
+  _:compromised_node_dep_520 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-clipboard 2.3.6" ;
+      :packageName "@antv/x6-plugin-clipboard" ;
+      :packageVersion "2.3.6"  .
+
+  _:compromised_node_dep_521 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-dnd 2.2.1" ;
+      :packageName "@antv/x6-plugin-dnd" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_522 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-dnd 2.3.1" ;
+      :packageName "@antv/x6-plugin-dnd" ;
+      :packageVersion "2.3.1"  .
+
+  _:compromised_node_dep_523 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-export 2.2.6" ;
+      :packageName "@antv/x6-plugin-export" ;
+      :packageVersion "2.2.6"  .
+
+  _:compromised_node_dep_524 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-export 2.3.6" ;
+      :packageName "@antv/x6-plugin-export" ;
+      :packageVersion "2.3.6"  .
+
+  _:compromised_node_dep_525 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-history 2.3.4" ;
+      :packageName "@antv/x6-plugin-history" ;
+      :packageVersion "2.3.4"  .
+
+  _:compromised_node_dep_526 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-history 2.4.4" ;
+      :packageName "@antv/x6-plugin-history" ;
+      :packageVersion "2.4.4"  .
+
+  _:compromised_node_dep_527 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-keyboard 2.3.3" ;
+      :packageName "@antv/x6-plugin-keyboard" ;
+      :packageVersion "2.3.3"  .
+
+  _:compromised_node_dep_528 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-keyboard 2.4.3" ;
+      :packageName "@antv/x6-plugin-keyboard" ;
+      :packageVersion "2.4.3"  .
+
+  _:compromised_node_dep_529 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-minimap 2.1.7" ;
+      :packageName "@antv/x6-plugin-minimap" ;
+      :packageVersion "2.1.7"  .
+
+  _:compromised_node_dep_530 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-minimap 2.2.7" ;
+      :packageName "@antv/x6-plugin-minimap" ;
+      :packageVersion "2.2.7"  .
+
+  _:compromised_node_dep_531 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-scroller 2.1.10" ;
+      :packageName "@antv/x6-plugin-scroller" ;
+      :packageVersion "2.1.10"  .
+
+  _:compromised_node_dep_532 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-scroller 2.2.10" ;
+      :packageName "@antv/x6-plugin-scroller" ;
+      :packageVersion "2.2.10"  .
+
+  _:compromised_node_dep_533 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-selection 2.3.2" ;
+      :packageName "@antv/x6-plugin-selection" ;
+      :packageVersion "2.3.2"  .
+
+  _:compromised_node_dep_534 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-selection 2.4.2" ;
+      :packageName "@antv/x6-plugin-selection" ;
+      :packageVersion "2.4.2"  .
+
+  _:compromised_node_dep_535 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-snapline 2.2.7" ;
+      :packageName "@antv/x6-plugin-snapline" ;
+      :packageVersion "2.2.7"  .
+
+  _:compromised_node_dep_536 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-snapline 2.3.7" ;
+      :packageName "@antv/x6-plugin-snapline" ;
+      :packageVersion "2.3.7"  .
+
+  _:compromised_node_dep_537 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-stencil 2.2.5" ;
+      :packageName "@antv/x6-plugin-stencil" ;
+      :packageVersion "2.2.5"  .
+
+  _:compromised_node_dep_538 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-stencil 2.3.5" ;
+      :packageName "@antv/x6-plugin-stencil" ;
+      :packageVersion "2.3.5"  .
+
+  _:compromised_node_dep_539 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-transform 2.2.8" ;
+      :packageName "@antv/x6-plugin-transform" ;
+      :packageVersion "2.2.8"  .
+
+  _:compromised_node_dep_540 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-plugin-transform 2.3.8" ;
+      :packageName "@antv/x6-plugin-transform" ;
+      :packageVersion "2.3.8"  .
+
+  _:compromised_node_dep_541 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-react 0.2.26" ;
+      :packageName "@antv/x6-react" ;
+      :packageVersion "0.2.26"  .
+
+  _:compromised_node_dep_542 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-react 0.3.26" ;
+      :packageName "@antv/x6-react" ;
+      :packageVersion "0.3.26"  .
+
+  _:compromised_node_dep_543 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-react-components 2.1.9" ;
+      :packageName "@antv/x6-react-components" ;
+      :packageVersion "2.1.9"  .
+
+  _:compromised_node_dep_544 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-react-components 2.2.9" ;
+      :packageName "@antv/x6-react-components" ;
+      :packageVersion "2.2.9"  .
+
+  _:compromised_node_dep_545 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-react-shape 3.1.1" ;
+      :packageName "@antv/x6-react-shape" ;
+      :packageVersion "3.1.1"  .
+
+  _:compromised_node_dep_546 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-react-shape 3.2.1" ;
+      :packageName "@antv/x6-react-shape" ;
+      :packageVersion "3.2.1"  .
+
+  _:compromised_node_dep_547 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-vector 1.5.2" ;
+      :packageName "@antv/x6-vector" ;
+      :packageVersion "1.5.2"  .
+
+  _:compromised_node_dep_548 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-vector 1.6.2" ;
+      :packageName "@antv/x6-vector" ;
+      :packageVersion "1.6.2"  .
+
+  _:compromised_node_dep_549 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-vue3-shape 1.1.0" ;
+      :packageName "@antv/x6-vue3-shape" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_550 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-vue3-shape 1.2.0" ;
+      :packageName "@antv/x6-vue3-shape" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_551 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-vue-shape 3.1.2" ;
+      :packageName "@antv/x6-vue-shape" ;
+      :packageVersion "3.1.2"  .
+
+  _:compromised_node_dep_552 a node:compromised_node_dep ;
+      rdfs:label "@antv/x6-vue-shape 3.2.2" ;
+      :packageName "@antv/x6-vue-shape" ;
+      :packageVersion "3.2.2"  .
+
+  _:compromised_node_dep_553 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow 2.2.13" ;
+      :packageName "@antv/xflow" ;
+      :packageVersion "2.2.13"  .
+
+  _:compromised_node_dep_554 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow 2.3.13" ;
+      :packageName "@antv/xflow" ;
+      :packageVersion "2.3.13"  .
+
+  _:compromised_node_dep_555 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-core 1.1.55" ;
+      :packageName "@antv/xflow-core" ;
+      :packageVersion "1.1.55"  .
+
+  _:compromised_node_dep_556 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-core 1.2.55" ;
+      :packageName "@antv/xflow-core" ;
+      :packageVersion "1.2.55"  .
+
+  _:compromised_node_dep_557 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-diff 1.1.0" ;
+      :packageName "@antv/xflow-diff" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_558 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-diff 1.2.0" ;
+      :packageName "@antv/xflow-diff" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_559 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-extension 1.1.55" ;
+      :packageName "@antv/xflow-extension" ;
+      :packageVersion "1.1.55"  .
+
+  _:compromised_node_dep_560 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-extension 1.2.55" ;
+      :packageName "@antv/xflow-extension" ;
+      :packageVersion "1.2.55"  .
+
+  _:compromised_node_dep_561 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-hook 1.1.55" ;
+      :packageName "@antv/xflow-hook" ;
+      :packageVersion "1.1.55"  .
+
+  _:compromised_node_dep_562 a node:compromised_node_dep ;
+      rdfs:label "@antv/xflow-hook 1.2.55" ;
+      :packageName "@antv/xflow-hook" ;
+      :packageVersion "1.2.55"  .
+
+  _:compromised_node_dep_563 a node:compromised_node_dep ;
+      rdfs:label "ast-plugin 0.1.7" ;
+      :packageName "ast-plugin" ;
+      :packageVersion "0.1.7"  .
+
+  _:compromised_node_dep_564 a node:compromised_node_dep ;
+      rdfs:label "ast-plugin 0.2.7" ;
+      :packageName "ast-plugin" ;
+      :packageVersion "0.2.7"  .
+
+  _:compromised_node_dep_565 a node:compromised_node_dep ;
+      rdfs:label "babel-plugin-version 0.3.3" ;
+      :packageName "babel-plugin-version" ;
+      :packageVersion "0.3.3"  .
+
+  _:compromised_node_dep_566 a node:compromised_node_dep ;
+      rdfs:label "babel-plugin-version 0.4.3" ;
+      :packageName "babel-plugin-version" ;
+      :packageVersion "0.4.3"  .
+
+  _:compromised_node_dep_567 a node:compromised_node_dep ;
+      rdfs:label "boring-avatars-vanilla 1.1.2" ;
+      :packageName "boring-avatars-vanilla" ;
+      :packageVersion "1.1.2"  .
+
+  _:compromised_node_dep_568 a node:compromised_node_dep ;
+      rdfs:label "boring-avatars-vanilla 1.2.2" ;
+      :packageName "boring-avatars-vanilla" ;
+      :packageVersion "1.2.2"  .
+
+  _:compromised_node_dep_569 a node:compromised_node_dep ;
+      rdfs:label "byte-parser 1.1.0" ;
+      :packageName "byte-parser" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_570 a node:compromised_node_dep ;
+      rdfs:label "byte-parser 1.2.0" ;
+      :packageName "byte-parser" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_571 a node:compromised_node_dep ;
+      rdfs:label "canvas-nest.js 2.1.4" ;
+      :packageName "canvas-nest.js" ;
+      :packageVersion "2.1.4"  .
+
+  _:compromised_node_dep_572 a node:compromised_node_dep ;
+      rdfs:label "canvas-nest.js 2.2.4" ;
+      :packageName "canvas-nest.js" ;
+      :packageVersion "2.2.4"  .
+
+  _:compromised_node_dep_573 a node:compromised_node_dep ;
+      rdfs:label "echarts-for-react 3.0.7" ;
+      :packageName "echarts-for-react" ;
+      :packageVersion "3.0.7"  .
+
+  _:compromised_node_dep_574 a node:compromised_node_dep ;
+      rdfs:label "echarts-for-react 3.1.7" ;
+      :packageName "echarts-for-react" ;
+      :packageVersion "3.1.7"  .
+
+  _:compromised_node_dep_575 a node:compromised_node_dep ;
+      rdfs:label "echarts-for-react 3.2.7" ;
+      :packageName "echarts-for-react" ;
+      :packageVersion "3.2.7"  .
+
+  _:compromised_node_dep_576 a node:compromised_node_dep ;
+      rdfs:label "filesize.js 2.1.0" ;
+      :packageName "filesize.js" ;
+      :packageVersion "2.1.0"  .
+
+  _:compromised_node_dep_577 a node:compromised_node_dep ;
+      rdfs:label "filesize.js 2.2.0" ;
+      :packageName "filesize.js" ;
+      :packageVersion "2.2.0"  .
+
+  _:compromised_node_dep_578 a node:compromised_node_dep ;
+      rdfs:label "fixed-round 1.1.2" ;
+      :packageName "fixed-round" ;
+      :packageVersion "1.1.2"  .
+
+  _:compromised_node_dep_579 a node:compromised_node_dep ;
+      rdfs:label "fixed-round 1.2.2" ;
+      :packageName "fixed-round" ;
+      :packageVersion "1.2.2"  .
+
+  _:compromised_node_dep_580 a node:compromised_node_dep ;
+      rdfs:label "gantt-for-react 0.3.0" ;
+      :packageName "gantt-for-react" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_581 a node:compromised_node_dep ;
+      rdfs:label "gantt-for-react 0.4.0" ;
+      :packageName "gantt-for-react" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_582 a node:compromised_node_dep ;
+      rdfs:label "jest-canvas-mock 2.5.3" ;
+      :packageName "jest-canvas-mock" ;
+      :packageVersion "2.5.3"  .
+
+  _:compromised_node_dep_583 a node:compromised_node_dep ;
+      rdfs:label "jest-canvas-mock 2.6.3" ;
+      :packageName "jest-canvas-mock" ;
+      :packageVersion "2.6.3"  .
+
+  _:compromised_node_dep_584 a node:compromised_node_dep ;
+      rdfs:label "jest-canvas-mock 2.7.3" ;
+      :packageName "jest-canvas-mock" ;
+      :packageVersion "2.7.3"  .
+
+  _:compromised_node_dep_585 a node:compromised_node_dep ;
+      rdfs:label "jest-date-mock 1.0.11" ;
+      :packageName "jest-date-mock" ;
+      :packageVersion "1.0.11"  .
+
+  _:compromised_node_dep_586 a node:compromised_node_dep ;
+      rdfs:label "jest-date-mock 1.1.11" ;
+      :packageName "jest-date-mock" ;
+      :packageVersion "1.1.11"  .
+
+  _:compromised_node_dep_587 a node:compromised_node_dep ;
+      rdfs:label "jest-date-mock 1.2.11" ;
+      :packageName "jest-date-mock" ;
+      :packageVersion "1.2.11"  .
+
+  _:compromised_node_dep_588 a node:compromised_node_dep ;
+      rdfs:label "jest-electron 0.2.12" ;
+      :packageName "jest-electron" ;
+      :packageVersion "0.2.12"  .
+
+  _:compromised_node_dep_589 a node:compromised_node_dep ;
+      rdfs:label "jest-electron 0.3.12" ;
+      :packageName "jest-electron" ;
+      :packageVersion "0.3.12"  .
+
+  _:compromised_node_dep_590 a node:compromised_node_dep ;
+      rdfs:label "jest-expect 0.1.1" ;
+      :packageName "jest-expect" ;
+      :packageVersion "0.1.1"  .
+
+  _:compromised_node_dep_591 a node:compromised_node_dep ;
+      rdfs:label "jest-expect 0.2.1" ;
+      :packageName "jest-expect" ;
+      :packageVersion "0.2.1"  .
+
+  _:compromised_node_dep_592 a node:compromised_node_dep ;
+      rdfs:label "jest-less-loader 0.3.0" ;
+      :packageName "jest-less-loader" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_593 a node:compromised_node_dep ;
+      rdfs:label "jest-less-loader 0.4.0" ;
+      :packageName "jest-less-loader" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_594 a node:compromised_node_dep ;
+      rdfs:label "jest-random-mock 1.1.0" ;
+      :packageName "jest-random-mock" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_595 a node:compromised_node_dep ;
+      rdfs:label "jest-random-mock 1.2.0" ;
+      :packageName "jest-random-mock" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_596 a node:compromised_node_dep ;
+      rdfs:label "jest-url-loader 0.2.0" ;
+      :packageName "jest-url-loader" ;
+      :packageVersion "0.2.0"  .
+
+  _:compromised_node_dep_597 a node:compromised_node_dep ;
+      rdfs:label "jest-url-loader 0.3.0" ;
+      :packageName "jest-url-loader" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_598 a node:compromised_node_dep ;
+      rdfs:label "limit-size 0.2.4" ;
+      :packageName "limit-size" ;
+      :packageVersion "0.2.4"  .
+
+  _:compromised_node_dep_599 a node:compromised_node_dep ;
+      rdfs:label "limit-size 0.3.4" ;
+      :packageName "limit-size" ;
+      :packageVersion "0.3.4"  .
+
+  _:compromised_node_dep_600 a node:compromised_node_dep ;
+      rdfs:label "lint-md 0.3.0" ;
+      :packageName "lint-md" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_601 a node:compromised_node_dep ;
+      rdfs:label "lint-md 0.4.0" ;
+      :packageName "lint-md" ;
+      :packageVersion "0.4.0"  .
+
+  _:compromised_node_dep_602 a node:compromised_node_dep ;
+      rdfs:label "lint-md-cli 0.2.2" ;
+      :packageName "lint-md-cli" ;
+      :packageVersion "0.2.2"  .
+
+  _:compromised_node_dep_603 a node:compromised_node_dep ;
+      rdfs:label "lint-md-cli 0.3.2" ;
+      :packageName "lint-md-cli" ;
+      :packageVersion "0.3.2"  .
+
+  _:compromised_node_dep_604 a node:compromised_node_dep ;
+      rdfs:label "@lint-md/cli 2.1.0" ;
+      :packageName "@lint-md/cli" ;
+      :packageVersion "2.1.0"  .
+
+  _:compromised_node_dep_605 a node:compromised_node_dep ;
+      rdfs:label "@lint-md/cli 2.2.0" ;
+      :packageName "@lint-md/cli" ;
+      :packageVersion "2.2.0"  .
+
+  _:compromised_node_dep_606 a node:compromised_node_dep ;
+      rdfs:label "@lint-md/core 2.1.0" ;
+      :packageName "@lint-md/core" ;
+      :packageVersion "2.1.0"  .
+
+  _:compromised_node_dep_607 a node:compromised_node_dep ;
+      rdfs:label "@lint-md/core 2.2.0" ;
+      :packageName "@lint-md/core" ;
+      :packageVersion "2.2.0"  .
+
+  _:compromised_node_dep_608 a node:compromised_node_dep ;
+      rdfs:label "@lint-md/parser 0.1.14" ;
+      :packageName "@lint-md/parser" ;
+      :packageVersion "0.1.14"  .
+
+  _:compromised_node_dep_609 a node:compromised_node_dep ;
+      rdfs:label "@lint-md/parser 0.2.14" ;
+      :packageName "@lint-md/parser" ;
+      :packageVersion "0.2.14"  .
+
+  _:compromised_node_dep_610 a node:compromised_node_dep ;
+      rdfs:label "mcp-echarts 0.8.1" ;
+      :packageName "mcp-echarts" ;
+      :packageVersion "0.8.1"  .
+
+  _:compromised_node_dep_611 a node:compromised_node_dep ;
+      rdfs:label "mcp-echarts 0.9.1" ;
+      :packageName "mcp-echarts" ;
+      :packageVersion "0.9.1"  .
+
+  _:compromised_node_dep_612 a node:compromised_node_dep ;
+      rdfs:label "mcp-mermaid 0.5.1" ;
+      :packageName "mcp-mermaid" ;
+      :packageVersion "0.5.1"  .
+
+  _:compromised_node_dep_613 a node:compromised_node_dep ;
+      rdfs:label "mcp-mermaid 0.6.1" ;
+      :packageName "mcp-mermaid" ;
+      :packageVersion "0.6.1"  .
+
+  _:compromised_node_dep_614 a node:compromised_node_dep ;
+      rdfs:label "miz 1.1.1" ;
+      :packageName "miz" ;
+      :packageVersion "1.1.1"  .
+
+  _:compromised_node_dep_615 a node:compromised_node_dep ;
+      rdfs:label "miz 1.2.1" ;
+      :packageName "miz" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_616 a node:compromised_node_dep ;
+      rdfs:label "onfire.js 2.1.1" ;
+      :packageName "onfire.js" ;
+      :packageVersion "2.1.1"  .
+
+  _:compromised_node_dep_617 a node:compromised_node_dep ;
+      rdfs:label "onfire.js 2.2.1" ;
+      :packageName "onfire.js" ;
+      :packageVersion "2.2.1"  .
+
+  _:compromised_node_dep_618 a node:compromised_node_dep ;
+      rdfs:label "react-adsense 0.2.0" ;
+      :packageName "react-adsense" ;
+      :packageVersion "0.2.0"  .
+
+  _:compromised_node_dep_619 a node:compromised_node_dep ;
+      rdfs:label "react-adsense 0.3.0" ;
+      :packageName "react-adsense" ;
+      :packageVersion "0.3.0"  .
+
+  _:compromised_node_dep_620 a node:compromised_node_dep ;
+      rdfs:label "relationship.js 1.3.9" ;
+      :packageName "relationship.js" ;
+      :packageVersion "1.3.9"  .
+
+  _:compromised_node_dep_621 a node:compromised_node_dep ;
+      rdfs:label "relationship.js 1.4.9" ;
+      :packageName "relationship.js" ;
+      :packageVersion "1.4.9"  .
+
+  _:compromised_node_dep_622 a node:compromised_node_dep ;
+      rdfs:label "ribbon.js 1.1.2" ;
+      :packageName "ribbon.js" ;
+      :packageVersion "1.1.2"  .
+
+  _:compromised_node_dep_623 a node:compromised_node_dep ;
+      rdfs:label "size-sensor 1.0.4" ;
+      :packageName "size-sensor" ;
+      :packageVersion "1.0.4"  .
+
+  _:compromised_node_dep_624 a node:compromised_node_dep ;
+      rdfs:label "size-sensor 1.1.4" ;
+      :packageName "size-sensor" ;
+      :packageVersion "1.1.4"  .
+
+  _:compromised_node_dep_625 a node:compromised_node_dep ;
+      rdfs:label "size-sensor 1.2.4" ;
+      :packageName "size-sensor" ;
+      :packageVersion "1.2.4"  .
+
+  _:compromised_node_dep_626 a node:compromised_node_dep ;
+      rdfs:label "slice.js 1.2.1" ;
+      :packageName "slice.js" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_627 a node:compromised_node_dep ;
+      rdfs:label "slice.js 1.3.1" ;
+      :packageName "slice.js" ;
+      :packageVersion "1.3.1"  .
+
+  _:compromised_node_dep_628 a node:compromised_node_dep ;
+      rdfs:label "timeago.js 4.1.2" ;
+      :packageName "timeago.js" ;
+      :packageVersion "4.1.2"  .
+
+  _:compromised_node_dep_629 a node:compromised_node_dep ;
+      rdfs:label "timeago.js 4.2.2" ;
+      :packageName "timeago.js" ;
+      :packageVersion "4.2.2"  .
+
+  _:compromised_node_dep_630 a node:compromised_node_dep ;
+      rdfs:label "timeago-react 3.1.7" ;
+      :packageName "timeago-react" ;
+      :packageVersion "3.1.7"  .
+
+  _:compromised_node_dep_631 a node:compromised_node_dep ;
+      rdfs:label "timeago-react 3.2.7" ;
+      :packageName "timeago-react" ;
+      :packageVersion "3.2.7"  .
+
+  _:compromised_node_dep_632 a node:compromised_node_dep ;
+      rdfs:label "uri-parse 1.1.0" ;
+      :packageName "uri-parse" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_633 a node:compromised_node_dep ;
+      rdfs:label "uri-parse 1.2.0" ;
+      :packageName "uri-parse" ;
+      :packageVersion "1.2.0"  .
+
+  _:compromised_node_dep_634 a node:compromised_node_dep ;
+      rdfs:label "word-width 1.1.1" ;
+      :packageName "word-width" ;
+      :packageVersion "1.1.1"  .
+
+  _:compromised_node_dep_635 a node:compromised_node_dep ;
+      rdfs:label "word-width 1.2.1" ;
+      :packageName "word-width" ;
+      :packageVersion "1.2.1"  .
+
+  _:compromised_node_dep_636 a node:compromised_node_dep ;
+      rdfs:label "xmorse 1.1.0" ;
+      :packageName "xmorse" ;
+      :packageVersion "1.1.0"  .
+
+  _:compromised_node_dep_637 a node:compromised_node_dep ;
+      rdfs:label "xmorse 1.2.0" ;
+      :packageName "xmorse" ;
+      :packageVersion "1.2.0"  .
+
+}

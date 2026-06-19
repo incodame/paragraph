@@ -1,0 +1,56 @@
+@prefix : <https://github.com/Incodam/paragraph#> .
+@prefix node: <https://github.com/Incodam/paragraph/nodeproj#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+GRAPH :para_graph {
+  _:application_node_dep_1 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @angular/common ~21.2.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@angular/common" ;
+      :packageVersion "~21.2.0" .
+
+  _:application_node_dep_2 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @angular/compiler ~21.2.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@angular/compiler" ;
+      :packageVersion "~21.2.0" .
+
+  _:application_node_dep_3 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @angular/core ~21.2.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@angular/core" ;
+      :packageVersion "~21.2.0" .
+
+  _:application_node_dep_4 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @angular/forms ~21.2.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@angular/forms" ;
+      :packageVersion "~21.2.0" .
+
+  _:application_node_dep_5 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @angular/platform-browser ~21.2.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@angular/platform-browser" ;
+      :packageVersion "~21.2.0" .
+
+  _:application_node_dep_6 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @angular/router ~21.2.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@angular/router" ;
+      :packageVersion "~21.2.0" .
+
+  _:application_node_dep_7 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo @nx/angular 22.7.2" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "@nx/angular" ;
+      :packageVersion "22.7.2" .
+
+  _:application_node_dep_8 a node:application_node_dep ;
+      rdfs:label "paragraph-monorepo rxjs ~7.8.0" ;
+      :appName "paragraph-monorepo" ;
+      :packageName "rxjs" ;
+      :packageVersion "~7.8.0" .
+
+}
