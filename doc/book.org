@@ -253,14 +253,58 @@ IMPORTANT. The advertised syntax is enabled via assert_bdsl's fact expansion pip
 
 * Practical examples of searches for application parameters
 ** Use case driven examples of configuration parameters' searches
-Big Angular applications are a challenge to comprehend as configuration is everywhere and discrepancies between
+Big applications are a challenge to comprehend as configuration is everywhere and discrepancies between
 modules' configuration can go unnoticed until problems surface in the integrated product.
     - a node project dependency might not be compatible even for a minor upgrade of angular
-    - a module's eslint rules might not be aligned with other modules' settings 
+    - a maven module dependency might not be compatible with the Java version used for an application
     - a module's typescript options might not be aligned with other modules' configuration 
 Below are some example of searches which can be done using the BDsl.    
 
-** Examples of "bridging" searches
+*** Analysis of software library dependencies
+
+Below are examples of the usual steps involved for working with the BDsl scripts under prolog/bdsl_lib.
+
+#+begin_src text
+% load the springboot definitions ("pavement")
+?- consult('/opt/paragraph/prolog/bdsl_lib/springboot.bdsl.pl'). 
+
+% search values for the "mvn_dep" parameter   
+?- paramv(mvn_dep, Val, [dbg(true)], Nsc).
+[warfile(paragraph-ui-0.0.1-SNAPSHOT.war-paragraph-ui-(version).war),endswith(/pom.xml),xpath(//project/dependencies/dependency)]
+Reading archive /opt/paragraph/ParagraphUI/target/paragraph-ui-0.0.1-SNAPSHOT.war: META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml
+Val = element(dependency, [], ['\n\t\t\t', element(groupId, [], ['org.springframework.boot']), '\n\t\t\t', element(artifactId, [], ['spring-boot-starter-web']), '\n\t\t']),
+Nsc = [ae('META-INF/maven/org.incodame.paragraph/paragraph-ui/pom.xml'), ar('/opt/paragraph/ParagraphUI/target/paragraph-ui-0.0.1-SNAPSHOT.war'), dbg(true)] .
+
+% unload the springboot definitions
+?- retract_bdsl(springboot).
+
+% load the node project definitions ("pavement")
+?- consult('/opt/paragraph/prolog/bdsl_lib/nodeproj.bdsl.pl').
+
+% search values for the "node_dep" parameter
+?- paramv(node_dep, Val, [dbg(true)], Nsc).
+[applfile(package.json),jsonget(dependencies/:)]
+Val = ['@angular/common'-"~21.2.0", '@angular/compiler'-"~21.2.0", '@angular/core'-"~21.2.0", '@angular/forms'-"~21.2.0", '@angular/platform-browser'-"~21.2.0", '@angular/router'-"~21.2.0", '@nx/angular'-"22.7.2", rxjs-"~7.8.0"],
+Nsc = [af('/opt/paragraph/ParagraphAng/paragraph-monorepo/package.json'), dbg(true)] ;
+false.
+
+% unload the nodeproj definitions
+?- retract_bdsl(nodeproj).
+#+end_src
+
+The graph of parameters for an analysis is designed to be composable by different definitions/pavements.
+
+Before consulting a pavement for the 2nd time, simply retract the bdsl facts using the corresponding pavement ("springboot", "nodeproj", etc...)
+ using "retract_bdsl".
+The Nsc variable above ("new scoper") carries the resulting context of the paramv evaluation:
+  - ae "archive extract" yields the location of a file resource in an archive
+  - ar "archive" yields the location of an archive in the file system
+  - af "application file" yields the location of a configuration file in the file system
+  etc... 
+The dbg(true) option allows a print of the bottom_up navigation path to resolve a parameter to its using application (navigate_graph_up),
+ and of accessed file systems resources during the search.  
+
+** Examples of "bridging" searches involving several parameters
 *** Scopers to the rescue
 *** Example - Chaining parameter evaluations with scopers
 
@@ -429,4 +473,4 @@ In the case of the insecure node dependencies, that the packageName and packageV
 
 * Examples of workflows - coordinating complex search tasks
 ** The coworkers module - resumable workflow system
-** Use of datalog system and agentic AI
+** Use of datalog system and agentic AI for synchronizing search tasks

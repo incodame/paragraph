@@ -6,6 +6,7 @@ A configuration management toolkit (module) written in prolog, including:
 * application archive analysis (jar, war, ear, zips)
 * diff tools working on xml, json, or yaml documents or referencing parameters (diff DSL)
 * coordination of search tasks using the coworkers module
+* example of data integration with a datalog system for checking software contracts
 
 The framework's purpose and examples is covered in this online [book](https://github.com/incodame/paragraph/blob/master/doc/book.org)
 
@@ -192,3 +193,6 @@ SELECT ?x WHERE {
   }
 }
 ```
+
+Beyond visualization this resource [software contracts](https://github.com/incodame/paragraph/blob/master/doc/software_contracts.org) documents 
+the use of Datalog systems to automatically check contracts that the para_graph model and extracted paramv values must fulfill. 
