@@ -25,6 +25,7 @@ prevent use of other directory not under workdirectory
 *** chaining tests
 ** datalog system for storing para_graphs (RDFox)
 *** BDsl to RDF Turtle / OWL2 conversion using ai (sub project pgraphlog)
+*** add OWL2 data property name to BDsl (e.g. node_dep packageName and packageVersion)
 *** Import into RDFox
 ** verticles
  - document the role of the paragraph verticles
