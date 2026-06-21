@@ -13,9 +13,9 @@
 
   % build config
   f('package.json') :> pr('nodeproj'), 
-  f('package.json') -+ s([name='node_dep', loc=jsonget('dependencies/:'), doc="node project dependency"]),
-  s('node_dep') -+ i([name='node_dep_name', loc=jsonget('key()'), doc="node dependency name"]),
-  s('node_dep') -+ i([name='node_dep_ver', loc=jsonget('val()'), doc="node dependency version"]),
+  f('package.json') -+ s([name='node_dep', loc=jsonget('dependencies/:'), doc="node project dependency", owl="child_infos()"]),
+  s('node_dep') -+ i([name='node_dep_name', loc=jsonget('key()'), doc="node dependency name", owl=":packageName"]),
+  s('node_dep') -+ i([name='node_dep_ver', loc=jsonget('val()'), doc="node dependency version", owl=":packageVersion"]),
 
   % typescript config
   f('tsconfig.json') :> pr('appdir'),

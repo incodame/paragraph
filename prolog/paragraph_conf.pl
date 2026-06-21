@@ -232,15 +232,15 @@ container_contains_param(Container, ContainerType, Param, ParamType) :-
 
 extract_loc_and_doc(ContainerTerm, Param, ParamType, Loc, Doc) :-
     ( ParamType = i -> 
-        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=Loc, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, i([ name=Param, loc=Loc, doc=Doc | _ ]))
       ; ParamType = s ->
-        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=Loc, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, s([ name=Param, loc=Loc, doc=Doc | _ ]))
       ; ParamType = f ->
-        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=Loc, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, f([ name=Param, loc=Loc, doc=Doc | _ ]))
       ; ParamType = d ->
-        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=Loc, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, d([ name=Param, loc=Loc, doc=Doc | _ ]))
       ; ParamType = z ->  
-        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=Loc, doc=Doc ]))
+        paragraph_bdsl:'-+'(ContainerTerm, z([ name=Param, loc=Loc, doc=Doc | _ ]))
     ).
 
 
