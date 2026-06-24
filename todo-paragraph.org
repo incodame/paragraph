@@ -25,7 +25,7 @@ prevent use of other directory not under workdirectory
 *** chaining tests
 ** datalog system for storing para_graphs (RDFox)
 *** BDsl to RDF Turtle / OWL2 conversion using ai (sub project pgraphlog)
-*** add OWL2 data property name to BDsl (e.g. node_dep packageName and packageVersion)
+*** add and use OWL2 data property name to BDsl (e.g. node_dep packageName and packageVersion)
 *** Import into RDFox
 ** verticles
  - document the role of the paragraph verticles
@@ -42,9 +42,9 @@ prevent use of other directory not under workdirectory
 ** BDsl syntax enabled via "fact expansion" pipeline (t/bdsl_expand_t.plt)
 ** scratch introduction
 * improve
-** contloc_app_archive 
-processes files . and ..
-it uses directory_files and could filter based on the FileType if it is ground
+** simplified setup:
+*** paragraph_setup calls paragraph_py_setup and the pack_installs
+*** complete docker image without need of paragraph_setup
 ** tabling not yet working
  - document use of tabling with paramval
  - document differences SWI (table as subsumptive) vs scryer

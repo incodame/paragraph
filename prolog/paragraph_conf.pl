@@ -10,6 +10,15 @@
 :- py_add_lib_dir('/opt/pavements/lib/python').
 
 %%
+%% Setup
+%%
+
+paragraph_setup :-
+    paragraph_py_setup,
+    pack_install(list_util),
+    pack_install(regex), !.
+
+%%
 %% Paragraph python setup
 %%
 
