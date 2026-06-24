@@ -1,17 +1,25 @@
 # First time:
 ```
-docker run -it --rm -v $(pwd):/opt/paragraph -v $(pwd)/../pavements:/opt/pavements -v /tmp/paragraph:/tmp/paragraph --env PARAGRAPH_HOME=/opt/paragraph --env PARAGRAPH_TEMP=/tmp/paragraph --env PAVEMENTS_LIBRARY=/opt/pavements/library --env IPADDRE=$(ipconfig getifaddr en0) incodame/swipy
+docker run -it --rm -v $(pwd):/opt/paragraph -v $(pwd)/../pavements:/opt/pavements -v /tmp/paragraph:/tmp/paragraph --env PARAGRAPH_HOME=/opt/paragraph --env PARAGRAPH_TEMP=/tmp/paragraph --env PAVEMENTS_LIBRARY=/opt/pavements/library incodame/swipy
 ```
 
-## install:
+NOTE - The docker image "swipy" can be built using the Dockerfile at https://github.com/incodame/swipy 
+
+## configure a working session with:
 ```
-?- pack_install(list_util).
-?- pack_install(regex).
+?- consult('/opt/paragraph/prolog/paragraph_conf.pl').
+?- paragraph_setup.
+```
+
+The latest command imports some python and prolog packages which are not part of the standard distribution for python / swi-prolog.
+
+## load some BDSL definitions with:
+```
+?- consult('/opt/paragraph/prolog/bdsl_lib/nodeproj.bdsl.pl').
 ```
 
 ## start a working session with:
 ```
-?- consult('/opt/paragraph/prolog/paragraph_conf.pl').
 ?- consult('/opt/paragraph/prolog/paragraph.pl').
 ```
 
