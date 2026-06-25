@@ -1,0 +1,113 @@
+* AI Agents Integration with BDsl Metadata and Datalog/SPARQL
+
+** Purpose
+This document describes how Paragraph can expose BDsl-derived metadata as RDF/SPARQL knowledge, enabling agents to monitor source changes and generate or retract application facts in a datalog-enabled store.
+
+** Key concepts
+- BDsl metadata: structured facts generated from BDsl source scripts such as `nodeproj.bdsl.pl`.
+- Metadata graph: RDF/OWL representation of BDsl entities, parameters, and extraction rules.
+- Application facts: derived facts created by agents to represent real system state or changes.
+- Agent workflow: query metadata, interpret extraction details, update the same named graph with application facts.
+
+** Motivation
+Paragraph’s BDsl was originally intended to mechanize software parameter extraction for decision-making in devops. Converting BDsl representation into RDF/OWL metadata makes those extraction rules available to agents and datalog/SPARQL systems such as RDFox.
+
+** Agent role
+Agents can use the BDsl metadata as an "Ariadne’s thread":
+- discover relevant parameters and file-based sources
+- understand extraction paths via `:loc`
+- use documentation and semantic hints from `:doc` and `:owl`
+- generate or retract derived application facts during code reviews, merges, or deployment checks
+
+**Metadata model example**
+The `nodeproj_bdsl.ttl` sample illustrates the kinds of metadata generated from a BDsl script:
+
+- `node:nodeproj` is a project root reference (`:PathRef`).
+- `node:package_json` is an application file node (`:ApplFile`) containing `package.json`.
+- `node:node_dep` is a structured parameter (`:StructParam`) extracted from `package.json`.
+- `node:node_dep_name` and `node:node_dep_ver` are information parameters (`:InfoParam`) belonging to the structured parameter.
+- `node:application_node_dep` is the application-level fact that agents should derive from the source parameter.
+
+**Example metadata fragment**
+#+begin_src ttl
+node:node_dep a :StructParam ;
+    rdfs:label "node_dep (structured parameter from package.json)" ;
+    :forFile node:package_json ;
+    :loc "jsonget('dependencies/:')" ;
+    :doc "node project dependency" .
+
+node:node_dep_name a :InfoParam ;
+    rdfs:label "node_dep_name" ;
+    :loc "jsonget('key()')" ;
+    :belongsTo node:node_dep .
+
+node:node_dep_ver a :InfoParam ;
+    rdfs:label "node_dep_ver" ;
+    :loc "jsonget('val()')" ;
+    :belongsTo node:node_dep .
+
+node:application_node_dep a node:node_dep ;
+    rdfs:label "application_node_dep (instance of node_dep)" ;
+    :doc "actual application dependency" .
+#+end_src
+
+This fragment shows how source-side parameters and application-side derived instances are represented in the same graph.
+
+**Agent workflow details
+1. Discover parameters
+   - Query the metadata graph for all `:Parameter` instances.
+   - Collect associated `:loc`, `:doc`, `:owl`, and membership relationships.
+2. Interpret extraction rules
+   - Use `:loc` expressions to read values from the referenced source file.
+   - Use parameter hierarchy (`:belongsTo`, `:forFile`) to understand structure.
+3. Detect changes
+   - Compare current source values with previous application facts.
+   - Use context from the change review prompt to identify current application and version.
+4. Update derived facts
+   - Add new facts such as `node:application_node_dep` when a dependency appears.
+   - Retract facts when a dependency is removed.
+   - Keep derived facts in the same named graph as the metadata or in a dedicated application graph depending on deployment.
+
+**Practical SPARQL query for metadata discovery
+A more useful query than a simple `rdf:type :Parameter` lookup is one that retrieves extraction details:
+
+#+begin_src sparql
+SELECT ?param ?label ?doc ?loc ?owl ?file WHERE {
+  GRAPH :para_graph {
+    ?param rdf:type :Parameter .
+    OPTIONAL { ?param rdfs:label ?label }
+    OPTIONAL { ?param :doc ?doc }
+    OPTIONAL { ?param :loc ?loc }
+    OPTIONAL { ?param :owl ?owl }
+    OPTIONAL { ?param :forFile ?file }
+  }
+}
+#+end_src
+
+This query gives an agent the metadata it needs to evaluate parameter extraction and derive application facts.
+
+**Example prompt for an agent
+#+begin_src text
+You are a change reviewer agent. Your goal is to monitor changes for the named parameters defined in the RDF metadata graph and derive application-level facts accordingly.
+
+Use the metadata at https://localhost:12110/console/datastores/explore?datastore=<your datastore>.
+
+1. Retrieve metadata parameters with SPARQL.
+2. For each target parameter, inspect its `:loc`, `:doc`, and any structural relationships.
+3. Detect changed source values from the current change context.
+4. Add or retract derived application facts in the same named graph.
+
+Please do not modify the BDsl metadata itself. Only update derived application facts such as `application_node_dep` instances.
+
+Watch for these parameters:
+  - `node_dep`
+#+end_src
+
+**Recommended improvements for the metadata strategy
+- Keep BDsl metadata and derived facts clearly separated by class or graph when possible.
+- Use `:doc` to describe extraction semantics for non-trivial parameters.
+- Use `:owl` or ontology references to indicate type, cardinality, or semantic constraints.
+- Prefer explicit parameter hierarchies (`:belongsTo`, `:forFile`) so agents can traverse nested structures.
+
+**Conclusion
+This architecture makes BDsl scripts first-class inputs to AI agents and datalog/SPARQL systems. By expressing BDsl parameters as RDF metadata, agents can perform extraction, update derived facts, and support software contract reviews in a repeatable, queryable way.
