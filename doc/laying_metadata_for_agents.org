@@ -1,0 +1,59 @@
+* Software Configuration Management with Prolog / Datalog
+
+* Laying "metadata" for agents ("DRAFT")
+
+** A new role for the paragraph's internal BDsl representation
+
+Paragraph's initial intent dating back in 2016 was to "mechanize" the extraction of software systems' parameters to 
+ assist humans in order to collect a "discretized" view of these systems for decision making in relation to devops.
+
+The introduction in 2026 of the BDsl as "glue" for the integration with the pavements project was designed as an 
+ intermediary step to test that integration and improve the expressiveness of the configuration of the tool for
+ solving real projects.
+
+During the evaluation of the datalog product for the "software contracts" chapter (in doc/software_contracts.org) 
+ it became clear that the translation of the BDsl representation to RDF / OWL2 was a natural task for agentic AI. 
+
+In particular the BDsl-derived facts can be stored in the graph as a kind of "Ariadne's thread" that can later be
+ used by agents to perform the same extraction on their own and generate new "application" facts during system 
+ change reviews (typically during "merge" or "pull" requests by developers or devops).
+
+** Giving the agents the possibility to generate new datalog facts
+
+Typically the agent can be instructed to monitor changes for a list of paragraph parameters, for which it will be
+ able to extract values using the information conveyed in the "doc" attribute of the parameters in the BDsl, and 
+ generate additional facts or retract facts, thanks to the "owl" property of those parameters.
+ 
+As example:
+
+the "node_dep" :StructParam will incur the generation of new "application_node_dep" nodes with values extracted for
+ each of the child informations related to the node_dep parameter: node_dep_name as ":packageName" and 
+ node_dep_ver as ":packageVersion". 
+
+Contextual parameters such as application name and version can be obtained by the agent from the context of the 
+ change and some possible additional information from the prompt.  
+
+Below is an example of such a prompt: 
+
+#+begin_src text 
+As a change reviewer you are monitoring change of values for the parameters defined in the datalog system at
+  https://localhost:12110/console/datastores/explore?datastore=<your datastore>
+
+The parameters can be obtained using the following SPARQL query:
+
+SELECT ?x WHERE {
+  GRAPH :para_graph {
+    ?x rdf:type :Parameter .
+  }
+}
+
+please retrieve possible change of values for the following parameters: 
+  - "node_dep" 
+in relation with the current change. 
+
+Upon successful retrieval, please add or retract "application_" facts connected to that parameter, 
+ to (resp. from) the same named graph. 
+
+#+end_src 
+
+
