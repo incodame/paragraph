@@ -92,7 +92,8 @@ You are a change reviewer agent. Your goal is to monitor changes for the named p
 
 Use the metadata at https://localhost:12110/console/datastores/explore?datastore=<your datastore>.
 
-1. Retrieve metadata parameters with SPARQL.
+1. Retrieve metadata parameters with SPARQL using the query shown above.
+   Use it to collect `?param`, `?label`, `?doc`, `?loc`, `?owl`, and `?file`.
 2. For each target parameter, inspect its `:loc`, `:doc`, and any structural relationships.
 3. Detect changed source values from the current change context.
 4. Add or retract derived application facts in the same named graph.
@@ -108,6 +109,14 @@ Watch for these parameters:
 - Use `:doc` to describe extraction semantics for non-trivial parameters.
 - Use `:owl` or ontology references to indicate type, cardinality, or semantic constraints.
 - Prefer explicit parameter hierarchies (`:belongsTo`, `:forFile`) so agents can traverse nested structures.
+
+** Metadata graph vs application facts graph
+- Metadata graph: stores BDsl-derived descriptions of parameters, sources, extraction rules, and ontology hints.
+- Application facts graph: stores derived, runtime facts that represent the current application state or change-driven results.
+- Separation benefits:
+  - avoids accidental metadata mutation by agents
+  - allows different access and retention policies for metadata and derived facts
+  - clarifies whether a fact is a rule/extraction description or a realized application artifact
 
 ** Conclusion
 This architecture makes BDsl scripts first-class inputs to AI agents and datalog/SPARQL systems. By expressing BDsl parameters as RDF metadata, agents can perform extraction, update derived facts, and support software contract reviews in a repeatable, queryable way.
