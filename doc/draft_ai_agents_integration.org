@@ -19,7 +19,7 @@ Agents can use the BDsl metadata as an "Ariadne’s thread":
 - use documentation and semantic hints from `:doc` and `:owl`
 - generate or retract derived application facts during code reviews, merges, or deployment checks
 
-**Metadata model example**
+** Metadata model example
 The `nodeproj_bdsl.ttl` sample illustrates the kinds of metadata generated from a BDsl script:
 
 - `node:nodeproj` is a project root reference (`:PathRef`).
@@ -28,7 +28,7 @@ The `nodeproj_bdsl.ttl` sample illustrates the kinds of metadata generated from 
 - `node:node_dep_name` and `node:node_dep_ver` are information parameters (`:InfoParam`) belonging to the structured parameter.
 - `node:application_node_dep` is the application-level fact that agents should derive from the source parameter.
 
-**Example metadata fragment**
+** Example metadata fragment
 #+begin_src ttl
 node:node_dep a :StructParam ;
     rdfs:label "node_dep (structured parameter from package.json)" ;
@@ -53,7 +53,7 @@ node:application_node_dep a node:node_dep ;
 
 This fragment shows how source-side parameters and application-side derived instances are represented in the same graph.
 
-**Agent workflow details
+** Agent workflow details
 1. Discover parameters
    - Query the metadata graph for all `:Parameter` instances.
    - Collect associated `:loc`, `:doc`, `:owl`, and membership relationships.
@@ -68,7 +68,7 @@ This fragment shows how source-side parameters and application-side derived inst
    - Retract facts when a dependency is removed.
    - Keep derived facts in the same named graph as the metadata or in a dedicated application graph depending on deployment.
 
-**Practical SPARQL query for metadata discovery
+** Practical SPARQL query for metadata discovery
 A more useful query than a simple `rdf:type :Parameter` lookup is one that retrieves extraction details:
 
 #+begin_src sparql
@@ -86,7 +86,7 @@ SELECT ?param ?label ?doc ?loc ?owl ?file WHERE {
 
 This query gives an agent the metadata it needs to evaluate parameter extraction and derive application facts.
 
-**Example prompt for an agent
+** Example prompt for an agent
 #+begin_src text
 You are a change reviewer agent. Your goal is to monitor changes for the named parameters defined in the RDF metadata graph and derive application-level facts accordingly.
 
@@ -103,11 +103,11 @@ Watch for these parameters:
   - `node_dep`
 #+end_src
 
-**Recommended improvements for the metadata strategy
+** Recommended improvements for the metadata strategy
 - Keep BDsl metadata and derived facts clearly separated by class or graph when possible.
 - Use `:doc` to describe extraction semantics for non-trivial parameters.
 - Use `:owl` or ontology references to indicate type, cardinality, or semantic constraints.
 - Prefer explicit parameter hierarchies (`:belongsTo`, `:forFile`) so agents can traverse nested structures.
 
-**Conclusion
+** Conclusion
 This architecture makes BDsl scripts first-class inputs to AI agents and datalog/SPARQL systems. By expressing BDsl parameters as RDF metadata, agents can perform extraction, update derived facts, and support software contract reviews in a repeatable, queryable way.
