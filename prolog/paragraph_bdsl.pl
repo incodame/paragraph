@@ -3,17 +3,17 @@
 :- op(500, xfy, ':>').
 :- op(400, xfy, '-+').
 :- dynamic ':>'/2.
-:- discontiguous ':>'/2.
+:- discontiguous ':>'/2.  % expresses resolution to a path or some concrete filesystem resource
 :- dynamic '-+'/2.
-:- discontiguous '-+'/2.
+:- discontiguous '-+'/2.  % belongs to an upper structure or container
 :- dynamic p/1.
 :- discontiguous p/1.  % path specification
 :- dynamic pr/1.
-:- discontiguous pr/1.  % path reference specification
+:- discontiguous pr/1. % path reference specification
 :- dynamic d/2.
-:- discontiguous d/2.  % directory specification
+:- discontiguous d/2.  % directory content specification
 :- dynamic z/2.
-:- discontiguous z/2.  % zip/jar specification
+:- discontiguous z/2.  % zip/jar content specification
 :- dynamic f/1.
 :- discontiguous f/1.  % file specification
 :- dynamic s/1.
