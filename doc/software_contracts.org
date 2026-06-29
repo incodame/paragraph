@@ -5,7 +5,7 @@
 ** Introduction
 
 This document presents an introduction to the concept of "software system contracts": 
-[[file:./draft_reflection_on_system_contracts.org]].
+[[file:./reflection_on_system_contracts.org]].
 
 ** Role of ontologies
 Ontologies defined using the OWL2 standard allow to reason using a more natural framework than just plain prolog:
