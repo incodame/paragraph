@@ -1,9 +1,10 @@
 # First time:
 ```
-docker run -it --rm -v $(pwd):/opt/paragraph -v $(pwd)/../pavements:/opt/pavements -v /tmp/paragraph:/tmp/paragraph --env PARAGRAPH_HOME=/opt/paragraph --env PARAGRAPH_TEMP=/tmp/paragraph --env PAVEMENTS_LIBRARY=/opt/pavements/library incodame/swipy
+docker run -it --rm -v $(realpath .):/opt/paragraph -v $(realpath .)/../pavements:/opt/pavements -v /tmp/paragraph:/tmp/paragraph --env PARAGRAPH_HOME=/opt/paragraph --env PARAGRAPH_TEMP=/tmp/paragraph --env PAVEMENTS_LIBRARY=/opt/pavements/library incodame/swipy
 ```
 
-NOTE - The docker image "swipy" can be built using the Dockerfile at https://github.com/incodame/swipy 
+NOTE 1 - The docker image "swipy" can be built using the Dockerfile at https://github.com/incodame/swipy 
+NOTE 2 - replace $(realpath .) with the actual OS path after cloning paragraph on your system
 
 ## configure a working session with:
 ```

@@ -1,0 +1,83 @@
+* A reflection on the importance of software contracts
+
+This section's goal is to precise the meaning of "software contracts" in the context of 
+ a large scale software ecosystem, such as an enterprise software solution.
+
+They refer to collective rules that make a system work at every stakeholder's
+ level, which I refer as "consumer": impacted development teams, product managers, QA teams, 
+ dev.ops teams, legal teams, customers etc ...  
+
+** Scaling solutions from individual application development to software ecosystem development
+
+Solutions to create guardrails for application development using AI agents are typically:
+  - to document input information and expected output for software changes, in prompts
+  - to add explicit rules or quality gates in prompts
+  - to maintain a comprehensive software test suite in particular for preventing regressions
+
+These solutions help developers produce incremental changes with a reasonable level of confidence
+ that the changes stay aligned with the overall project standards and objectives (vision).
+
+In a software ecosystem such as an enterprise solution being developped by many different teams,
+ oversight requires a change of scale and use of different solutions for validating changes made 
+ through the use of AI agents. 
+
+Agility brought to individual teams by AI agents increase the risk for "integration instability":
+  - changes happen quicker and a thorough review of changes might not be performed at all times
+     by development teams
+  - AI software agents might not produce a reliable change audit trail, potentially leading to an
+     obfuscated picture of the current state of the ecosystem
+  - the higher speed of delivering changes might create an imbalance on the "consumers" who
+     have to adapt to a higher flow of information without being equally equipped to validate 
+     changes at their level (lack of AI or automated validation tools)
+
+The above risks stay however comparatively low to those:  
+  - supplier to consumer agreements might be expressed in documentation not typically fed to 
+     agents or stay largely undocumented based on historical practice 
+  - different consumers of software changes might not expect the same outcome as they work with
+     different rules for their own validation of the system 
+       
+** Leveraging explainable AI to keep oversight on changes made through agentic AI
+
+Based on the risks expressed above, a hybrid solution composed of agentic AI and of classical AI 
+ leveraging corporate knowledge makes sense. This is most commonly done using RAG,
+ with the 2 most well known forms: vector database for raw documents and knowledge graph RAG.
+
+On practical matters, it is not possible to parse the whole corpus of information for validating
+ agent changes. RAG systems encode a "path to information retrieval" that agents can use for their
+ work, which is normally limited in size. 
+
+For practical and cost reasons agent search in a vast vector database or knowledge graph
+ is not typically performed at an individual team level. Agents might also choose not to use some
+ of the encoded facts from the RAG information system without explicit instructions to do so.
+
+*** The role of datalog systems in conjunction with agentic AI
+
+An agent, working in the context of an individual software change it was instructed to perform,
+ is usually not made aware of the "big picture" and of the expectations of all stakeholders.
+
+An AI agent can however be given the minimal "metadata" to express or retract facts from a 
+ knowledge graph, which it can correlate to a software change, provided it can take the form of
+ a software file change or software test result change.
+ 
+Confer for example the role of the BDsl in paragraph: 
+[[file:./draft_laying_metadata_for_agents.org]].
+
+For complex subject matters the output of tests maintained by the software development teams can
+ be updated to include additional metadata, which can be made available in test reports.
+The test reports metadata can then be translated to facts in the knowledge graph by an agent.
+
+Stakeholders requirements (which I design by "software contracts") can then be
+ automatically verified by the knowledge graph if it supports datalog inference rules,
+ which extends the graph with additional facts. 
+
+This essential aspect of datalog systems lays the ground for a re-inforcing pattern:
+  - agents can use the additional facts in their work without need for a full graph search
+  - datalog rules can express a wide range of stakeholders' expectations, however complex these
+     might be
+  - the datalog system can provide an accurate picture of the ecosystem to all stakeholders
+
+
+
+
+
+
