@@ -1,9 +1,10 @@
 * A reflection on the importance of software contracts
 
 This section's goal is to precise the meaning of "software contracts" in the context of 
- a large scale software ecosystem, such as an enterprise software solution.
+ a large scale software ecosystem, such as an enterprise software solution, and more
+ specifically in the context of software changes made through agentic AI.
 
-They refer to collective rules that make a system work at every stakeholder's
+"Software contracts" refer to collective rules that make a system work at every stakeholder's
  level, which I refer as "consumer": impacted development teams, product managers, QA teams, 
  dev.ops teams, legal teams, customers etc ...  
 
@@ -76,8 +77,13 @@ This essential aspect of datalog systems lays the ground for a re-inforcing patt
      might be
   - the datalog system can provide an accurate picture of the ecosystem to all stakeholders
 
+*** The qualities to be expected from a datalog implementation
 
+The performance of the datalog system to manage additional facts or fact retractions under 
+ constant load is one essential quality to allow seamless integration with existing enterprise
+ tools used for change control or continuous integration.  
 
-
+The ability to explain facts created by rules is also of utmost importance to enable tool
+ adoption by non technical specialists.  
 
 
