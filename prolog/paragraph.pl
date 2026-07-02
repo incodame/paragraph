@@ -708,10 +708,19 @@ container_term(Container, MatchedContainer, zipfile(MatchedContainer-Container))
 
 %%% xpath
 
+% helper to convert xpath atom to xpath term
+xpath_atom_to_term(XpathAtom, XpathTerm) :-
+    (   atom_concat('//', Rest, XpathAtom)
+    ->  XpathTerm = '//'(Rest)
+    ;   atom_concat('/', Rest, XpathAtom)
+    ->  XpathTerm = '/'(Rest)
+    ;   XpathTerm = XpathAtom
+    ).
+
 % xpath for a flat file
 transition(xpath(XpathAtom), file(FilePath), Val, Scoper0, Scoper1) :-
-    read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)]),
-    load_xml(FilePath, XmlRoot, _),
+    xpath_atom_to_term(XpathAtom, XpathTerm),
+    load_xml(FilePath, XmlRoot, []),
     xpath(XmlRoot, XpathTerm, Val),
     Scoper1 = Scoper0.
 
@@ -747,6 +756,22 @@ transition(warfile(MatchedFile), app(AppId), file(FilePath), Scoper0, Scoper1) :
     atomic_list_concat(FilePathList, '/', FilePath),
     Scoper1 = [ar(FilePath) | Scoper0].
 
+% version using paramloc/8, if Scoper0 has no constraint
+% if MatchedFile was resolved from FileMatch 
+transition(jarfile(MatchedFile-FileMatch), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, FileMatch, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
+    append(ResolvePathList, [MatchedFile], FilePathList),
+    atomic_list_concat(FilePathList, '/', FilePath),
+    Scoper1 = [ar(FilePath) | Scoper0].
+
+% version using paramloc/8, if Scoper0 has no constraint
+% NB: paramloc: MatchedFile is not ground if AppId is ground
+transition(jarfile(MatchedFile), app(AppId), file(FilePath), Scoper0, Scoper1) :-
+    paramloc(AppId, _Param, MatchedFile, _LocTerm, MatchedFile, ResolvePathList, _Markers, _ParamProps),
+    append(ResolvePathList, [MatchedFile], FilePathList),
+    atomic_list_concat(FilePathList, '/', FilePath),
+    Scoper1 = [ar(FilePath) | Scoper0].
+
 % version using contloc/5, if Scoper0 has some constraint
 %transition(applfile(FileSpec), app(AppId), file(FilePath), Scoper0, Scoper1) :-
 %    contloc(AppId, applfile(FileSpec), file(FilePath), Scoper0, Scoper1).
@@ -758,14 +783,14 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper1) :-
     contloc(AppId, applfile(FileSpec), Version, file(FilePath), Scoper0, Scoper1),
     format(string(Info), 'Reading file ~w', [FilePath]),
     writeln(Info),
-    load_xml(FilePath, XmlRoot, _),
+    load_xml(FilePath, XmlRoot, []),
     xpath(XmlRoot, Xpath, Val).
 
 
 % xpath for an archive xml resource (war / jar / zip)
 transition(xpath(XpathAtom), stream(FileStream), Val, Scoper0, Scoper1) :-
-    read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)]),
-    load_xml(stream(FileStream), XmlRoot, _),
+    xpath_atom_to_term(XpathAtom, XpathTerm),
+    load_xml(stream(FileStream), XmlRoot, []),
     xpath(XmlRoot, XpathTerm, Val),
     %close(FileStream),
     Scoper1 = Scoper0.
@@ -793,7 +818,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
     setup_call_cleanup(
         open_archive_entry(AfilePath, Entry, XmlStream),
         (
-            load_xml(stream(XmlStream), XmlRoot, _),
+            load_xml(stream(XmlStream), XmlRoot, []),
             xpath(XmlRoot, Xpath, Val)
         ),
         close(XmlStream)).
@@ -839,7 +864,7 @@ paramval(Param, AppId, Version, Val, Scoper0, Scoper2) :-
 
 % nested xpath definitions
 transition(xpath(XpathAtom), ParentXml, Val, Scoper0, Scoper1) :-
-    read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)]),
+    xpath_atom_to_term(XpathAtom, XpathTerm),
     xpath(ParentXml, XpathTerm, Val),
     Scoper1 = Scoper0.
 
