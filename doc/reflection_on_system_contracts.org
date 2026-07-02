@@ -64,8 +64,11 @@ Confer for example the role of the BDsl in paragraph:
 [[file:./draft_laying_metadata_for_agents.org]].
 
 For complex subject matters the output of tests maintained by the software development teams can
- be updated to include additional metadata, which can be made available in test reports.
-The test reports metadata can then be translated to facts in the knowledge graph by an agent.
+ be converted to RDF facts, either through an agent with metadata present in the test output,
+ or via a dedicated toolkit. 
+
+For example RML (RDF Mapping Language) can be used to transform TestNG XML results to RDF triples:
+ [[https://rml.io]]
 
 Stakeholders requirements (which I design by "software contracts") can then be
  automatically verified by the knowledge graph if it supports datalog inference rules,
@@ -79,11 +82,13 @@ This essential aspect of datalog systems lays the ground for a re-inforcing patt
 
 *** The qualities to be expected from a datalog implementation
 
-The performance of the datalog system to manage additional facts or fact retractions under 
+The performance of the datalog system to produce additional facts or fact retractions under 
  constant load is one essential quality to allow seamless integration with existing enterprise
  tools used for change control or continuous integration.  
 
 The ability to explain facts created by rules is also of utmost importance to enable tool
  adoption by non technical specialists.  
 
-
+The materialization through datalog rules of facts representing the status of contracts further 
+simplifies the integration with tools like chatbots, providing support for queries in natural
+language, without the need to perform complex graph traversals.
