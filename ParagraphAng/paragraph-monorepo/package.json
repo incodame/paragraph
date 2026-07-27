@@ -12,10 +12,10 @@
     "@angular/platform-browser": "~21.2.0",
     "@angular/router": "~21.2.0",
     "rxjs": "~7.8.0",
-    "@nx/angular": "22.7.2"
+    "@nx/angular": "23.1.0"
   },
   "devDependencies": {
-    "@analogjs/vite-plugin-angular": "~2.1.2",
+    "@analogjs/vite-plugin-angular": "~2.6.4",
     "@analogjs/vitest-angular": "~2.1.2",
     "@angular-devkit/build-angular": "~21.2.0",
     "@angular-devkit/core": "~21.2.0",
