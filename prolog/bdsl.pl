@@ -65,7 +65,7 @@ f('pom.xml') -+ s([name=parent_pom, loc=xpath('//project/parent'), doc="pom.xml 
 f('readme.md') -+ i([name=help_url, loc=regexp("[(](?<V1L>.*)[)]$"), doc="help resource url"]).
 
 %% file reference syntax allows to group containers with similar properties, and to specify properties of the container as a whole, 
-%% without having to repeat them for each file
+%% without having to repeat them for each file. The repeated facts get asserted by assert_bdsl using a "fact expansion" pipeline.
 fr(tsconfig) :> f('tsconfig.json').
 fr(tsconfig) :> f('tsconfig.app.json').
 fr(tsconfig) -+ s([name='ts_option', loc=jsonget('compilerOptions/:'), doc="typescript compiler option"]).
