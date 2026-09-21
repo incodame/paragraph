@@ -710,10 +710,8 @@ container_term(Container, MatchedContainer, zipfile(MatchedContainer-Container))
 
 % helper to convert xpath atom to xpath term
 xpath_atom_to_term(XpathAtom, XpathTerm) :-
-    (   atom_concat('//', Rest, XpathAtom)
-    ->  XpathTerm = '//'(Rest)
-    ;   atom_concat('/', Rest, XpathAtom)
-    ->  XpathTerm = '/'(Rest)
+    (   atom(XpathAtom)
+    ->  read_term_from_atom(XpathAtom, XpathTerm, [module(xpath)])
     ;   XpathTerm = XpathAtom
     ).
 
