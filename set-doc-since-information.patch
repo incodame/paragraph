@@ -1,0 +1,14 @@
+diff --git a/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java b/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java
+--- a/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java
++++ b/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java
+@@ -53,6 +53,7 @@ public class Parameter {
+         return doc;
+     }
+ 
+-    public void setDoc(String doc) {
+-        this.doc = doc;
++    public void setDoc(String doc,
++                       String sinceInformation) {
++        this.doc = doc + " (since " + sinceInformation + ")";
+     }
+ }
