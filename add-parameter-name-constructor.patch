@@ -1,0 +1,14 @@
+diff --git a/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java b/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java
+--- a/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java
++++ b/ParagraphUI/src/main/java/org/incodame/paragraph/sample/webapp/demo/Parameter.java
+@@ -19,6 +19,10 @@ public class Parameter {
+     public Parameter() {
+     }
+ 
++    public Parameter(String name) {
++        this.name = name;
++    }
++
+     public Parameter(String name, String value) {
+         this.name = name;
+         this.value = value;
