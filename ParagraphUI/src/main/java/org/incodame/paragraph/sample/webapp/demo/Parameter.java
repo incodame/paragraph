@@ -19,6 +19,10 @@ public class Parameter {
     public Parameter() {
     }
 
+    public Parameter(String name) {
+        this.name = name;
+    }
+
     public Parameter(String name, String value) {
         this.name = name;
         this.value = value;
@@ -54,7 +58,8 @@ public class Parameter {
         return doc;
     }
 
-    public void setDoc(String doc) {
-        this.doc = doc;
+    public void setDoc(String doc,
++                      String sinceInformation) {
++        this.doc = doc + " (since " + sinceInformation + ")";
     }
 }
