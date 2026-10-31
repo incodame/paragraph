@@ -49,7 +49,11 @@ public class Parameter {
     public String getLoc() {
         return loc;
     }
-
+    
+    /**
+     * Sets the information how to retrieve a parameter's value
+     * @param loc a prolog predicate describing how to retrieve the parameter's value
+     */
     public void setLoc(String loc) {
         this.loc = loc;
     }
@@ -59,7 +63,7 @@ public class Parameter {
     }
 
     public void setDoc(String doc,
-+                      String sinceInformation) {
-+        this.doc = doc + " (since " + sinceInformation + ")";
+                       String sinceInformation) {
+        this.doc = doc + " (since " + sinceInformation + ")";
     }
 }
